@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
 import 'features/dashboard/controller/dashboard_controller.dart';
-import 'features/dashboard/view/dashboard_view.dart';
+import 'features/auth/view/login_view.dart';
 
 void main() {
   runApp(const CoordinatorApp());
@@ -29,8 +29,9 @@ class CoordinatorApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [Locale('ar', 'SA')],
-        home: const DashboardView(),
+        home: const LoginView(),
       ),
     );
   }
 }
+
