@@ -8,209 +8,436 @@ class StudentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provide the controller if not already provided higher up.
+    // Assuming it's not provided globally, we provide it here locally.
     return ChangeNotifierProvider(
       create: (_) => StudentsController(),
-      child: Consumer<StudentsController>(
-        builder: (context, controller, child) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('الطلاب والمشرفين'),
-              elevation: 0,
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: const _StudentsScreenContent(),
+    );
+  }
+}
+
+class _StudentsScreenContent extends StatelessWidget {
+  const _StudentsScreenContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Consumer<StudentsController>(
+          builder: (context, controller, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with Add Button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Header
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'الطلاب والمشرفين',
-                              style: Theme.of(context).textTheme.displaySmall,
-                            ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'إدارة بيانات الطلاب والمشرفين الأكاديميين',
-                              style: TextStyle(color: AppColors.gray600),
-                            ),
-                          ],
+                        Text(
+                          'إنشاء حسابات الطلاب',
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add),
-                          label: const Text('إضافة طالب جديد'),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'إدارة حسابات الطلاب في النظام',
+                          style: TextStyle(
+                            color: AppColors.gray500,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-
-                    // Search
-                    TextField(
-                      controller: controller.searchController,
-                      decoration: InputDecoration(
-                        hintText: 'ابحث عن طالب...',
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        controller.toggleAddStudentForm();
+                      },
+                      icon: const Icon(Icons.person_add_alt_1, color: Colors.white, size: 18),
+                      label: const Text(
+                        'إضافة طالب جديد',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2563EB),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                  ],
+                ),
+                const SizedBox(height: 24),
 
-                    // Table
-                    Card(
+                // Inline Add Form
+                if (controller.isAddingStudent) _buildAddStudentForm(context, controller),
+
+                // Search Bar
+                if (!controller.isAddingStudent) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.gray200),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextField(
+                      onChanged: controller.search,
+                      textAlign: TextAlign.right,
+                      decoration: const InputDecoration(
+                        hintText: 'البحث عن طالب...',
+                        hintStyle: TextStyle(color: AppColors.gray400),
+                        border: InputBorder.none,
+                        suffixIcon: Icon(Icons.search, color: AppColors.gray400), // Suffix since RTL
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Students Table
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.gray200),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          columns: const [
-                            DataColumn(label: Text('الاسم')),
-                            DataColumn(label: Text('التخصص')),
-                            DataColumn(label: Text('المشرف الأكاديمي')),
-                            DataColumn(label: Text('البريد الإلكتروني')),
-                            DataColumn(label: Text('الحالة')),
-                            DataColumn(label: Text('الإجراءات')),
-                          ],
-                          rows: controller.filteredStudents
-                              .map(
-                                (student) => DataRow(
-                                  cells: [
-                                    DataCell(Text(student.name)),
-                                    DataCell(Text(student.specialization)),
-                                    DataCell(Text(student.advisor)),
-                                    DataCell(Text(student.email)),
-                                    DataCell(
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFDCFCE7),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: const Text(
-                                          'نشط',
-                                          style: TextStyle(
-                                            color: AppColors.success,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(Icons.edit),
-                                            onPressed: () {},
-                                            iconSize: 18,
-                                            color: AppColors.primary,
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete),
-                                            onPressed: () {},
-                                            iconSize: 18,
-                                            color: AppColors.error,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width - 300, // Roughly sidebar width + padding
+                          ),
+                          child: DataTable(
+                            headingRowColor: WidgetStateProperty.all(const Color(0xFFF8FAFC)),
+                            headingTextStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.foreground,
+                              fontFamily: 'Tajawal',
+                            ),
+                            dataRowMaxHeight: 60,
+                            dataRowMinHeight: 60,
+                            columns: const [
+                              DataColumn(label: Text('#')),
+                              DataColumn(label: Text('اسم الطالب')),
+                              DataColumn(label: Text('الرقم الجامعي')),
+                              DataColumn(label: Text('القسم')),
+                              DataColumn(label: Text('اسم المستخدم')),
+                              DataColumn(label: Text('الإجراءات')),
+                            ],
+                            rows: controller.students.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final student = entry.value;
+                              return DataRow(
+                                color: WidgetStateProperty.resolveWith<Color?>(
+                                  (Set<WidgetState> states) {
+                                    return index.isEven ? Colors.white : const Color(0xFFF8FAFC).withAlpha(128);
+                                  },
                                 ),
-                              )
-                              .toList(),
+                                cells: [
+                                  DataCell(Text('${index + 1}')),
+                                  DataCell(Text(student.name, style: const TextStyle(fontWeight: FontWeight.w600))),
+                                  DataCell(Text(student.id)),
+                                  DataCell(Text(student.department)),
+                                  DataCell(Text(student.username)),
+                                  DataCell(Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
+                                        onPressed: () {
+                                          controller.openEditForm(student);
+                                        },
+                                        tooltip: 'تعديل',
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
+                                        onPressed: () {
+                                          controller.deleteStudent(student.id);
+                                        },
+                                        tooltip: 'حذف',
+                                      ),
+                                    ],
+                                  )),
+                                ],
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                  ),
+                ],
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
 
-                    // Stats
-                    GridView.count(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'إجمالي الطلاب',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  controller.totalStudents.toString(),
-                                  style: Theme.of(context).textTheme.displaySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'الطلاب النشطين',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  controller.activeStudents.toString(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displaySmall
-                                      ?.copyWith(color: AppColors.success),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'التخصصات',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  controller.specializations.toString(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displaySmall
-                                      ?.copyWith(color: AppColors.primary),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+  Widget _buildAddStudentForm(BuildContext context, StudentsController controller) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.gray200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(5),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                controller.isEditing ? 'تعديل بيانات الطالب' : 'إنشاء حساب طالب جديد',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.foreground,
                 ),
               ),
+              IconButton(
+                icon: const Icon(Icons.close, color: AppColors.gray500),
+                onPressed: controller.cancelAddStudent,
+              ),
+            ],
+          ),
+          
+          if (controller.formError != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFFECACA)),
+              ),
+              child: Text(
+                controller.formError!,
+                style: const TextStyle(color: AppColors.error, fontSize: 13, fontWeight: FontWeight.bold),
+              ),
             ),
-          );
-        },
+          ],
+          
+          const SizedBox(height: 24),
+          
+          // Form Fields Row 1
+          Row(
+            children: [
+              Expanded(
+                child: _buildFormField(
+                  label: 'اسم الطالب',
+                  controller: controller.nameController,
+                ),
+              ),
+              const SizedBox(width: 24),
+              Expanded(
+                child: _buildFormField(
+                  label: 'الرقم الجامعي',
+                  controller: controller.idController,
+                  isNumeric: true,
+                  readOnly: controller.isEditing, // لا يمكن تعديل الرقم الجامعي
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          
+          // Form Fields Row 2
+          Row(
+            children: [
+              Expanded(
+                child: _buildDropdownField(
+                  label: 'القسم',
+                  value: controller.selectedDepartment,
+                  items: controller.departments,
+                  onChanged: controller.setSelectedDepartment,
+                ),
+              ),
+              const SizedBox(width: 24),
+              Expanded(
+                child: _buildFormField(
+                  label: 'اسم المستخدم',
+                  controller: controller.usernameController,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Form Fields Row 3
+          Row(
+            children: [
+              Expanded(
+                child: _buildFormField(
+                  label: 'كلمة المرور',
+                  controller: controller.passwordController,
+                  obscureText: true,
+                ),
+              ),
+              const SizedBox(width: 24),
+              Expanded(child: Container()), // Empty space for alignment
+            ],
+          ),
+          const SizedBox(height: 32),
+
+          // Action Buttons
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  controller.saveStudent();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16A34A), // Green color for save
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  controller.isEditing ? 'حفظ التعديلات' : 'حفظ وإنشاء الحساب',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(width: 16),
+              OutlinedButton(
+                onPressed: controller.cancelAddStudent,
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  side: const BorderSide(color: AppColors.gray300),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'إلغاء',
+                  style: TextStyle(color: AppColors.gray600, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildFormField({
+    required String label,
+    required TextEditingController controller,
+    bool obscureText = false,
+    bool isNumeric = false,
+    bool readOnly = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.gray700,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          obscureText: obscureText,
+          textAlign: TextAlign.right,
+          readOnly: readOnly,
+          keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: readOnly ? const Color(0xFFF1F5F9) : const Color(0xFFF8FAFC),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.gray200),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.gray200),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.gray700,
+          ),
+        ),
+        const SizedBox(height: 8),
+        InputDecorator(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFFF8FAFC),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.gray200),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.gray200),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+            ),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: value,
+              isExpanded: true,
+              isDense: true,
+              icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.gray500),
+              items: items.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(item, textAlign: TextAlign.right),
+                );
+              }).toList(),
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

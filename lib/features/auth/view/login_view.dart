@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../controller/auth_controller.dart';
-import '../../dashboard/view/dashboard_view.dart';
+import '../../../core/widgets/main_layout.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -27,7 +27,7 @@ class _LoginScreenContent extends StatelessWidget {
     if (success && context.mounted) {
       // الانتقال إلى الشاشة الرئيسية وإزالة شاشة تسجيل الدخول من المكدس (Stack)
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const DashboardView()),
+        MaterialPageRoute(builder: (_) => const MainLayout()),
       );
     } else if (controller.errorMessage != null && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

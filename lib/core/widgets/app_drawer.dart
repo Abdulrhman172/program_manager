@@ -21,141 +21,90 @@ class _AppDrawerState extends State<AppDrawer> {
     DrawerItem(
       id: 'dashboard',
       label: 'لوحة التحكم',
-      icon: Icons.dashboard,
+      icon: Icons.grid_view_rounded,
       route: '/',
+    ),
+    DrawerItem(
+      id: 'students',
+      label: 'إنشاء حسابات الطلاب',
+      icon: Icons.person_add_alt_1_outlined,
+      route: '/students',
+    ),
+    DrawerItem(
+      id: 'supervisors',
+      label: 'تفعيل وإيقاف المشرفين',
+      icon: Icons.people_outline,
+      route: '/supervisors',
     ),
     DrawerItem(
       id: 'stages',
       label: 'إدارة المراحل',
-      icon: Icons.bar_chart,
+      icon: Icons.list_alt,
       route: '/stages',
     ),
     DrawerItem(
-      id: 'students',
-      label: 'الطلاب والمشرفين',
-      icon: Icons.people,
-      route: '/students',
-    ),
-    DrawerItem(
-      id: 'research',
-      label: 'الاطلاع على البحوث',
-      icon: Icons.book,
-      route: '/research',
-    ),
-    DrawerItem(
       id: 'approval',
-      label: 'اعتماد البحوث',
-      icon: Icons.check_circle,
+      label: 'اعتماد المرحلة الأولى',
+      icon: Icons.check_circle_outline,
       route: '/approval',
     ),
     DrawerItem(
-      id: 'documents',
-      label: 'إدارة الوثائق',
-      icon: Icons.description,
-      route: '/documents',
+      id: 'research',
+      label: 'الاطلاع على الأبحاث',
+      icon: Icons.feed_outlined,
+      route: '/research',
     ),
     DrawerItem(
-      id: 'notifications',
-      label: 'الإشعارات',
-      icon: Icons.notifications,
-      route: '/notifications',
-      badge: 3,
+      id: 'teams',
+      label: 'إدارة الفرق',
+      icon: Icons.groups_outlined,
+      route: '/teams',
     ),
     DrawerItem(
       id: 'settings',
       label: 'الإعدادات',
-      icon: Icons.settings,
+      icon: Icons.settings_outlined,
       route: '/settings',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    return Container(
+      color: Colors.white,
+      width: 250,
       child: Column(
         children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: AppColors.gray200),
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.sidebarPrimary,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'ح',
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'نظام الإدارة',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        'مسؤول البرنامج',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // Navigation Items
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
                 final isActive = widget.currentRoute == item.route;
 
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
-                    color: isActive
-                        ? const Color(0xFFEFF6FF)
-                        : Colors.transparent,
+                    color: isActive ? const Color(0xFF2563EB) : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: ListTile(
+                    dense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     leading: Icon(
                       item.icon,
-                      color: isActive
-                          ? AppColors.sidebarPrimary
-                          : AppColors.gray700,
+                      color: isActive ? Colors.white : const Color(0xFF6B7280),
                       size: 20,
                     ),
                     title: Text(
                       item.label,
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight:
-                            isActive ? FontWeight.w600 : FontWeight.normal,
-                        color: isActive
-                            ? AppColors.sidebarPrimary
-                            : AppColors.gray700,
+                        fontFamily: 'Cairo',
+                        fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+                        color: isActive ? Colors.white : const Color(0xFF4B5563),
                       ),
                     ),
                     trailing: item.badge != null
@@ -180,60 +129,10 @@ class _AppDrawerState extends State<AppDrawer> {
                         : null,
                     onTap: () {
                       widget.onItemSelected(item.route);
-                      Navigator.pop(context);
                     },
                   ),
                 );
               },
-            ),
-          ),
-
-          // Footer
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(color: AppColors.gray200),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.gray50,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'مسجل الدخول كـ',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'أ.د محمد علي',
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.logout, size: 18),
-                    label: const Text('تسجيل الخروج'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.error,
-                      side: const BorderSide(color: AppColors.error),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ],

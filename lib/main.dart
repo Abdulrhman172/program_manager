@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
 import 'features/dashboard/controller/dashboard_controller.dart';
 import 'features/auth/view/login_view.dart';
+import 'features/supervisors/controller/supervisors_controller.dart';
+import 'features/stages/controller/stages_controller.dart';
 
 void main() {
   runApp(const CoordinatorApp());
@@ -17,6 +19,8 @@ class CoordinatorApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DashboardController()),
+        ChangeNotifierProvider(create: (_) => SupervisorsController()),
+        ChangeNotifierProvider(create: (_) => StagesController()),
       ],
       child: MaterialApp(
         title: 'نظام إدارة بحوث التخرج',

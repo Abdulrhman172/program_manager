@@ -1,31 +1,22 @@
-class Student {
+class StudentModel {
   final String id;
   final String name;
-  final String email;
-  final String phone;
-  final String specialization;
-  final String advisor;
-  final String status; // active, inactive
+  final String department;
+  final String username;
 
-  Student({
+  StudentModel({
     required this.id,
     required this.name,
-    required this.email,
-    required this.phone,
-    required this.specialization,
-    required this.advisor,
-    required this.status,
+    required this.department,
+    required this.username,
   });
 
-  factory Student.fromJson(Map<String, dynamic> json) {
-    return Student(
+  factory StudentModel.fromJson(Map<String, dynamic> json) {
+    return StudentModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      specialization: json['specialization'] as String,
-      advisor: json['advisor'] as String,
-      status: json['status'] as String,
+      department: json['department'] as String,
+      username: json['username'] as String,
     );
   }
 
@@ -33,11 +24,8 @@ class Student {
     return {
       'id': id,
       'name': name,
-      'email': email,
-      'phone': phone,
-      'specialization': specialization,
-      'advisor': advisor,
-      'status': status,
+      'department': department,
+      'username': username,
     };
   }
 }
