@@ -9,6 +9,7 @@ import '../../features/approval/view/approval_view.dart';
 import '../../features/teams/view/teams_view.dart';
 import '../../features/settings/view/settings_view.dart';
 import '../../features/auth/view/login_view.dart';
+import '../../features/research/view/research_view.dart';
 import '../theme/app_theme.dart';
 import 'app_drawer.dart';
 
@@ -28,8 +29,7 @@ class MainLayout extends StatelessWidget {
       case '/approval':
         return const ApprovalView();
       case '/research':
-        // Placeholder until research view is updated
-        return const Center(child: Text('الاطلاع على الأبحاث (قيد التطوير)'));
+        return const ResearchView();
       case '/teams':
         return const TeamsView();
       case '/settings':

@@ -1,83 +1,92 @@
 import 'package:flutter/material.dart';
-import '../model/research_model.dart';
+import '../model/approval_model.dart';
 
-/// Controller for the Approval screen.
-/// Manages research projects approval/rejection logic.
 class ApprovalController extends ChangeNotifier {
-  List<ResearchProject> _projects = [
-    ResearchProject(
+  final List<ApprovalModel> _approvals = [
+    ApprovalModel(
       id: '1',
-      title: 'نظام إدارة المكتبات الذكية',
-      studentName: 'أحمد محمد علي',
-      advisor: 'أ.د محمد السلام',
-      submissionDate: '15/03/2026',
-      stage: 'المرحلة الأولى',
-      status: 'pending',
+      title: 'نظام إدارة المكتبة الإلكترونية',
+      description: 'نظام شامل لإدارة المكتبات الجامعية إلكترونياً',
+      members: ['عبدالله محمد', 'خالد أحمد', 'فاطمة سالم'],
+      supervisor: 'د. محمد أحمد علي',
+      submissionDate: '15-02-2026',
+      status: 'في الانتظار',
     ),
-    ResearchProject(
+    ApprovalModel(
       id: '2',
-      title: 'تطبيق الذكاء الاصطناعي في التعليم',
-      studentName: 'فاطمة خالد إبراهيم',
-      advisor: 'أ.د سارة محمود',
-      submissionDate: '10/03/2026',
-      stage: 'المرحلة الثانية',
-      status: 'pending',
+      title: 'منصة التعليم التفاعلية',
+      description: 'منصة ذكية تهدف إلى تحسين جودة التعليم عن بعد باستخدام تقنيات الذكاء الاصطناعي',
+      members: ['نور عبدالله', 'سعيد علي'],
+      supervisor: 'د. فاطمة سالم حسن',
+      submissionDate: '16-02-2026',
+      status: 'في الانتظار',
     ),
-    ResearchProject(
+    ApprovalModel(
       id: '3',
-      title: 'نظام أمان الشبكات المتقدم',
-      studentName: 'محمود علي حسن',
-      advisor: 'أ.د علي أحمد',
-      submissionDate: '05/03/2026',
-      stage: 'المرحلة الأولى',
-      status: 'approved',
+      title: 'تطبيق متابعة الحضور والغياب',
+      description: 'تطبيق جوال يعتمد على تحديد الموقع لتسجيل حضور الطلاب',
+      members: ['أحمد حسين', 'عمر خالد', 'يوسف أحمد'],
+      supervisor: 'د. خالد يحيى محمود',
+      submissionDate: '14-02-2026',
+      status: 'في الانتظار',
+    ),
+    ApprovalModel(
+      id: '4',
+      title: 'نظام تحليل البيانات للشركات',
+      description: 'نظام إحصائي لتحليل البيانات الكبيرة للشركات التجارية',
+      members: ['سارة محمد', 'علياء حسين'],
+      supervisor: 'د. محمد أحمد علي',
+      submissionDate: '10-02-2026',
+      status: 'معتمدة',
+    ),
+    ApprovalModel(
+      id: '5',
+      title: 'تطبيق طلب الطعام الجامعي',
+      description: 'تطبيق لتسهيل طلب الوجبات من كافتيريا الجامعة',
+      members: ['خالد سعد', 'حسن محمود'],
+      supervisor: 'د. نورة عبدالله',
+      submissionDate: '11-02-2026',
+      status: 'مرفوضة',
     ),
   ];
 
-  List<ResearchProject> get projects => _projects;
+  List<ApprovalModel> _filteredApprovals = [];
+  String _searchQuery = '';
 
-  List<ResearchProject> get pendingProjects =>
-      _projects.where((p) => p.status == 'pending').toList();
+  ApprovalController() {
+    _filteredApprovals = _approvals;
+  }
 
-  List<ResearchProject> get approvedProjects =>
-      _projects.where((p) => p.status == 'approved').toList();
+  List<ApprovalModel> get approvals => _filteredApprovals;
 
-  List<ResearchProject> get rejectedProjects =>
-      _projects.where((p) => p.status == 'rejected').toList();
+  int get pendingCount => _approvals.where((a) => a.status == 'في الانتظار').length;
+  int get approvedCount => _approvals.where((a) => a.status == 'معتمدة').length;
+  int get rejectedCount => _approvals.where((a) => a.status == 'مرفوضة').length;
 
-  void approveProject(String id) {
-    _projects = _projects.map((p) {
-      if (p.id == id) {
-        return ResearchProject(
-          id: p.id,
-          title: p.title,
-          studentName: p.studentName,
-          advisor: p.advisor,
-          submissionDate: p.submissionDate,
-          stage: p.stage,
-          status: 'approved',
-        );
-      }
-      return p;
-    }).toList();
+  void changeStatus(String id, String newStatus) {
+    final index = _approvals.indexWhere((a) => a.id == id);
+    if (index != -1) {
+      _approvals[index].status = newStatus;
+      _filterList();
+      notifyListeners();
+    }
+  }
+
+  void search(String query) {
+    _searchQuery = query;
+    _filterList();
     notifyListeners();
   }
 
-  void rejectProject(String id) {
-    _projects = _projects.map((p) {
-      if (p.id == id) {
-        return ResearchProject(
-          id: p.id,
-          title: p.title,
-          studentName: p.studentName,
-          advisor: p.advisor,
-          submissionDate: p.submissionDate,
-          stage: p.stage,
-          status: 'rejected',
-        );
-      }
-      return p;
-    }).toList();
-    notifyListeners();
+  void _filterList() {
+    if (_searchQuery.isEmpty) {
+      _filteredApprovals = List.from(_approvals);
+    } else {
+      _filteredApprovals = _approvals
+          .where((approval) =>
+              approval.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              approval.supervisor.toLowerCase().contains(_searchQuery.toLowerCase()))
+          .toList();
+    }
   }
 }

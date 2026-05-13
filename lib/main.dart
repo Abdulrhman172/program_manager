@@ -6,6 +6,8 @@ import 'features/dashboard/controller/dashboard_controller.dart';
 import 'features/auth/view/login_view.dart';
 import 'features/supervisors/controller/supervisors_controller.dart';
 import 'features/stages/controller/stages_controller.dart';
+import 'features/approval/controller/approval_controller.dart';
+import 'features/research/controller/research_controller.dart';
 
 void main() {
   runApp(const CoordinatorApp());
@@ -21,6 +23,8 @@ class CoordinatorApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => SupervisorsController()),
         ChangeNotifierProvider(create: (_) => StagesController()),
+        ChangeNotifierProvider(create: (_) => ApprovalController()),
+        ChangeNotifierProvider(create: (_) => ResearchController()),
       ],
       child: MaterialApp(
         title: 'نظام إدارة بحوث التخرج',
