@@ -38,4 +38,3 @@ class CoordinatorApp extends StatelessWidget {
     );
   }
 }
-
