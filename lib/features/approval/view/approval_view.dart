@@ -220,7 +220,7 @@ class ApprovalView extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      approval.description,
+                      'التخصص: ${approval.department}',
                       style: const TextStyle(
                         fontSize: 13,
                         color: AppColors.gray500,
@@ -244,12 +244,8 @@ class ApprovalView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                'تاريخ التقديم: ${approval.submissionDate}',
-                style: const TextStyle(fontSize: 13, color: AppColors.gray500),
-              ),
               Text(
                 'المشرف: ${approval.supervisor}',
                 style: const TextStyle(fontSize: 13, color: AppColors.gray600),
@@ -331,6 +327,11 @@ class ApprovalView extends StatelessWidget {
                 const Text('الوصف:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                 const SizedBox(height: 4),
                 Text(approval.description, style: const TextStyle(fontSize: 14, color: AppColors.gray700), textAlign: TextAlign.right),
+                
+                const SizedBox(height: 16),
+                const Text('التخصص:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 4),
+                Text(approval.department, style: const TextStyle(fontSize: 14, color: AppColors.gray700), textAlign: TextAlign.right),
                 
                 const SizedBox(height: 16),
                 const Text('أعضاء الفريق:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
