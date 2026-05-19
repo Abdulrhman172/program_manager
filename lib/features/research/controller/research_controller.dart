@@ -3,6 +3,7 @@ import '../model/research_model.dart';
 
 class ResearchController extends ChangeNotifier {
   final List<ResearchModel> _researches = [
+    // --- Active researches (2025/2026) ---
     ResearchModel(
       id: '1',
       title: 'نظام إدارة المكتبة الإلكترونية',
@@ -16,6 +17,8 @@ class ResearchController extends ChangeNotifier {
         ResearchFile(name: 'المرحلة الثانية.pdf', size: '3.8 MB'),
       ],
       status: 'قيد التنفيذ',
+      researchState: 'نشط',
+      academicYear: '2025/2026',
     ),
     ResearchModel(
       id: '2',
@@ -30,6 +33,8 @@ class ResearchController extends ChangeNotifier {
         ResearchFile(name: 'المرحلة الثانية.pdf', size: '4.2 MB'),
       ],
       status: 'قيد التنفيذ',
+      researchState: 'نشط',
+      academicYear: '2025/2026',
     ),
     ResearchModel(
       id: '3',
@@ -43,6 +48,8 @@ class ResearchController extends ChangeNotifier {
         ResearchFile(name: 'مقترح البحث.pdf', size: '1.2 MB'),
       ],
       status: 'في البداية',
+      researchState: 'نشط',
+      academicYear: '2025/2026',
     ),
     ResearchModel(
       id: '4',
@@ -56,6 +63,8 @@ class ResearchController extends ChangeNotifier {
         ResearchFile(name: 'ملخص الفكرة.pdf', size: '0.8 MB'),
       ],
       status: 'في البداية',
+      researchState: 'متوقف',
+      academicYear: '2025/2026',
     ),
     ResearchModel(
       id: '5',
@@ -71,6 +80,8 @@ class ResearchController extends ChangeNotifier {
         ResearchFile(name: 'المسودة النهائية.pdf', size: '12.4 MB'),
       ],
       status: 'المرحلة المتقدمة',
+      researchState: 'نشط',
+      academicYear: '2025/2026',
     ),
     ResearchModel(
       id: '6',
@@ -85,46 +96,173 @@ class ResearchController extends ChangeNotifier {
         ResearchFile(name: 'تصميم الواجهات.pdf', size: '8.3 MB'),
       ],
       status: 'قيد التنفيذ',
+      researchState: 'متوقف',
+      academicYear: '2025/2026',
+    ),
+
+    // --- Archived: 2024/2025 ---
+    ResearchModel(
+      id: 'a1',
+      title: 'نظام الموارد البشرية الإلكتروني',
+      supervisor: 'د. سامي عبدالله',
+      department: 'إدارة أعمال عربي',
+      currentPhase: 'مكتمل',
+      lastUpdated: '15-06-2025',
+      progress: 100.0,
+      files: [
+        ResearchFile(name: 'المرحلة الأولى.pdf', size: '2.0 MB'),
+        ResearchFile(name: 'التقرير النهائي.pdf', size: '8.0 MB'),
+      ],
+      status: 'مكتمل',
+      researchState: 'مؤرشف',
+      academicYear: '2024/2025',
+    ),
+    ResearchModel(
+      id: 'a2',
+      title: 'تطبيق الصحة الرقمية',
+      supervisor: 'د. منى سعد',
+      department: 'المحاسبة',
+      currentPhase: 'مكتمل',
+      lastUpdated: '20-06-2025',
+      progress: 100.0,
+      files: [
+        ResearchFile(name: 'الدراسة الجدوى.pdf', size: '3.1 MB'),
+        ResearchFile(name: 'التقرير النهائي.pdf', size: '10.5 MB'),
+      ],
+      status: 'مكتمل',
+      researchState: 'مؤرشف',
+      academicYear: '2024/2025',
+    ),
+
+    // --- Archived: 2023/2024 ---
+    ResearchModel(
+      id: 'b1',
+      title: 'منصة التجارة الإلكترونية المحلية',
+      supervisor: 'د. أحمد سالم',
+      department: 'تسويق رقمي',
+      currentPhase: 'مكتمل',
+      lastUpdated: '10-06-2024',
+      progress: 100.0,
+      files: [
+        ResearchFile(name: 'المرحلة الأولى.pdf', size: '1.8 MB'),
+        ResearchFile(name: 'التقرير النهائي.pdf', size: '7.2 MB'),
+      ],
+      status: 'مكتمل',
+      researchState: 'مؤرشف',
+      academicYear: '2023/2024',
+    ),
+    ResearchModel(
+      id: 'b2',
+      title: 'نظام إدارة المستودعات',
+      supervisor: 'د. خالد يحيى محمود',
+      department: 'إدارة أعمال دولية',
+      currentPhase: 'مكتمل',
+      lastUpdated: '12-06-2024',
+      progress: 100.0,
+      files: [
+        ResearchFile(name: 'خطة المشروع.pdf', size: '2.4 MB'),
+        ResearchFile(name: 'التقرير النهائي.pdf', size: '9.8 MB'),
+      ],
+      status: 'مكتمل',
+      researchState: 'مؤرشف',
+      academicYear: '2023/2024',
     ),
   ];
 
   List<ResearchModel> _filteredResearches = [];
   String _searchQuery = '';
+  String _stateFilter = 'الكل'; // 'الكل', 'نشط', 'متوقف', 'مؤرشف'
+
+  // For archived drill-down
+  String? _selectedArchiveYear; // null = show year list, String = show that year's researches
 
   ResearchController() {
-    _filteredResearches = _researches;
+    _applyFilter();
   }
 
   List<ResearchModel> get researches => _filteredResearches;
+  String get stateFilter => _stateFilter;
+  String? get selectedArchiveYear => _selectedArchiveYear;
+  bool get isInArchivedMode => _stateFilter == 'مؤرشف';
 
-  int get totalCount => _researches.length;
-  int get advancedPhaseCount => _researches.where((r) => r.status == 'المرحلة المتقدمة').length;
-  int get inProgressCount => _researches.where((r) => r.status == 'قيد التنفيذ').length;
-  int get inBeginningCount => _researches.where((r) => r.status == 'في البداية').length;
+  // Stats (always from active researches only)
+  List<ResearchModel> get _activeResearches => _researches.where((r) => r.researchState != 'مؤرشف').toList();
+  int get totalCount => _activeResearches.length;
+  int get advancedPhaseCount => _activeResearches.where((r) => r.status == 'المرحلة المتقدمة').length;
+  int get inProgressCount => _activeResearches.where((r) => r.status == 'قيد التنفيذ').length;
+  int get inBeginningCount => _activeResearches.where((r) => r.status == 'في البداية').length;
 
-  void search(String query) {
-    _searchQuery = query;
-    _filterList();
+  // Archive academic years available
+  List<String> get archiveYears {
+    final years = _researches
+        .where((r) => r.researchState == 'مؤرشف')
+        .map((r) => r.academicYear)
+        .toSet()
+        .toList();
+    years.sort((a, b) => b.compareTo(a)); // newest first
+    return years;
+  }
+
+  void setFilter(String filter) {
+    _stateFilter = filter;
+    _selectedArchiveYear = null; // reset year selection when switching filters
+    _applyFilter();
     notifyListeners();
   }
 
-  void _filterList() {
-    if (_searchQuery.isEmpty) {
-      _filteredResearches = List.from(_researches);
+  void selectArchiveYear(String year) {
+    _selectedArchiveYear = year;
+    _applyFilter();
+    notifyListeners();
+  }
+
+  void backToArchiveYears() {
+    _selectedArchiveYear = null;
+    _filteredResearches = [];
+    notifyListeners();
+  }
+
+  void search(String query) {
+    _searchQuery = query;
+    _applyFilter();
+    notifyListeners();
+  }
+
+  void _applyFilter() {
+    List<ResearchModel> temp;
+
+    if (_stateFilter == 'مؤرشف') {
+      if (_selectedArchiveYear != null) {
+        temp = _researches.where((r) => r.researchState == 'مؤرشف' && r.academicYear == _selectedArchiveYear).toList();
+      } else {
+        _filteredResearches = [];
+        return;
+      }
+    } else if (_stateFilter == 'الكل') {
+      // "All" excludes archived
+      temp = _researches.where((r) => r.researchState != 'مؤرشف').toList();
     } else {
-      _filteredResearches = _researches
+      final stateMap = {'نشط': 'نشط', 'متوقف': 'متوقف'};
+      final mapped = stateMap[_stateFilter] ?? _stateFilter;
+      temp = _researches.where((r) => r.researchState == mapped).toList();
+    }
+
+    if (_searchQuery.isNotEmpty) {
+      temp = temp
           .where((r) =>
               r.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
               r.supervisor.toLowerCase().contains(_searchQuery.toLowerCase()))
           .toList();
     }
+
+    _filteredResearches = temp;
   }
 
   void downloadAllFiles(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('جاري تحميل جميع الملفات...', textAlign: TextAlign.right),
-        backgroundColor: Color(0xFF2563EB), // Blue
+        backgroundColor: Color(0xFF2563EB),
         duration: Duration(seconds: 2),
       ),
     );
@@ -134,7 +272,7 @@ class ResearchController extends ChangeNotifier {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('جاري تحميل $fileName...', textAlign: TextAlign.right),
-        backgroundColor: const Color(0xFF2563EB), // Blue
+        backgroundColor: const Color(0xFF2563EB),
         duration: const Duration(seconds: 2),
       ),
     );

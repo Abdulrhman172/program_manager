@@ -4,11 +4,11 @@ import '../model/student_model.dart';
 class StudentsController extends ChangeNotifier {
   // Mock Data
   final List<StudentModel> _students = [
-    StudentModel(id: '2021001', name: 'عبدالله محمد سعيد', department: 'إدارة أعمال عربي', username: 'abdullah2021'),
-    StudentModel(id: '2021002', name: 'فاطمة أحمد علي', department: 'إدارة أعمال إنجليزي', username: 'fatima2021'),
-    StudentModel(id: '2021003', name: 'خالد حسن محمود', department: 'إدارة أعمال دولية', username: 'khaled2021'),
-    StudentModel(id: '2021004', name: 'نور سالم عبدالله', department: 'محاسبة', username: 'noor2021'),
-    StudentModel(id: '2021005', name: 'أحمد يحيى حسين', department: 'ترجمة', username: 'ahmed2021'),
+    StudentModel(id: '2021001', name: 'عبدالله محمد سعيد', department: 'إدارة أعمال عربي', batchNumber: 'الدفعة 15', academicYear: '2025/2026'),
+    StudentModel(id: '2021002', name: 'فاطمة أحمد علي', department: 'إدارة أعمال إنجليزي', batchNumber: 'الدفعة 15', academicYear: '2025/2026'),
+    StudentModel(id: '2021003', name: 'خالد حسن محمود', department: 'إدارة أعمال دولية', batchNumber: 'الدفعة 14', academicYear: '2024/2025'),
+    StudentModel(id: '2021004', name: 'نور سالم عبدالله', department: 'محاسبة', batchNumber: 'الدفعة 16', academicYear: '2026/2027'),
+    StudentModel(id: '2021005', name: 'أحمد يحيى حسين', department: 'ترجمة', batchNumber: 'الدفعة 15', academicYear: '2025/2026'),
   ];
 
   final List<String> departments = [
@@ -32,7 +32,8 @@ class StudentsController extends ChangeNotifier {
   // Controllers for the new/edit student form
   final TextEditingController nameController = TextEditingController();
   final TextEditingController idController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController batchNumberController = TextEditingController();
+  final TextEditingController academicYearController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   StudentsController() {
@@ -68,7 +69,8 @@ class StudentsController extends ChangeNotifier {
 
     nameController.text = student.name;
     idController.text = student.id;
-    usernameController.text = student.username;
+    batchNumberController.text = student.batchNumber;
+    academicYearController.text = student.academicYear;
     passwordController.text = ''; // Usually don't show password on edit
     
     // Set department if it exists in the list
@@ -100,7 +102,8 @@ class StudentsController extends ChangeNotifier {
     // Validation
     if (nameController.text.trim().isEmpty ||
         idController.text.trim().isEmpty ||
-        usernameController.text.trim().isEmpty ||
+        batchNumberController.text.trim().isEmpty ||
+        academicYearController.text.trim().isEmpty ||
         _selectedDepartment == null) {
       _formError = 'يرجى تعبئة جميع الحقول وإختيار القسم';
       notifyListeners();
@@ -118,7 +121,8 @@ class StudentsController extends ChangeNotifier {
       id: idController.text.trim(),
       name: nameController.text.trim(),
       department: _selectedDepartment!,
-      username: usernameController.text.trim(),
+      batchNumber: batchNumberController.text.trim(),
+      academicYear: academicYearController.text.trim(),
     );
 
     if (_isEditing && _editingStudentId != null) {
@@ -173,7 +177,8 @@ class StudentsController extends ChangeNotifier {
   void _clearForm() {
     nameController.clear();
     idController.clear();
-    usernameController.clear();
+    batchNumberController.clear();
+    academicYearController.clear();
     passwordController.clear();
     _selectedDepartment = null;
     _formError = null;
@@ -183,7 +188,8 @@ class StudentsController extends ChangeNotifier {
   void dispose() {
     nameController.dispose();
     idController.dispose();
-    usernameController.dispose();
+    batchNumberController.dispose();
+    academicYearController.dispose();
     passwordController.dispose();
     super.dispose();
   }

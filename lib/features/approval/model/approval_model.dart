@@ -7,6 +7,7 @@ class ApprovalModel {
   final String supervisor;
   final String submissionDate;
   String status; // 'في الانتظار', 'معتمدة', 'مرفوضة'
+  String? rejectionReason;
 
   ApprovalModel({
     required this.id,
@@ -17,5 +18,6 @@ class ApprovalModel {
     required this.supervisor,
     required this.submissionDate,
     required this.status,
+    this.rejectionReason,
   });
 }

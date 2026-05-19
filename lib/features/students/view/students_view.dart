@@ -127,7 +127,8 @@ class _StudentsScreenContent extends StatelessWidget {
                               DataColumn(label: Text('اسم الطالب')),
                               DataColumn(label: Text('الرقم الجامعي')),
                               DataColumn(label: Text('القسم')),
-                              DataColumn(label: Text('اسم المستخدم')),
+                              DataColumn(label: Text('رقم الدفعة')),
+                              DataColumn(label: Text('السنة الدراسية')),
                               DataColumn(label: Text('الإجراءات')),
                             ],
                             rows: controller.students.asMap().entries.map((entry) {
@@ -144,7 +145,8 @@ class _StudentsScreenContent extends StatelessWidget {
                                   DataCell(Text(student.name, style: const TextStyle(fontWeight: FontWeight.w600))),
                                   DataCell(Text(student.id)),
                                   DataCell(Text(student.department)),
-                                  DataCell(Text(student.username)),
+                                  DataCell(Text(student.batchNumber)),
+                                  DataCell(Text(student.academicYear)),
                                   DataCell(Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -273,8 +275,8 @@ class _StudentsScreenContent extends StatelessWidget {
               const SizedBox(width: 24),
               Expanded(
                 child: _buildFormField(
-                  label: 'اسم المستخدم',
-                  controller: controller.usernameController,
+                  label: 'رقم الدفعة',
+                  controller: controller.batchNumberController,
                 ),
               ),
             ],
@@ -286,13 +288,18 @@ class _StudentsScreenContent extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildFormField(
+                  label: 'السنة الدراسية',
+                  controller: controller.academicYearController,
+                ),
+              ),
+              const SizedBox(width: 24),
+              Expanded(
+                child: _buildFormField(
                   label: 'كلمة المرور',
                   controller: controller.passwordController,
                   obscureText: true,
                 ),
               ),
-              const SizedBox(width: 24),
-              Expanded(child: Container()), // Empty space for alignment
             ],
           ),
           const SizedBox(height: 32),

@@ -14,7 +14,9 @@ class ResearchModel {
   final String lastUpdated;
   final double progress; // percentage e.g. 65 for 65%
   final List<ResearchFile> files;
-  final String status; // 'المرحلة المتقدمة', 'قيد التنفيذ', 'في البداية'
+  final String status;       // label shown in stats cards
+  final String researchState; // 'نشط', 'متوقف', 'مؤرشف'
+  final String academicYear;  // e.g. '2025/2026'
 
   ResearchModel({
     required this.id,
@@ -26,5 +28,7 @@ class ResearchModel {
     required this.progress,
     required this.files,
     required this.status,
+    required this.researchState,
+    required this.academicYear,
   });
 }

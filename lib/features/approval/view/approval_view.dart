@@ -26,10 +26,7 @@ class ApprovalView extends StatelessWidget {
                 const SizedBox(height: 8),
                 const Text(
                   'مراجعة واعتماد عناوين الأبحاث',
-                  style: TextStyle(
-                    color: AppColors.gray500,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: AppColors.gray500, fontSize: 14),
                 ),
                 const SizedBox(height: 24),
 
@@ -72,7 +69,11 @@ class ApprovalView extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+
+                // Filter Chips
+                _buildFilterChips(context, controller),
+                const SizedBox(height: 20),
 
                 // Search Bar
                 Container(
@@ -96,20 +97,74 @@ class ApprovalView extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Projects List
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.approvals.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 16),
-                  itemBuilder: (context, index) {
-                    final approval = controller.approvals[index];
-                    return _buildProjectCard(context, controller, approval);
-                  },
-                ),
+                if (controller.approvals.isEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 48),
+                      child: Column(
+                        children: [
+                          Icon(Icons.inbox_outlined, size: 64, color: AppColors.gray300),
+                          const SizedBox(height: 16),
+                          Text(
+                            'لا توجد مشاريع في هذه الحالة',
+                            style: TextStyle(color: AppColors.gray500, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.approvals.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final approval = controller.approvals[index];
+                      return _buildProjectCard(context, controller, approval);
+                    },
+                  ),
               ],
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChips(BuildContext context, ApprovalController controller) {
+    final filters = ['الكل', 'في الانتظار', 'معتمدة', 'مرفوضة'];
+    final filterColors = {
+      'الكل': const Color(0xFF2563EB),
+      'في الانتظار': const Color(0xFFEA580C),
+      'معتمدة': const Color(0xFF16A34A),
+      'مرفوضة': const Color(0xFFDC2626),
+    };
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: filters.map((filter) {
+          final isSelected = controller.currentFilter == filter;
+          final color = filterColors[filter] ?? AppColors.primary;
+          return Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: ChoiceChip(
+              label: Text(filter),
+              selected: isSelected,
+              onSelected: (_) => controller.setFilter(filter),
+              selectedColor: color,
+              backgroundColor: Colors.white,
+              labelStyle: TextStyle(
+                color: isSelected ? Colors.white : AppColors.gray700,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+              side: BorderSide(color: isSelected ? color : AppColors.gray200),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              showCheckmark: false,
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -133,11 +188,7 @@ class ApprovalView extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: textColor),
           ),
           const SizedBox(height: 16),
           Text(
@@ -221,10 +272,7 @@ class ApprovalView extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'التخصص: ${approval.department}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.gray500,
-                      ),
+                      style: const TextStyle(fontSize: 13, color: AppColors.gray500),
                       textAlign: TextAlign.right,
                     ),
                   ],
@@ -252,130 +300,322 @@ class ApprovalView extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  controller.changeStatus(approval.id, 'مرفوضة');
-                },
-                icon: const Icon(Icons.close, size: 16, color: Colors.white),
-                label: const Text('رفض', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDC2626), // Red
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                ),
+          // Show rejection reason if rejected
+          if (approval.status == 'مرفوضة' && approval.rejectionReason != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFFECACA)),
               ),
-              const SizedBox(width: 12),
-              ElevatedButton.icon(
-                onPressed: () {
-                  controller.changeStatus(approval.id, 'معتمدة');
-                },
-                icon: const Icon(Icons.check, size: 16, color: Colors.white),
-                label: const Text('اعتماد', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF16A34A), // Green
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                ),
+              child: Text(
+                'سبب الرفض: ${approval.rejectionReason}',
+                style: const TextStyle(fontSize: 13, color: Color(0xFFDC2626)),
+                textAlign: TextAlign.right,
               ),
-              const SizedBox(width: 12),
-              OutlinedButton.icon(
-                onPressed: () {
-                  _showDetailsModal(context, approval);
-                },
-                icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
-                label: const Text('عرض التفاصيل'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.foreground,
-                  side: const BorderSide(color: AppColors.gray300),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => _showDetailsModal(context, controller, approval),
+              icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
+              label: const Text('عرض التفاصيل'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.foreground,
+                side: const BorderSide(color: AppColors.gray300),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _showDetailsModal(BuildContext context, ApprovalModel approval) {
+  void _showConfirmApproveDialog(BuildContext context, ApprovalController controller, ApprovalModel approval) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('تأكيد الاعتماد', textAlign: TextAlign.right),
+        content: Text(
+          'هل أنت متأكد من اعتماد مشروع "${approval.title}"؟',
+          textAlign: TextAlign.right,
+        ),
+        actionsAlignment: MainAxisAlignment.start,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('لا', style: TextStyle(color: AppColors.gray600)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              controller.changeStatus(approval.id, 'معتمدة');
+              Navigator.of(ctx).pop(); // close confirm dialog
+              Navigator.of(context).pop(); // close details modal
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF16A34A),
+            ),
+            child: const Text('نعم، اعتماد', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRejectionReasonDialog(BuildContext context, ApprovalController controller, ApprovalModel approval) {
+    final reasonController = TextEditingController();
+    String? errorText;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text('سبب الرفض', textAlign: TextAlign.right),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'يرجى كتابة سبب رفض مشروع "${approval.title}":',
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(fontSize: 14, color: AppColors.gray700),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: reasonController,
+                  textAlign: TextAlign.right,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'اكتب سبب الرفض هنا...',
+                    hintStyle: const TextStyle(color: AppColors.gray400),
+                    errorText: errorText,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: AppColors.gray200),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: AppColors.primary),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFF8FAFC),
+                  ),
+                ),
+              ],
+            ),
+            actionsAlignment: MainAxisAlignment.start,
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('غير موافق', style: TextStyle(color: AppColors.gray600)),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (reasonController.text.trim().isEmpty) {
+                    setState(() => errorText = 'يرجى كتابة سبب الرفض');
+                    return;
+                  }
+                  controller.changeStatus(approval.id, 'مرفوضة', reason: reasonController.text.trim());
+                  Navigator.of(ctx).pop(); // close reason dialog
+                  Navigator.of(context).pop(); // close details modal
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFDC2626),
+                ),
+                child: const Text('موافق، رفض', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void _showDetailsModal(BuildContext context, ApprovalController controller, ApprovalModel approval) {
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
-            width: 500,
+            width: 520,
             padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  approval.title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.foreground,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-                const SizedBox(height: 16),
-                const Text('الوصف:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                const SizedBox(height: 4),
-                Text(approval.description, style: const TextStyle(fontSize: 14, color: AppColors.gray700), textAlign: TextAlign.right),
-                
-                const SizedBox(height: 16),
-                const Text('التخصص:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                const SizedBox(height: 4),
-                Text(approval.department, style: const TextStyle(fontSize: 14, color: AppColors.gray700), textAlign: TextAlign.right),
-                
-                const SizedBox(height: 16),
-                const Text('أعضاء الفريق:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                const SizedBox(height: 4),
-                ...approval.members.map((member) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // Title + status badge
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(member, style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.circle, size: 6, color: AppColors.gray700),
+                      _buildStatusBadge(approval.status),
+                      Expanded(
+                        child: Text(
+                          approval.title,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.foreground,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
                     ],
                   ),
-                )),
-                
-                const SizedBox(height: 16),
-                const Text('المشرف الأكاديمي:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                const SizedBox(height: 4),
-                Text(approval.supervisor, style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
-                
-                const SizedBox(height: 16),
-                const Text('تاريخ التقديم:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                const SizedBox(height: 4),
-                Text(approval.submissionDate, style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
-                
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      side: const BorderSide(color: AppColors.gray300),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  const SizedBox(height: 20),
+
+                  const Text('الوصف:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 4),
+                  Text(approval.description,
+                      style: const TextStyle(fontSize: 14, color: AppColors.gray700),
+                      textAlign: TextAlign.right),
+
+                  const SizedBox(height: 16),
+                  const Text('التخصص:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 4),
+                  Text(approval.department,
+                      style: const TextStyle(fontSize: 14, color: AppColors.gray700),
+                      textAlign: TextAlign.right),
+
+                  const SizedBox(height: 16),
+                  const Text('أعضاء الفريق:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 4),
+                  ...approval.members.map((member) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(member, style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.circle, size: 6, color: AppColors.gray700),
+                      ],
                     ),
-                    child: const Text('إغلاق', style: TextStyle(color: AppColors.foreground, fontWeight: FontWeight.bold)),
+                  )),
+
+                  const SizedBox(height: 16),
+                  const Text('المشرف الأكاديمي:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 4),
+                  Text(approval.supervisor,
+                      style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
+
+                  const SizedBox(height: 16),
+                  const Text('تاريخ التقديم:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 4),
+                  Text(approval.submissionDate,
+                      style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
+
+                  // Show rejection reason if exists
+                  if (approval.rejectionReason != null) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEF2F2),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFFECACA)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text('سبب الرفض:',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFFDC2626))),
+                          const SizedBox(height: 4),
+                          Text(approval.rejectionReason!,
+                              style: const TextStyle(fontSize: 13, color: Color(0xFFDC2626)),
+                              textAlign: TextAlign.right),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 24),
+                  const Divider(color: AppColors.gray200),
+                  const SizedBox(height: 16),
+
+                  // Action Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _showRejectionReasonDialog(context, controller, approval),
+                          icon: const Icon(Icons.close, size: 16, color: Colors.white),
+                          label: const Text('رفض', style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFDC2626),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _showConfirmApproveDialog(context, controller, approval),
+                          icon: const Icon(Icons.check, size: 16, color: Colors.white),
+                          label: const Text('اعتماد', style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF16A34A),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: const BorderSide(color: AppColors.gray300),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      child: const Text('إغلاق',
+                          style: TextStyle(color: AppColors.foreground, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildStatusBadge(String status) {
+    Color bg, text;
+    switch (status) {
+      case 'في الانتظار':
+        bg = const Color(0xFFFFF7ED); text = const Color(0xFFEA580C);
+        break;
+      case 'معتمدة':
+        bg = const Color(0xFFF0FDF4); text = const Color(0xFF16A34A);
+        break;
+      case 'مرفوضة':
+        bg = const Color(0xFFFEF2F2); text = const Color(0xFFDC2626);
+        break;
+      default:
+        bg = AppColors.gray100; text = AppColors.gray600;
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
+      child: Text(status, style: TextStyle(color: text, fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 }

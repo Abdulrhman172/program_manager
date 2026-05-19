@@ -2,13 +2,15 @@ class StudentModel {
   final String id;
   final String name;
   final String department;
-  final String username;
+  final String batchNumber;
+  final String academicYear;
 
   StudentModel({
     required this.id,
     required this.name,
     required this.department,
-    required this.username,
+    required this.batchNumber,
+    required this.academicYear,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -16,7 +18,8 @@ class StudentModel {
       id: json['id'] as String,
       name: json['name'] as String,
       department: json['department'] as String,
-      username: json['username'] as String,
+      batchNumber: json['batchNumber'] as String,
+      academicYear: json['academicYear'] as String,
     );
   }
 
@@ -25,7 +28,8 @@ class StudentModel {
       'id': id,
       'name': name,
       'department': department,
-      'username': username,
+      'batchNumber': batchNumber,
+      'academicYear': academicYear,
     };
   }
 }

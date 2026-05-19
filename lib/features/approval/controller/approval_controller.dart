@@ -57,24 +57,37 @@ class ApprovalController extends ChangeNotifier {
 
   List<ApprovalModel> _filteredApprovals = [];
   String _searchQuery = '';
+  String _statusFilter = 'الكل'; // 'الكل', 'في الانتظار', 'معتمدة', 'مرفوضة'
 
   ApprovalController() {
     _filteredApprovals = _approvals;
   }
 
   List<ApprovalModel> get approvals => _filteredApprovals;
+  String get currentFilter => _statusFilter;
 
   int get pendingCount => _approvals.where((a) => a.status == 'في الانتظار').length;
   int get approvedCount => _approvals.where((a) => a.status == 'معتمدة').length;
   int get rejectedCount => _approvals.where((a) => a.status == 'مرفوضة').length;
 
-  void changeStatus(String id, String newStatus) {
+  void changeStatus(String id, String newStatus, {String? reason}) {
     final index = _approvals.indexWhere((a) => a.id == id);
     if (index != -1) {
       _approvals[index].status = newStatus;
+      if (newStatus == 'مرفوضة') {
+        _approvals[index].rejectionReason = reason;
+      } else {
+        _approvals[index].rejectionReason = null;
+      }
       _filterList();
       notifyListeners();
     }
+  }
+
+  void setFilter(String filter) {
+    _statusFilter = filter;
+    _filterList();
+    notifyListeners();
   }
 
   void search(String query) {
@@ -84,14 +97,20 @@ class ApprovalController extends ChangeNotifier {
   }
 
   void _filterList() {
-    if (_searchQuery.isEmpty) {
-      _filteredApprovals = List.from(_approvals);
-    } else {
-      _filteredApprovals = _approvals
+    var tempList = _approvals;
+
+    if (_statusFilter != 'الكل') {
+      tempList = tempList.where((a) => a.status == _statusFilter).toList();
+    }
+
+    if (_searchQuery.isNotEmpty) {
+      tempList = tempList
           .where((approval) =>
               approval.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
               approval.supervisor.toLowerCase().contains(_searchQuery.toLowerCase()))
           .toList();
     }
+
+    _filteredApprovals = tempList;
   }
 }
