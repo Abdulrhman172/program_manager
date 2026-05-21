@@ -37,6 +37,38 @@ class StagesView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 600;
+                    if (isMobile) {
+                      return Column(
+                        children: [
+                          _buildStatCard(
+                            title: 'إجمالي المراحل',
+                            value: controller.totalStages.toString(),
+                            bgColor: const Color(0xFFFAF5FF),
+                            textColor: const Color(0xFF9333EA),
+                            borderColor: const Color(0xFFE9D5FF),
+                            icon: Icons.calendar_today_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'المراحل القادمة',
+                            value: controller.upcomingStages.toString(),
+                            bgColor: const Color(0xFFEFF6FF),
+                            textColor: const Color(0xFF2563EB),
+                            borderColor: const Color(0xFFBFDBFE),
+                            icon: Icons.calendar_month_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'المراحل النشطة',
+                            value: controller.activeStages.toString(),
+                            bgColor: const Color(0xFFF0FDF4),
+                            textColor: const Color(0xFF16A34A),
+                            borderColor: const Color(0xFF86EFAC),
+                            icon: Icons.access_time_outlined,
+                          ),
+                        ],
+                      );
+                    }
                     return Row(
                       children: [
                         Expanded(
@@ -49,7 +81,7 @@ class StagesView extends StatelessWidget {
                             icon: Icons.calendar_today_outlined,
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المراحل القادمة',
@@ -60,7 +92,7 @@ class StagesView extends StatelessWidget {
                             icon: Icons.calendar_month_outlined,
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المراحل النشطة',
@@ -235,8 +267,10 @@ class StagesView extends StatelessWidget {
 
           // Date Info and Edit Button
           if (!isEditing)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 12,
               children: [
                 OutlinedButton.icon(
                   onPressed: () {
@@ -252,10 +286,12 @@ class StagesView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Row(
+                const SizedBox(width: 16),
+                Wrap(
+                  spacing: 16,
+                  runSpacing: 8,
                   children: [
                     _buildDateChip('النهاية: ${stage.endDate}'),
-                    const SizedBox(width: 16),
                     _buildDateChip('البداية: ${stage.startDate}'),
                   ],
                 ),

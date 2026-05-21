@@ -179,7 +179,7 @@ class _SimpleStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -197,7 +197,7 @@ class _SimpleStatCard extends StatelessWidget {
             ),
             child: Icon(icon, color: const Color(0xFF64748B), size: 24),
           ),
-          const Spacer(),
+          const SizedBox(height: 8),
           Text(
             title,
             style: const TextStyle(
@@ -258,6 +258,7 @@ class _NotificationItem extends StatelessWidget {
               color: AppColors.gray500,
             ),
           ),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -315,18 +316,23 @@ class _StageCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.foreground,
+              Expanded(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.foreground,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Container(
+                margin: const EdgeInsets.only(top: 4),
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(

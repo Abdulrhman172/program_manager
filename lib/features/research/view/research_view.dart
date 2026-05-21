@@ -34,6 +34,43 @@ class ResearchView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 600;
+                    if (isMobile) {
+                      return Column(
+                        children: [
+                          _buildStatCard(
+                            title: 'إجمالي الأبحاث',
+                            value: controller.totalCount.toString(),
+                            bgColor: Colors.white,
+                            textColor: AppColors.foreground,
+                            borderColor: AppColors.gray200,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'المرحلة المتقدمة',
+                            value: controller.advancedPhaseCount.toString(),
+                            bgColor: const Color(0xFFF0FDF4),
+                            textColor: const Color(0xFF16A34A),
+                            borderColor: const Color(0xFF86EFAC),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'قيد التنفيذ',
+                            value: controller.inProgressCount.toString(),
+                            bgColor: const Color(0xFFEFF6FF),
+                            textColor: const Color(0xFF2563EB),
+                            borderColor: const Color(0xFFBFDBFE),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'في البداية',
+                            value: controller.inBeginningCount.toString(),
+                            bgColor: const Color(0xFFFFF7ED),
+                            textColor: const Color(0xFFEA580C),
+                            borderColor: const Color(0xFFFFEDD5),
+                          ),
+                        ],
+                      );
+                    }
                     return Row(
                       children: [
                         Expanded(
@@ -45,7 +82,7 @@ class ResearchView extends StatelessWidget {
                             borderColor: AppColors.gray200,
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المرحلة المتقدمة',
@@ -55,7 +92,7 @@ class ResearchView extends StatelessWidget {
                             borderColor: const Color(0xFF86EFAC),
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'قيد التنفيذ',
@@ -65,7 +102,7 @@ class ResearchView extends StatelessWidget {
                             borderColor: const Color(0xFFBFDBFE),
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'في البداية',
@@ -223,55 +260,60 @@ class ResearchView extends StatelessWidget {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.foreground),
         ),
         const SizedBox(height: 16),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 3.0,
-          ),
-          itemCount: years.length,
-          itemBuilder: (context, index) {
-            final year = years[index];
-            return GestureDetector(
-              onTap: () => controller.selectArchiveYear(year),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.gray200),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(8),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Icon(Icons.chevron_left, color: AppColors.gray400),
-                    Row(
-                      children: [
-                        const Icon(Icons.archive_outlined, color: Color(0xFF6B7280), size: 20),
-                        const SizedBox(width: 10),
-                        Text(
-                          'السنة الدراسية $year',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.foreground,
-                          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isMobile = constraints.maxWidth < 600;
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isMobile ? 1 : 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: isMobile ? 4.0 : 3.0,
+              ),
+              itemCount: years.length,
+              itemBuilder: (context, index) {
+                final year = years[index];
+                return GestureDetector(
+                  onTap: () => controller.selectArchiveYear(year),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.gray200),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(8),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(Icons.chevron_left, color: AppColors.gray400),
+                        Row(
+                          children: [
+                            const Icon(Icons.archive_outlined, color: Color(0xFF6B7280), size: 20),
+                            const SizedBox(width: 10),
+                            Text(
+                              'السنة الدراسية $year',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.foreground,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),

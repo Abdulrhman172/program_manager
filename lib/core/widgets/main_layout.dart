@@ -100,110 +100,115 @@ class MainLayout extends StatelessWidget {
           height: 1.0,
         ),
       ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // عنوان النظام في اليمين (RTL)
-          const Text(
-            'نظام إدارة ومتابعة أبحاث التخرج',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajawal',
-              color: AppColors.primary,
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        reverse: true, // For RTL
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // عنوان النظام في اليمين (RTL)
+            const Text(
+              'نظام إدارة ومتابعة أبحاث التخرج',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Tajawal',
+                color: AppColors.primary,
+              ),
             ),
-          ),
-          
-          // الأدوات في اليسار
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // الإشعارات
-              Stack(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications_none),
-                    onPressed: () {},
-                  ),
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.error,
-                        shape: BoxShape.circle,
+            const SizedBox(width: 16),
+            
+            // الأدوات في اليسار
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // الإشعارات
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.notifications_none),
+                      onPressed: () {},
+                    ),
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: AppColors.error,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+  
+                // معلومات المستخدم
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'د. أحمد محمد علي',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.foreground,
+                      ),
+                    ),
+                    Text(
+                      'مسؤول البرنامج',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.gray500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 12),
+                
+                // الأيقونة الشخصية
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
                   ),
-                ],
-              ),
-              const SizedBox(width: 16),
-
-              // معلومات المستخدم
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'د. أحمد محمد علي',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.foreground,
+                  child: const Center(
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
-                  Text(
-                    'مسؤول البرنامج',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.gray500,
+                ),
+                const SizedBox(width: 24),
+  
+                // زر تسجيل الخروج
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const LoginView()),
+                    );
+                  },
+                  icon: const Icon(Icons.logout, size: 18),
+                  label: const Text('تسجيل الخروج'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.error,
+                    side: const BorderSide(color: AppColors.error),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 12),
-              
-              // الأيقونة الشخصية
-              Container(
-                width: 36,
-                height: 36,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
                 ),
-              ),
-              const SizedBox(width: 24),
-
-              // زر تسجيل الخروج
-              OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const LoginView()),
-                  );
-                },
-                icon: const Icon(Icons.logout, size: 18),
-                label: const Text('تسجيل الخروج'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.error,
-                  side: const BorderSide(color: AppColors.error),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

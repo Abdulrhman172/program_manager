@@ -37,6 +37,38 @@ class TeamsView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 600;
+                    if (isMobile) {
+                      return Column(
+                        children: [
+                          _buildStatCard(
+                            title: 'إجمالي الفرق',
+                            value: controller.totalTeams.toString(),
+                            bgColor: Colors.white,
+                            textColor: const Color(0xFF2563EB),
+                            borderColor: AppColors.gray200,
+                            icon: Icons.people_outline,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'إجمالي الطلاب',
+                            value: controller.totalStudents.toString(),
+                            bgColor: const Color(0xFFEFF6FF),
+                            textColor: const Color(0xFF2563EB),
+                            borderColor: const Color(0xFFBFDBFE),
+                            icon: null,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: 'متوسط حجم الفريق',
+                            value: controller.averageTeamSize.toStringAsFixed(1),
+                            bgColor: const Color(0xFFF0FDF4),
+                            textColor: const Color(0xFF16A34A),
+                            borderColor: const Color(0xFF86EFAC),
+                            icon: null,
+                          ),
+                        ],
+                      );
+                    }
                     return Row(
                       children: [
                         Expanded(
@@ -49,7 +81,7 @@ class TeamsView extends StatelessWidget {
                             icon: Icons.people_outline,
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'إجمالي الطلاب',
@@ -60,7 +92,7 @@ class TeamsView extends StatelessWidget {
                             icon: null,
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'متوسط حجم الفريق',
