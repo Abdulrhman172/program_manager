@@ -9,6 +9,7 @@ import 'features/stages/controller/stages_controller.dart';
 import 'features/approval/controller/approval_controller.dart';
 import 'features/research/controller/research_controller.dart';
 import 'features/teams/controller/teams_controller.dart';
+import 'features/grades/controller/grades_controller.dart';
 
 void main() {
   runApp(const CoordinatorApp());
@@ -27,6 +28,7 @@ class CoordinatorApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ApprovalController()),
         ChangeNotifierProvider(create: (_) => ResearchController()),
         ChangeNotifierProvider(create: (_) => TeamsController()),
+        ChangeNotifierProvider(create: (_) => GradesController()),
       ],
       child: MaterialApp(
         title: 'نظام إدارة بحوث التخرج',

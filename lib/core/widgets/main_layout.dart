@@ -10,6 +10,7 @@ import '../../features/teams/view/teams_view.dart';
 import '../../features/settings/view/settings_view.dart';
 import '../../features/auth/view/login_view.dart';
 import '../../features/research/view/research_view.dart';
+import '../../features/grades/view/grades_view.dart';
 import '../theme/app_theme.dart';
 import 'app_drawer.dart';
 
@@ -32,6 +33,8 @@ class MainLayout extends StatelessWidget {
         return const ResearchView();
       case '/teams':
         return const TeamsView();
+      case '/grades':
+        return const GradesView();
       case '/settings':
         return const SettingsView();
       default:
