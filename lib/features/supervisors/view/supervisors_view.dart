@@ -36,6 +36,49 @@ class SupervisorsView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 600;
+                    if (isMobile) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'إجمالي المشرفين',
+                                  value: controller.totalSupervisors.toString(),
+                                  bgColor: Colors.white,
+                                  textColor: AppColors.foreground,
+                                  borderColor: AppColors.gray200,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المشرفين المفعلين',
+                                  value: controller.activeSupervisors.toString(),
+                                  bgColor: const Color(0xFFF0FDF4),
+                                  textColor: AppColors.success,
+                                  borderColor: const Color(0xFF86EFAC),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المشرفين غير المفعلين',
+                                  value: controller.inactiveSupervisors.toString(),
+                                  bgColor: const Color(0xFFFEF2F2),
+                                  textColor: AppColors.error,
+                                  borderColor: const Color(0xFFFECACA),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }
                     return Row(
                       children: [
                         Expanded(
@@ -47,7 +90,7 @@ class SupervisorsView extends StatelessWidget {
                             borderColor: AppColors.gray200,
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المشرفين المفعلين',
@@ -57,7 +100,7 @@ class SupervisorsView extends StatelessWidget {
                             borderColor: const Color(0xFF86EFAC),
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المشرفين غير المفعلين',

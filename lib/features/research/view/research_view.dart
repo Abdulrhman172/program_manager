@@ -37,36 +37,52 @@ class ResearchView extends StatelessWidget {
                     if (isMobile) {
                       return Column(
                         children: [
-                          _buildStatCard(
-                            title: 'إجمالي الأبحاث',
-                            value: controller.totalCount.toString(),
-                            bgColor: Colors.white,
-                            textColor: AppColors.foreground,
-                            borderColor: AppColors.gray200,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'إجمالي الأبحاث',
+                                  value: controller.totalCount.toString(),
+                                  bgColor: Colors.white,
+                                  textColor: AppColors.foreground,
+                                  borderColor: AppColors.gray200,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المرحلة المتقدمة',
+                                  value: controller.advancedPhaseCount.toString(),
+                                  bgColor: const Color(0xFFF0FDF4),
+                                  textColor: const Color(0xFF16A34A),
+                                  borderColor: const Color(0xFF86EFAC),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 16),
-                          _buildStatCard(
-                            title: 'المرحلة المتقدمة',
-                            value: controller.advancedPhaseCount.toString(),
-                            bgColor: const Color(0xFFF0FDF4),
-                            textColor: const Color(0xFF16A34A),
-                            borderColor: const Color(0xFF86EFAC),
-                          ),
-                          const SizedBox(height: 16),
-                          _buildStatCard(
-                            title: 'قيد التنفيذ',
-                            value: controller.inProgressCount.toString(),
-                            bgColor: const Color(0xFFEFF6FF),
-                            textColor: const Color(0xFF2563EB),
-                            borderColor: const Color(0xFFBFDBFE),
-                          ),
-                          const SizedBox(height: 16),
-                          _buildStatCard(
-                            title: 'في البداية',
-                            value: controller.inBeginningCount.toString(),
-                            bgColor: const Color(0xFFFFF7ED),
-                            textColor: const Color(0xFFEA580C),
-                            borderColor: const Color(0xFFFFEDD5),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'قيد التنفيذ',
+                                  value: controller.inProgressCount.toString(),
+                                  bgColor: const Color(0xFFEFF6FF),
+                                  textColor: const Color(0xFF2563EB),
+                                  borderColor: const Color(0xFFBFDBFE),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'في البداية',
+                                  value: controller.inBeginningCount.toString(),
+                                  bgColor: const Color(0xFFFFF7ED),
+                                  textColor: const Color(0xFFEA580C),
+                                  borderColor: const Color(0xFFFFEDD5),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       );

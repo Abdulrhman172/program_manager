@@ -40,31 +40,45 @@ class StagesView extends StatelessWidget {
                     if (isMobile) {
                       return Column(
                         children: [
-                          _buildStatCard(
-                            title: 'إجمالي المراحل',
-                            value: controller.totalStages.toString(),
-                            bgColor: const Color(0xFFFAF5FF),
-                            textColor: const Color(0xFF9333EA),
-                            borderColor: const Color(0xFFE9D5FF),
-                            icon: Icons.calendar_today_outlined,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'إجمالي المراحل',
+                                  value: controller.totalStages.toString(),
+                                  bgColor: const Color(0xFFFAF5FF),
+                                  textColor: const Color(0xFF9333EA),
+                                  borderColor: const Color(0xFFE9D5FF),
+                                  icon: Icons.calendar_today_outlined,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 16),
-                          _buildStatCard(
-                            title: 'المراحل القادمة',
-                            value: controller.upcomingStages.toString(),
-                            bgColor: const Color(0xFFEFF6FF),
-                            textColor: const Color(0xFF2563EB),
-                            borderColor: const Color(0xFFBFDBFE),
-                            icon: Icons.calendar_month_outlined,
-                          ),
-                          const SizedBox(height: 16),
-                          _buildStatCard(
-                            title: 'المراحل النشطة',
-                            value: controller.activeStages.toString(),
-                            bgColor: const Color(0xFFF0FDF4),
-                            textColor: const Color(0xFF16A34A),
-                            borderColor: const Color(0xFF86EFAC),
-                            icon: Icons.access_time_outlined,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المراحل القادمة',
+                                  value: controller.upcomingStages.toString(),
+                                  bgColor: const Color(0xFFEFF6FF),
+                                  textColor: const Color(0xFF2563EB),
+                                  borderColor: const Color(0xFFBFDBFE),
+                                  icon: Icons.calendar_month_outlined,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المراحل النشطة',
+                                  value: controller.activeStages.toString(),
+                                  bgColor: const Color(0xFFF0FDF4),
+                                  textColor: const Color(0xFF16A34A),
+                                  borderColor: const Color(0xFF86EFAC),
+                                  icon: Icons.access_time_outlined,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       );
@@ -216,30 +230,34 @@ class StagesView extends StatelessWidget {
               ),
               
               // Title and Number
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        stage.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.foreground,
-                        ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            stage.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.foreground,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            stage.description,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.gray500,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        stage.description,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppColors.gray500,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
                   const SizedBox(width: 16),
                   Container(
                     width: 40,
@@ -260,6 +278,7 @@ class StagesView extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
               ),
             ],
           ),

@@ -32,8 +32,10 @@ class _StudentsScreenContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header with Add Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runSpacing: 16,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -34,6 +34,49 @@ class ApprovalView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 600;
+                    if (isMobile) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'في الانتظار',
+                                  value: controller.pendingCount.toString(),
+                                  bgColor: const Color(0xFFFFF7ED),
+                                  textColor: const Color(0xFFEA580C),
+                                  borderColor: const Color(0xFFFFEDD5),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المعتمدة',
+                                  value: controller.approvedCount.toString(),
+                                  bgColor: const Color(0xFFF0FDF4),
+                                  textColor: const Color(0xFF16A34A),
+                                  borderColor: const Color(0xFF86EFAC),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildStatCard(
+                                  title: 'المرفوضة',
+                                  value: controller.rejectedCount.toString(),
+                                  bgColor: const Color(0xFFFEF2F2),
+                                  textColor: const Color(0xFFDC2626),
+                                  borderColor: const Color(0xFFFECACA),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }
                     return Row(
                       children: [
                         Expanded(
@@ -45,7 +88,7 @@ class ApprovalView extends StatelessWidget {
                             borderColor: const Color(0xFFFFEDD5),
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المعتمدة',
@@ -55,7 +98,7 @@ class ApprovalView extends StatelessWidget {
                             borderColor: const Color(0xFF86EFAC),
                           ),
                         ),
-                        if (!isMobile) const SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _buildStatCard(
                             title: 'المرفوضة',
