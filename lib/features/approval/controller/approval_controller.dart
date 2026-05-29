@@ -90,12 +90,33 @@ class ApprovalController extends ChangeNotifier {
     notifyListeners();
 
     try {
+      int? noteId;
+      if (approved == false && reason != null && reason.isNotEmpty) {
+        // إدخال سبب الرفض في جدول proceduresNotes أولاً
+        final noteResponse = await SupabaseService.client
+            .from('proceduresNotes')
+            .insert({'proed_note_name': reason})
+            .select()
+            .single();
+        noteId = (noteResponse['proced_id'] as num?)?.toInt();
+      }
+
+      final updateData = <String, dynamic>{
+        'prgrm_mngr_approval': approved,
+      };
+
+      if (noteId != null) {
+        updateData['id_prgrm_mngr_proced'] = noteId;
+      }
+
       await SupabaseService.client
           .from('first stage')
-          .update({'prgrm_mngr_approval': approved}).eq('stage1_id', stage1Id);
+          .update(updateData)
+          .eq('stage1_id', stage1Id);
     } catch (e) {
       // إعادة الحالة السابقة عند الخطأ
       _approvals[index].prgrmMngrApproval = null;
+      _approvals[index].rejectionReason = null;
       _filterList();
       notifyListeners();
     }

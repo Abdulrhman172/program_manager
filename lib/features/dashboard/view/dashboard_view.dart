@@ -33,41 +33,56 @@ class DashboardView extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Stats Cards
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final isMobile = constraints.maxWidth < 600;
-                    return GridView.count(
-                      crossAxisCount: isMobile ? 1 : (constraints.maxWidth < 900 ? 2 : 4),
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      shrinkWrap: true,
-                      childAspectRatio: isMobile ? 2.5 : 1.8,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: const [
-                        _SimpleStatCard(
-                          title: 'المراحل النشطة حالياً',
-                          value: '2',
-                          icon: Icons.check_circle_outline,
-                        ),
-                        _SimpleStatCard(
-                          title: 'عدد المشرفين المفعلين',
-                          value: '28',
-                          icon: Icons.person_outline,
-                        ),
-                        _SimpleStatCard(
-                          title: 'عدد الطلاب المسجلين',
-                          value: '135',
-                          icon: Icons.people_outline,
-                        ),
-                        _SimpleStatCard(
-                          title: 'عدد أبحاث التخرج',
-                          value: '45',
-                          icon: Icons.description_outlined,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                if (controller.isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(40.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                else if (controller.errorMessage != null)
+                  Center(
+                    child: Text(
+                      controller.errorMessage!,
+                      style: const TextStyle(color: AppColors.error),
+                    ),
+                  )
+                else
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isMobile = constraints.maxWidth < 600;
+                      return GridView.count(
+                        crossAxisCount: isMobile ? 1 : (constraints.maxWidth < 900 ? 2 : 4),
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        shrinkWrap: true,
+                        childAspectRatio: isMobile ? 2.5 : 1.8,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          _SimpleStatCard(
+                            title: 'الأبحاث النشطة حالياً',
+                            value: controller.activeResearchesCount.toString(),
+                            icon: Icons.check_circle_outline,
+                          ),
+                          _SimpleStatCard(
+                            title: 'عدد المشرفين المفعلين',
+                            value: controller.supervisorsCount.toString(),
+                            icon: Icons.person_outline,
+                          ),
+                          _SimpleStatCard(
+                            title: 'عدد الطلاب المسجلين',
+                            value: controller.studentsCount.toString(),
+                            icon: Icons.people_outline,
+                          ),
+                          _SimpleStatCard(
+                            title: 'عدد الأبحاث المكتملة',
+                            value: controller.finishedResearchesCount.toString(),
+                            icon: Icons.description_outlined,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 const SizedBox(height: 32),
 
                 // Notifications Section

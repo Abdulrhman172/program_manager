@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/supabase_service.dart';
 import '../model/student_model.dart';
 
 class StudentsController extends ChangeNotifier {
-  // Mock Data
-  final List<StudentModel> _students = [
-    StudentModel(id: '2021001', name: 'عبدالله محمد سعيد', department: 'إدارة أعمال عربي', batchNumber: 'الدفعة 15', academicYear: '2025/2026'),
-    StudentModel(id: '2021002', name: 'فاطمة أحمد علي', department: 'إدارة أعمال إنجليزي', batchNumber: 'الدفعة 15', academicYear: '2025/2026'),
-    StudentModel(id: '2021003', name: 'خالد حسن محمود', department: 'إدارة أعمال دولية', batchNumber: 'الدفعة 14', academicYear: '2024/2025'),
-    StudentModel(id: '2021004', name: 'نور سالم عبدالله', department: 'محاسبة', batchNumber: 'الدفعة 16', academicYear: '2026/2027'),
-    StudentModel(id: '2021005', name: 'أحمد يحيى حسين', department: 'ترجمة', batchNumber: 'الدفعة 15', academicYear: '2025/2026'),
-  ];
+  List<StudentModel> _students = [];
 
   final List<String> departments = [
+    'تقنية معلومات',
     'إدارة أعمال عربي',
     'إدارة أعمال انجليزي',
     'إدارة أعمال دولية',
@@ -23,6 +19,7 @@ class StudentsController extends ChangeNotifier {
   List<StudentModel> _filteredStudents = [];
   String _searchQuery = '';
   
+  bool _isLoading = false;
   bool _isAddingStudent = false;
   bool _isEditing = false;
   String? _editingStudentId;
@@ -37,14 +34,41 @@ class StudentsController extends ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
 
   StudentsController() {
-    _filteredStudents = _students;
+    fetchStudents();
   }
 
   List<StudentModel> get students => _filteredStudents;
+  bool get isLoading => _isLoading;
   bool get isAddingStudent => _isAddingStudent;
   bool get isEditing => _isEditing;
   String? get formError => _formError;
   String? get selectedDepartment => _selectedDepartment;
+
+  Future<void> fetchStudents() async {
+    _isLoading = true;
+    _formError = null;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram != null) {
+        final response = await SupabaseService.client
+            .from('student')
+            .select()
+            .eq('id_program', idProgram);
+
+        _students = (response as List).map((e) => StudentModel.fromJson(e)).toList();
+        _filterList();
+      }
+    } catch (e) {
+      _formError = 'حدث خطأ في جلب البيانات: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   void toggleAddStudentForm() {
     if (_isAddingStudent && !_isEditing) {
@@ -96,7 +120,7 @@ class StudentsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveStudent() {
+  Future<void> saveStudent() async {
     _formError = null;
 
     // Validation
@@ -117,37 +141,54 @@ class StudentsController extends ChangeNotifier {
       return;
     }
 
-    final student = StudentModel(
-      id: idController.text.trim(),
-      name: nameController.text.trim(),
-      department: _selectedDepartment!,
-      batchNumber: batchNumberController.text.trim(),
-      academicYear: academicYearController.text.trim(),
-    );
+    _isLoading = true;
+    notifyListeners();
 
-    if (_isEditing && _editingStudentId != null) {
-      // Update existing
-      final index = _students.indexWhere((s) => s.id == _editingStudentId);
-      if (index != -1) {
-        _students[index] = student;
-      }
-    } else {
-      // Check if ID already exists
-      if (_students.any((s) => s.id == student.id)) {
-        _formError = 'الرقم الجامعي مسجل مسبقاً';
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram == null) {
+        _formError = 'لم يتم تحديد البرنامج';
+        _isLoading = false;
         notifyListeners();
         return;
       }
-      // Add new
-      _students.insert(0, student);
-    }
 
-    _filterList();
-    _isAddingStudent = false;
-    _isEditing = false;
-    _editingStudentId = null;
-    _clearForm();
-    notifyListeners();
+      final studentData = {
+        'stud_name': nameController.text.trim(),
+        'stud_college_num': int.tryParse(idController.text.trim()) ?? 0,
+        'stud_cohort_num': int.tryParse(batchNumberController.text.trim()) ?? 0,
+        'id_academy_year': int.tryParse(academicYearController.text.trim()) ?? 1,
+        'id_program': idProgram,
+      };
+
+      if (passwordController.text.isNotEmpty) {
+        studentData['stud_pass'] = passwordController.text.trim();
+      }
+
+      if (_isEditing && _editingStudentId != null) {
+        // Update existing
+        await SupabaseService.client
+            .from('student')
+            .update(studentData)
+            .eq('stud_college_num', int.tryParse(_editingStudentId!) ?? 0);
+      } else {
+        // Add new
+        await SupabaseService.client.from('student').insert(studentData);
+      }
+
+      await fetchStudents();
+      _isAddingStudent = false;
+      _isEditing = false;
+      _editingStudentId = null;
+      _clearForm();
+    } catch (e) {
+      _formError = 'حدث خطأ أثناء الحفظ: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void search(String query) {
@@ -168,10 +209,21 @@ class StudentsController extends ChangeNotifier {
     }
   }
 
-  void deleteStudent(String id) {
-    _students.removeWhere((s) => s.id == id);
-    _filterList();
+  Future<void> deleteStudent(String id) async {
+    _isLoading = true;
     notifyListeners();
+
+    try {
+      await SupabaseService.client
+          .from('student')
+          .delete()
+          .eq('stud_college_num', int.tryParse(id) ?? 0);
+      await fetchStudents();
+    } catch (e) {
+      _formError = 'حدث خطأ أثناء الحذف: $e';
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void _clearForm() {

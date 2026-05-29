@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/stage_model.dart';
 
@@ -32,9 +33,20 @@ class StagesController extends ChangeNotifier {
     notifyListeners();
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram == null) {
+        _errorMessage = 'لم يتم تحديد البرنامج';
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
       final response = await SupabaseService.client
           .from('stages')
           .select()
+          .eq('id_program', idProgram)
           .order('stages_id', ascending: true);
 
       _stages =

@@ -31,4 +31,31 @@ class ResearchModel {
     required this.researchState,
     required this.academicYear,
   });
+
+  factory ResearchModel.fromJson(Map<String, dynamic> json) {
+    // Extract related data if joined, otherwise fallback
+    final supervisorName = json['supervisor'] != null ? json['supervisor']['sprvsr_name'] : 'لم يحدد';
+    final stateName = json['GroupState'] != null ? json['GroupState']['states_name'] : 'غير معروف';
+    final academyYearName = json['AcademyYear'] != null ? json['AcademyYear']['acye_years'] : '2025/2026';
+
+    final finalDocUrl = json['final_document'] as String?;
+    List<ResearchFile> filesList = [];
+    if (finalDocUrl != null && finalDocUrl.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'المستند النهائي', size: 'Unknown'));
+    }
+
+    return ResearchModel(
+      id: json['group_id']?.toString() ?? '',
+      title: json['group_name']?.toString() ?? 'بدون عنوان',
+      supervisor: supervisorName ?? 'لم يحدد',
+      department: 'تقنية معلومات', // Hardcoded for now
+      currentPhase: json['project_stage']?.toString() ?? 'المرحلة الأولى',
+      lastUpdated: json['created_at'] != null ? json['created_at'].toString().split('T').first : 'غير محدد',
+      progress: (json['evaluation_degree'] as num?)?.toDouble() ?? 0.0,
+      files: filesList,
+      status: stateName ?? 'غير معروف',
+      researchState: stateName ?? 'غير معروف',
+      academicYear: academyYearName ?? '2025/2026',
+    );
+  }
 }

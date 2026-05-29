@@ -15,11 +15,11 @@ class StudentModel {
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      department: json['department'] as String,
-      batchNumber: json['batchNumber'] as String,
-      academicYear: json['academicYear'] as String,
+      id: json['stud_college_num']?.toString() ?? '',
+      name: json['stud_name']?.toString() ?? '',
+      department: 'تقنية معلومات', // سيتم تحديثه لاحقاً إذا لزم الأمر
+      batchNumber: json['stud_cohort_num']?.toString() ?? '',
+      academicYear: json['id_academy_year']?.toString() ?? '',
     );
   }
 
