@@ -15,7 +15,7 @@ class TeamsView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Consumer<TeamsController>(
           builder: (context, controller, _) {
-            return Column(
+                return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
@@ -33,6 +33,17 @@ class TeamsView extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
 
+                // Loading / Error
+                if (controller.isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else if (controller.errorMessage != null)
+                  Center(
+                    child: Text(
+                      controller.errorMessage!,
+                      style: const TextStyle(color: AppColors.error),
+                    ),
+                  )
+                else ...[
                 // Stats Cards
                 LayoutBuilder(
                   builder: (context, constraints) {
@@ -164,6 +175,7 @@ class TeamsView extends StatelessWidget {
                     );
                   },
                 ),
+                ], // end of else
               ],
             );
           },
@@ -260,7 +272,7 @@ class TeamsView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            team.projectTitle,
+                            team.groupName,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -284,7 +296,7 @@ class TeamsView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 52), // Align under the text
                       child: Text(
-                        team.department,
+                        team.programName,
                         style: const TextStyle(
                           fontSize: 13,
                           color: AppColors.gray500,
@@ -306,13 +318,13 @@ class TeamsView extends StatelessWidget {
           // Content
           const Text('عنوان البحث:', style: TextStyle(fontSize: 13, color: AppColors.gray500)),
           const SizedBox(height: 4),
-          Text(team.projectTitle, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.foreground)),
+          Text(team.groupName, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.foreground)),
           
           const SizedBox(height: 16),
           
           const Text('المشرف الأكاديمي:', style: TextStyle(fontSize: 13, color: AppColors.gray500)),
           const SizedBox(height: 4),
-          Text(team.supervisor, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.foreground)),
+          Text(team.supervisorName ?? 'غير محدد', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.foreground)),
           
           const SizedBox(height: 16),
           
@@ -350,7 +362,7 @@ class TeamsView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(member.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.foreground)),
-                          Text(member.id, style: const TextStyle(fontSize: 12, color: AppColors.gray500)),
+                           Text(member.id.toString(), style: const TextStyle(fontSize: 12, color: AppColors.gray500)),
                         ],
                       ),
                     ],
@@ -404,7 +416,7 @@ class TeamsView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            team.projectTitle,
+                            team.groupName,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -412,7 +424,7 @@ class TeamsView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            team.department,
+                        team.programName,
                             style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.gray500,
@@ -448,7 +460,7 @@ class TeamsView extends StatelessWidget {
                       children: [
                         const Text('عنوان البحث:', style: TextStyle(fontSize: 13, color: Color(0xFF2563EB))),
                         const SizedBox(height: 4),
-                        Text(team.projectTitle, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A))),
+                        Text(team.groupName, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A))),
                       ],
                     ),
                   ),
@@ -469,7 +481,7 @@ class TeamsView extends StatelessWidget {
                       children: [
                         const Text('المشرف الأكاديمي:', style: TextStyle(fontSize: 13, color: Color(0xFF16A34A))),
                         const SizedBox(height: 4),
-                        Text(team.supervisor, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF14532D))),
+                        Text(team.supervisorName ?? 'غير محدد', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF14532D))),
                       ],
                     ),
                   ),

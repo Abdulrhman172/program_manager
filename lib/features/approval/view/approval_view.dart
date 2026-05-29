@@ -15,6 +15,25 @@ class ApprovalView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Consumer<ApprovalController>(
           builder: (context, controller, _) {
+            if (controller.isLoading) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(80),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (controller.errorMessage != null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(40),
+                  child: Text(
+                    controller.errorMessage!,
+                    style: const TextStyle(color: AppColors.error),
+                  ),
+                ),
+              );
+            }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -133,7 +152,8 @@ class ApprovalView extends StatelessWidget {
                       hintText: 'البحث عن مشروع...',
                       hintStyle: TextStyle(color: AppColors.gray400),
                       border: InputBorder.none,
-                      suffixIcon: Icon(Icons.search, color: AppColors.gray400),
+                      suffixIcon:
+                          Icon(Icons.search, color: AppColors.gray400),
                     ),
                   ),
                 ),
@@ -146,11 +166,13 @@ class ApprovalView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 48),
                       child: Column(
                         children: [
-                          Icon(Icons.inbox_outlined, size: 64, color: AppColors.gray300),
+                          Icon(Icons.inbox_outlined,
+                              size: 64, color: AppColors.gray300),
                           const SizedBox(height: 16),
                           Text(
                             'لا توجد مشاريع في هذه الحالة',
-                            style: TextStyle(color: AppColors.gray500, fontSize: 16),
+                            style: TextStyle(
+                                color: AppColors.gray500, fontSize: 16),
                           ),
                         ],
                       ),
@@ -161,10 +183,12 @@ class ApprovalView extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.approvals.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final approval = controller.approvals[index];
-                      return _buildProjectCard(context, controller, approval);
+                      return _buildProjectCard(
+                          context, controller, approval);
                     },
                   ),
               ],
@@ -175,7 +199,8 @@ class ApprovalView extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChips(BuildContext context, ApprovalController controller) {
+  Widget _buildFilterChips(
+      BuildContext context, ApprovalController controller) {
     final filters = ['الكل', 'في الانتظار', 'معتمدة', 'مرفوضة'];
     final filterColors = {
       'الكل': const Color(0xFF2563EB),
@@ -202,8 +227,10 @@ class ApprovalView extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),
-              side: BorderSide(color: isSelected ? color : AppColors.gray200),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              side: BorderSide(
+                  color: isSelected ? color : AppColors.gray200),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               showCheckmark: false,
             ),
           );
@@ -231,7 +258,10 @@ class ApprovalView extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: textColor),
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: textColor),
           ),
           const SizedBox(height: 16),
           Text(
@@ -248,7 +278,8 @@ class ApprovalView extends StatelessWidget {
     );
   }
 
-  Widget _buildProjectCard(BuildContext context, ApprovalController controller, ApprovalModel approval) {
+  Widget _buildProjectCard(BuildContext context, ApprovalController controller,
+      ApprovalModel approval) {
     Color badgeBgColor;
     Color badgeTextColor;
 
@@ -285,7 +316,8 @@ class ApprovalView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: badgeBgColor,
                   borderRadius: BorderRadius.circular(20),
@@ -300,51 +332,44 @@ class ApprovalView extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      approval.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.foreground,
-                      ),
-                      textAlign: TextAlign.right,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'التخصص: ${approval.department}',
-                      style: const TextStyle(fontSize: 13, color: AppColors.gray500),
-                      textAlign: TextAlign.right,
-                    ),
-                  ],
+                child: Text(
+                  approval.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.foreground,
+                  ),
+                  textAlign: TextAlign.right,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          if (approval.description != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              approval.description!,
+              style:
+                  const TextStyle(fontSize: 13, color: AppColors.gray600),
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+          // موافقات الأطراف الأخرى
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                'أعضاء الفريق: ${approval.members.join(' - ')}',
-                style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-              ),
+              _buildMiniApprovalBadge(
+                  'المشرف', approval.sprvsrApproval),
+              const SizedBox(width: 8),
+              _buildMiniApprovalBadge(
+                  'رئيس القسم', approval.headDepApproval),
             ],
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'المشرف: ${approval.supervisor}',
-                style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-              ),
-            ],
-          ),
-          // Show rejection reason if rejected
-          if (approval.status == 'مرفوضة' && approval.rejectionReason != null) ...[
+          // سبب الرفض
+          if (approval.status == 'مرفوضة' &&
+              approval.rejectionReason != null) ...[
             const SizedBox(height: 8),
             Container(
               width: double.infinity,
@@ -352,11 +377,13 @@ class ApprovalView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFFEF2F2),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFFFECACA)),
+                border:
+                    Border.all(color: const Color(0xFFFECACA)),
               ),
               child: Text(
                 'سبب الرفض: ${approval.rejectionReason}',
-                style: const TextStyle(fontSize: 13, color: Color(0xFFDC2626)),
+                style: const TextStyle(
+                    fontSize: 13, color: Color(0xFFDC2626)),
                 textAlign: TextAlign.right,
               ),
             ),
@@ -365,14 +392,16 @@ class ApprovalView extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () => _showDetailsModal(context, controller, approval),
+              onPressed: () =>
+                  _showDetailsModal(context, controller, approval),
               icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
               label: const Text('عرض التفاصيل'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.foreground,
                 side: const BorderSide(color: AppColors.gray300),
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
               ),
             ),
           ),
@@ -381,11 +410,41 @@ class ApprovalView extends StatelessWidget {
     );
   }
 
-  void _showConfirmApproveDialog(BuildContext context, ApprovalController controller, ApprovalModel approval) {
+  Widget _buildMiniApprovalBadge(String label, bool? approved) {
+    Color bg, text;
+    String approvalText;
+    if (approved == true) {
+      bg = const Color(0xFFF0FDF4);
+      text = const Color(0xFF16A34A);
+      approvalText = 'وافق';
+    } else if (approved == false) {
+      bg = const Color(0xFFFEF2F2);
+      text = const Color(0xFFDC2626);
+      approvalText = 'رفض';
+    } else {
+      bg = const Color(0xFFFFF7ED);
+      text = const Color(0xFFEA580C);
+      approvalText = 'بانتظار';
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+          color: bg, borderRadius: BorderRadius.circular(8)),
+      child: Text(
+        '$label: $approvalText',
+        style:
+            TextStyle(fontSize: 11, color: text, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  void _showConfirmApproveDialog(BuildContext context,
+      ApprovalController controller, ApprovalModel approval) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('تأكيد الاعتماد', textAlign: TextAlign.right),
         content: Text(
           'هل أنت متأكد من اعتماد مشروع "${approval.title}"؟',
@@ -395,25 +454,28 @@ class ApprovalView extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('لا', style: TextStyle(color: AppColors.gray600)),
+            child: const Text('لا',
+                style: TextStyle(color: AppColors.gray600)),
           ),
           ElevatedButton(
             onPressed: () {
-              controller.changeStatus(approval.id, 'معتمدة');
-              Navigator.of(ctx).pop(); // close confirm dialog
-              Navigator.of(context).pop(); // close details modal
+              controller.changeStatus(approval.stage1Id, true);
+              Navigator.of(ctx).pop();
+              Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF16A34A),
             ),
-            child: const Text('نعم، اعتماد', style: TextStyle(color: Colors.white)),
+            child: const Text('نعم، اعتماد',
+                style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
   }
 
-  void _showRejectionReasonDialog(BuildContext context, ApprovalController controller, ApprovalModel approval) {
+  void _showRejectionReasonDialog(BuildContext context,
+      ApprovalController controller, ApprovalModel approval) {
     final reasonController = TextEditingController();
     String? errorText;
 
@@ -422,7 +484,8 @@ class ApprovalView extends StatelessWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16)),
             title: const Text('سبب الرفض', textAlign: TextAlign.right),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -431,7 +494,8 @@ class ApprovalView extends StatelessWidget {
                 Text(
                   'يرجى كتابة سبب رفض مشروع "${approval.title}":',
                   textAlign: TextAlign.right,
-                  style: const TextStyle(fontSize: 14, color: AppColors.gray700),
+                  style: const TextStyle(
+                      fontSize: 14, color: AppColors.gray700),
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -440,15 +504,18 @@ class ApprovalView extends StatelessWidget {
                   maxLines: 3,
                   decoration: InputDecoration(
                     hintText: 'اكتب سبب الرفض هنا...',
-                    hintStyle: const TextStyle(color: AppColors.gray400),
+                    hintStyle:
+                        const TextStyle(color: AppColors.gray400),
                     errorText: errorText,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.gray200),
+                      borderSide:
+                          const BorderSide(color: AppColors.gray200),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.primary),
+                      borderSide:
+                          const BorderSide(color: AppColors.primary),
                     ),
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
@@ -460,7 +527,8 @@ class ApprovalView extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text('غير موافق', style: TextStyle(color: AppColors.gray600)),
+                child: const Text('غير موافق',
+                    style: TextStyle(color: AppColors.gray600)),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -468,14 +536,16 @@ class ApprovalView extends StatelessWidget {
                     setState(() => errorText = 'يرجى كتابة سبب الرفض');
                     return;
                   }
-                  controller.changeStatus(approval.id, 'مرفوضة', reason: reasonController.text.trim());
-                  Navigator.of(ctx).pop(); // close reason dialog
-                  Navigator.of(context).pop(); // close details modal
+                  controller.changeStatus(approval.stage1Id, false,
+                      reason: reasonController.text.trim());
+                  Navigator.of(ctx).pop();
+                  Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFDC2626),
                 ),
-                child: const Text('موافق، رفض', style: TextStyle(color: Colors.white)),
+                child: const Text('موافق، رفض',
+                    style: TextStyle(color: Colors.white)),
               ),
             ],
           );
@@ -484,12 +554,14 @@ class ApprovalView extends StatelessWidget {
     );
   }
 
-  void _showDetailsModal(BuildContext context, ApprovalController controller, ApprovalModel approval) {
+  void _showDetailsModal(BuildContext context, ApprovalController controller,
+      ApprovalModel approval) {
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             width: 520,
             padding: const EdgeInsets.all(24),
@@ -518,47 +590,50 @@ class ApprovalView extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  const Text('الوصف:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const SizedBox(height: 4),
-                  Text(approval.description,
-                      style: const TextStyle(fontSize: 14, color: AppColors.gray700),
-                      textAlign: TextAlign.right),
+                  if (approval.description != null) ...[
+                    const Text('الوصف:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14)),
+                    const SizedBox(height: 4),
+                    Text(approval.description!,
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.gray700),
+                        textAlign: TextAlign.right),
+                    const SizedBox(height: 16),
+                  ],
 
-                  const SizedBox(height: 16),
-                  const Text('التخصص:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const SizedBox(height: 4),
-                  Text(approval.department,
-                      style: const TextStyle(fontSize: 14, color: AppColors.gray700),
-                      textAlign: TextAlign.right),
+                  // موافقات الأطراف
+                  const Text('حالة الموافقات:',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _buildMiniApprovalBadge(
+                          'المشرف', approval.sprvsrApproval),
+                      const SizedBox(width: 8),
+                      _buildMiniApprovalBadge(
+                          'مدير البرنامج', approval.prgrmMngrApproval),
+                      const SizedBox(width: 8),
+                      _buildMiniApprovalBadge(
+                          'رئيس القسم', approval.headDepApproval),
+                    ],
+                  ),
 
-                  const SizedBox(height: 16),
-                  const Text('أعضاء الفريق:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const SizedBox(height: 4),
-                  ...approval.members.map((member) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(member, style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.circle, size: 6, color: AppColors.gray700),
-                      ],
-                    ),
-                  )),
+                  // ملاحظات المشرف
+                  if (approval.sprvsrNote != null &&
+                      approval.sprvsrNote!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const Text('ملاحظة المشرف:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14)),
+                    const SizedBox(height: 4),
+                    Text(approval.sprvsrNote!,
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.gray700)),
+                  ],
 
-                  const SizedBox(height: 16),
-                  const Text('المشرف الأكاديمي:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const SizedBox(height: 4),
-                  Text(approval.supervisor,
-                      style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
-
-                  const SizedBox(height: 16),
-                  const Text('تاريخ التقديم:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const SizedBox(height: 4),
-                  Text(approval.submissionDate,
-                      style: const TextStyle(fontSize: 14, color: AppColors.gray700)),
-
-                  // Show rejection reason if exists
                   if (approval.rejectionReason != null) ...[
                     const SizedBox(height: 16),
                     Container(
@@ -567,16 +642,22 @@ class ApprovalView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xFFFEF2F2),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFFFECACA)),
+                        border: Border.all(
+                            color: const Color(0xFFFECACA)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           const Text('سبب الرفض:',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFFDC2626))),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Color(0xFFDC2626))),
                           const SizedBox(height: 4),
                           Text(approval.rejectionReason!,
-                              style: const TextStyle(fontSize: 13, color: Color(0xFFDC2626)),
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xFFDC2626)),
                               textAlign: TextAlign.right),
                         ],
                       ),
@@ -587,48 +668,64 @@ class ApprovalView extends StatelessWidget {
                   const Divider(color: AppColors.gray200),
                   const SizedBox(height: 16),
 
-                  // Action Buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () => _showRejectionReasonDialog(context, controller, approval),
-                          icon: const Icon(Icons.close, size: 16, color: Colors.white),
-                          label: const Text('رفض', style: TextStyle(color: Colors.white)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFDC2626),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  // Action Buttons — only if pending
+                  if (approval.status == 'في الانتظار') ...[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _showRejectionReasonDialog(
+                                context, controller, approval),
+                            icon: const Icon(Icons.close,
+                                size: 16, color: Colors.white),
+                            label: const Text('رفض',
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFDC2626),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () => _showConfirmApproveDialog(context, controller, approval),
-                          icon: const Icon(Icons.check, size: 16, color: Colors.white),
-                          label: const Text('اعتماد', style: TextStyle(color: Colors.white)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF16A34A),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _showConfirmApproveDialog(
+                                context, controller, approval),
+                            icon: const Icon(Icons.check,
+                                size: 16, color: Colors.white),
+                            label: const Text('اعتماد',
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF16A34A),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 14),
                         side: const BorderSide(color: AppColors.gray300),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                       ),
                       child: const Text('إغلاق',
-                          style: TextStyle(color: AppColors.foreground, fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              color: AppColors.foreground,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -644,21 +741,28 @@ class ApprovalView extends StatelessWidget {
     Color bg, text;
     switch (status) {
       case 'في الانتظار':
-        bg = const Color(0xFFFFF7ED); text = const Color(0xFFEA580C);
+        bg = const Color(0xFFFFF7ED);
+        text = const Color(0xFFEA580C);
         break;
       case 'معتمدة':
-        bg = const Color(0xFFF0FDF4); text = const Color(0xFF16A34A);
+        bg = const Color(0xFFF0FDF4);
+        text = const Color(0xFF16A34A);
         break;
       case 'مرفوضة':
-        bg = const Color(0xFFFEF2F2); text = const Color(0xFFDC2626);
+        bg = const Color(0xFFFEF2F2);
+        text = const Color(0xFFDC2626);
         break;
       default:
-        bg = AppColors.gray100; text = AppColors.gray600;
+        bg = AppColors.gray100;
+        text = AppColors.gray600;
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
-      child: Text(status, style: TextStyle(color: text, fontSize: 12, fontWeight: FontWeight.bold)),
+      decoration:
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
+      child: Text(status,
+          style: TextStyle(
+              color: text, fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 }

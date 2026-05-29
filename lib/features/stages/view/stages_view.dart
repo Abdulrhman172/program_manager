@@ -131,7 +131,7 @@ class StagesView extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(height: 16),
                   itemBuilder: (context, index) {
                     final stage = controller.stages[index];
-                    final isEditing = controller.editingStageId == stage.id;
+                    final isEditing = controller.editingStageId == stage.id.toString();
                     return _buildStageCard(context, controller, stage, isEditing);
                   },
                 ),
@@ -247,14 +247,7 @@ class StagesView extends StatelessWidget {
                               color: AppColors.foreground,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            stage.description,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.gray500,
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
@@ -268,7 +261,7 @@ class StagesView extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        stage.id,
+                        stage.id.toString(),
                         style: const TextStyle(
                           color: Color(0xFF2563EB),
                           fontSize: 18,

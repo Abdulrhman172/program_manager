@@ -15,6 +15,25 @@ class GradesView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Consumer<GradesController>(
           builder: (context, controller, _) {
+            if (controller.isLoading) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(80),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (controller.errorMessage != null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(40),
+                  child: Text(
+                    controller.errorMessage!,
+                    style: const TextStyle(color: AppColors.error),
+                  ),
+                ),
+              );
+            }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,7 +68,8 @@ class GradesView extends StatelessWidget {
                         Expanded(
                           child: _buildStatCard(
                             title: 'بانتظار المشرف',
-                            value: controller.waitingSupervisorCount.toString(),
+                            value:
+                                controller.waitingSupervisorCount.toString(),
                             bgColor: const Color(0xFFFEF2F2),
                             textColor: const Color(0xFFDC2626),
                             borderColor: const Color(0xFFFECACA),
@@ -97,10 +117,11 @@ class GradesView extends StatelessWidget {
                     onChanged: controller.search,
                     textAlign: TextAlign.right,
                     decoration: const InputDecoration(
-                      hintText: 'البحث عن بحث...',
+                      hintText: 'البحث عن مجموعة...',
                       hintStyle: TextStyle(color: AppColors.gray400),
                       border: InputBorder.none,
-                      suffixIcon: Icon(Icons.search, color: AppColors.gray400),
+                      suffixIcon:
+                          Icon(Icons.search, color: AppColors.gray400),
                     ),
                   ),
                 ),
@@ -113,11 +134,13 @@ class GradesView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 48),
                       child: Column(
                         children: [
-                          Icon(Icons.inbox_outlined, size: 64, color: AppColors.gray300),
+                          Icon(Icons.inbox_outlined,
+                              size: 64, color: AppColors.gray300),
                           const SizedBox(height: 16),
                           const Text(
                             'لا توجد أبحاث في هذه الحالة',
-                            style: TextStyle(color: AppColors.gray500, fontSize: 16),
+                            style: TextStyle(
+                                color: AppColors.gray500, fontSize: 16),
                           ),
                         ],
                       ),
@@ -128,7 +151,8 @@ class GradesView extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.grades.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final grade = controller.grades[index];
                       return _buildGradeCard(context, controller, grade);
@@ -169,8 +193,10 @@ class GradesView extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),
-              side: BorderSide(color: isSelected ? color : AppColors.gray200),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              side: BorderSide(
+                  color: isSelected ? color : AppColors.gray200),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               showCheckmark: false,
             ),
           );
@@ -201,7 +227,9 @@ class GradesView extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: textColor == AppColors.foreground ? AppColors.gray600 : textColor,
+              color: textColor == AppColors.foreground
+                  ? AppColors.gray600
+                  : textColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -219,11 +247,12 @@ class GradesView extends StatelessWidget {
     );
   }
 
-  Widget _buildGradeCard(BuildContext context, GradesController controller, GradeModel grade) {
+  Widget _buildGradeCard(BuildContext context, GradesController controller,
+      GradeModel grade) {
     Color badgeBgColor;
     Color badgeTextColor;
 
-    switch (grade.status) {
+    switch (grade.gradeStatus) {
       case 'بانتظار المشرف':
         badgeBgColor = const Color(0xFFFEF2F2);
         badgeTextColor = const Color(0xFFDC2626);
@@ -241,6 +270,8 @@ class GradesView extends StatelessWidget {
         badgeTextColor = AppColors.gray600;
     }
 
+    final finalGrade = grade.finalGrade ?? 0.0;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -251,18 +282,20 @@ class GradesView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          // Header row: badge + group name
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: badgeBgColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  grade.status,
+                  grade.gradeStatus,
                   style: TextStyle(
                     color: badgeTextColor,
                     fontSize: 12,
@@ -271,89 +304,97 @@ class GradesView extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      grade.researchTitle,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.foreground,
-                      ),
-                      textAlign: TextAlign.right,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'التخصص: ${grade.department}',
-                      style: const TextStyle(fontSize: 13, color: AppColors.gray500),
-                      textAlign: TextAlign.right,
-                    ),
-                  ],
+                child: Text(
+                  grade.groupName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.foreground,
+                  ),
+                  textAlign: TextAlign.right,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'المشرف: ${grade.supervisorName}',
-                style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-              ),
-            ],
-          ),
+          if (grade.notes != null && grade.notes!.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              'ملاحظات: ${grade.notes}',
+              style:
+                  const TextStyle(fontSize: 13, color: AppColors.gray600),
+              textAlign: TextAlign.right,
+            ),
+          ],
           const SizedBox(height: 16),
           const Divider(color: AppColors.gray200),
           const SizedBox(height: 16),
-          
+
           // Grades display
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Admin Grade Column
+              // Final total
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('المجموع', style: TextStyle(fontSize: 13, color: AppColors.gray500)),
+                    const Text('المجموع',
+                        style: TextStyle(
+                            fontSize: 13, color: AppColors.gray500)),
                     const SizedBox(height: 8),
                     Text(
-                      '${grade.totalGrade.toStringAsFixed(1)} / 100',
+                      '${finalGrade.toStringAsFixed(1)} / 100',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: grade.totalGrade >= 60 ? const Color(0xFF16A34A) : const Color(0xFFDC2626),
+                        color: finalGrade >= 60
+                            ? const Color(0xFF16A34A)
+                            : const Color(0xFFDC2626),
                       ),
                     ),
                   ],
                 ),
               ),
               Container(width: 1, height: 40, color: AppColors.gray200),
+              // Program manager grade
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('درجة المسؤول', style: TextStyle(fontSize: 13, color: AppColors.gray500)),
+                    const Text('درجة المسؤول',
+                        style: TextStyle(
+                            fontSize: 13, color: AppColors.gray500)),
                     const SizedBox(height: 8),
                     Text(
-                      grade.adminGrade != null ? '${grade.adminGrade} / 40' : '- / 40',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
+                      grade.programManagerGrade != null
+                          ? '${grade.programManagerGrade} / 40'
+                          : '- / 40',
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2563EB)),
                     ),
                   ],
                 ),
               ),
               Container(width: 1, height: 40, color: AppColors.gray200),
+              // Supervisor grade
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('درجة المشرف', style: TextStyle(fontSize: 13, color: AppColors.gray500)),
+                    const Text('درجة المشرف',
+                        style: TextStyle(
+                            fontSize: 13, color: AppColors.gray500)),
                     const SizedBox(height: 8),
                     Text(
-                      grade.supervisorGrade != null ? '${grade.supervisorGrade} / 60' : '- / 60',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.foreground),
+                      grade.supervisorGrade != null
+                          ? '${grade.supervisorGrade} / 60'
+                          : '- / 60',
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.foreground),
                     ),
                   ],
                 ),
@@ -361,24 +402,27 @@ class GradesView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          
+
           // Action Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: grade.supervisorGrade == null
-                  ? null // Disable if supervisor hasn't graded
+                  ? null
                   : () => _showAddGradeDialog(context, controller, grade),
               icon: const Icon(Icons.edit, size: 16, color: Colors.white),
               label: Text(
-                grade.adminGrade == null ? 'رصد درجة المسؤول' : 'تعديل درجة المسؤول',
+                grade.programManagerGrade == null
+                    ? 'رصد درجة المسؤول'
+                    : 'تعديل درجة المسؤول',
                 style: const TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2563EB),
                 disabledBackgroundColor: AppColors.gray300,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
               ),
             ),
           ),
@@ -387,9 +431,12 @@ class GradesView extends StatelessWidget {
     );
   }
 
-  void _showAddGradeDialog(BuildContext context, GradesController controller, GradeModel grade) {
+  void _showAddGradeDialog(BuildContext context, GradesController controller,
+      GradeModel grade) {
     final gradeController = TextEditingController(
-      text: grade.adminGrade != null ? grade.adminGrade.toString() : '',
+      text: grade.programManagerGrade != null
+          ? grade.programManagerGrade.toString()
+          : '',
     );
     String? errorText;
 
@@ -398,35 +445,43 @@ class GradesView extends StatelessWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16)),
             title: const Text('رصد الدرجة', textAlign: TextAlign.right),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'أدخل درجة مسؤول النظام للبحث "${grade.researchTitle}"',
+                  'أدخل درجة مسؤول البرنامج للمجموعة "${grade.groupName}"',
                   textAlign: TextAlign.right,
-                  style: const TextStyle(fontSize: 14, color: AppColors.gray700),
+                  style:
+                      const TextStyle(fontSize: 14, color: AppColors.gray700),
                 ),
                 const SizedBox(height: 16),
-                const Text('الدرجة (من 40):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                const Text('الدرجة (من 40):',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 13)),
                 const SizedBox(height: 8),
                 TextField(
                   controller: gradeController,
                   textAlign: TextAlign.right,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true),
                   decoration: InputDecoration(
                     hintText: 'مثال: 35',
-                    hintStyle: const TextStyle(color: AppColors.gray400),
+                    hintStyle:
+                        const TextStyle(color: AppColors.gray400),
                     errorText: errorText,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.gray200),
+                      borderSide:
+                          const BorderSide(color: AppColors.gray200),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.primary),
+                      borderSide:
+                          const BorderSide(color: AppColors.primary),
                     ),
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
@@ -438,7 +493,8 @@ class GradesView extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text('إلغاء', style: TextStyle(color: AppColors.gray600)),
+                child: const Text('إلغاء',
+                    style: TextStyle(color: AppColors.gray600)),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -447,25 +503,27 @@ class GradesView extends StatelessWidget {
                     setState(() => errorText = 'يرجى إدخال الدرجة');
                     return;
                   }
-                  
                   final parsedGrade = double.tryParse(text);
                   if (parsedGrade == null) {
                     setState(() => errorText = 'يرجى إدخال رقم صحيح');
                     return;
                   }
-
                   if (parsedGrade < 0 || parsedGrade > 40) {
-                    setState(() => errorText = 'يجب أن تكون الدرجة بين 0 و 40');
+                    setState(() =>
+                        errorText = 'يجب أن تكون الدرجة بين 0 و 40');
                     return;
                   }
-
-                  controller.updateAdminGrade(grade.id, parsedGrade);
+                  if (grade.gradeId != null) {
+                    controller.updateProgramManagerGrade(
+                        grade.gradeId!, parsedGrade);
+                  }
                   Navigator.of(ctx).pop();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
                 ),
-                child: const Text('حفظ', style: TextStyle(color: Colors.white)),
+                child: const Text('حفظ',
+                    style: TextStyle(color: Colors.white)),
               ),
             ],
           );

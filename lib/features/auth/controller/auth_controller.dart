@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/supabase_service.dart';
+import '../model/program_manager_model.dart';
 
 class AuthController extends ChangeNotifier {
   final TextEditingController studentIdController = TextEditingController();
@@ -23,7 +26,7 @@ class AuthController extends ChangeNotifier {
     _errorMessage = null;
 
     if (studentIdController.text.trim().isEmpty) {
-      _studentIdError = 'يرجى إدخال الرقم الجامعي';
+      _studentIdError = 'يرجى إدخال اسم المستخدم';
       isValid = false;
     }
 
@@ -37,26 +40,45 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<bool> login() async {
-    if (!validate()) {
-      return false;
-    }
+    if (!validate()) return false;
 
     _isLoading = true;
     notifyListeners();
 
-    // محاكاة عملية تسجيل الدخول
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final response = await SupabaseService.client
+          .from('ProgramManager')
+          .select()
+          .eq('prma_username', studentIdController.text.trim())
+          .eq('prma_pass', passwordController.text.trim())
+          .eq('prma_isactive', true)
+          .maybeSingle();
 
-    _isLoading = false;
+      _isLoading = false;
 
-    // للتبسيط، سنعتبر أي إدخال صحيح في هذه المرحلة
-    // يمكنك لاحقاً إضافة التحقق الفعلي هنا
-    if (studentIdController.text.trim().isNotEmpty && passwordController.text.trim().isNotEmpty) {
-      return true; // نجاح تسجيل الدخول
-    } else {
-      _errorMessage = 'الرقم الجامعي أو كلمة المرور غير صحيحة';
+      if (response == null) {
+        _errorMessage = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+        notifyListeners();
+        return false;
+      }
+
+      final manager = ProgramManagerModel.fromJson(response);
+
+      // حفظ بيانات الجلسة في SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('prma_id', manager.prmaId);
+      await prefs.setString('prma_name', manager.prmaName);
+      await prefs.setString('prma_email', manager.prmaEmail);
+      await prefs.setString('prma_username', manager.prmaUsername);
+      await prefs.setInt('id_program', manager.idProgram);
+
       notifyListeners();
-      return false; // فشل تسجيل الدخول
+      return true;
+    } catch (e) {
+      _isLoading = false;
+      _errorMessage = 'حدث خطأ في الاتصال، يرجى المحاولة مجدداً';
+      notifyListeners();
+      return false;
     }
   }
 

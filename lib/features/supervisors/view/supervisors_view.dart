@@ -14,6 +14,25 @@ class SupervisorsView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Consumer<SupervisorsController>(
           builder: (context, controller, _) {
+            if (controller.isLoading) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(80),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (controller.errorMessage != null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(40),
+                  child: Text(
+                    controller.errorMessage!,
+                    style: const TextStyle(color: AppColors.error),
+                  ),
+                ),
+              );
+            }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -68,7 +87,8 @@ class SupervisorsView extends StatelessWidget {
                               Expanded(
                                 child: _buildStatCard(
                                   title: 'المشرفين غير المفعلين',
-                                  value: controller.inactiveSupervisors.toString(),
+                                  value:
+                                      controller.inactiveSupervisors.toString(),
                                   bgColor: const Color(0xFFFEF2F2),
                                   textColor: AppColors.error,
                                   borderColor: const Color(0xFFFECACA),
@@ -153,7 +173,8 @@ class SupervisorsView extends StatelessWidget {
                           minWidth: MediaQuery.of(context).size.width - 300,
                         ),
                         child: DataTable(
-                          headingRowColor: WidgetStateProperty.all(const Color(0xFFF8FAFC)),
+                          headingRowColor: WidgetStateProperty.all(
+                              const Color(0xFFF8FAFC)),
                           headingTextStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppColors.foreground,
@@ -164,8 +185,8 @@ class SupervisorsView extends StatelessWidget {
                           columns: const [
                             DataColumn(label: Text('#')),
                             DataColumn(label: Text('اسم المشرف')),
-                            DataColumn(label: Text('القسم')),
                             DataColumn(label: Text('البريد الإلكتروني')),
+                            DataColumn(label: Text('رقم الهاتف')),
                             DataColumn(label: Text('عدد الأبحاث')),
                             DataColumn(label: Text('الحالة')),
                             DataColumn(label: Text('الإجراء')),
@@ -176,26 +197,37 @@ class SupervisorsView extends StatelessWidget {
                             return DataRow(
                               color: WidgetStateProperty.resolveWith<Color?>(
                                 (Set<WidgetState> states) {
-                                  return index.isEven ? Colors.white : const Color(0xFFF8FAFC).withAlpha(128);
+                                  return index.isEven
+                                      ? Colors.white
+                                      : const Color(0xFFF8FAFC).withAlpha(128);
                                 },
                               ),
                               cells: [
                                 DataCell(Text('${index + 1}')),
-                                DataCell(Text(supervisor.name, style: const TextStyle(fontWeight: FontWeight.w600))),
-                                DataCell(Text(supervisor.department)),
+                                DataCell(Text(supervisor.name,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600))),
                                 DataCell(Text(supervisor.email)),
-                                DataCell(Center(child: Text(supervisor.researchCount.toString()))),
+                                DataCell(Text(supervisor.phoneNum ?? '-')),
+                                DataCell(Center(
+                                    child: Text(
+                                        supervisor.researchCount.toString()))),
                                 DataCell(
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: supervisor.isActive ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2),
+                                      color: supervisor.isActive
+                                          ? const Color(0xFFDCFCE7)
+                                          : const Color(0xFFFEE2E2),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
                                       supervisor.isActive ? 'مفعل' : 'غير مفعل',
                                       style: TextStyle(
-                                        color: supervisor.isActive ? const Color(0xFF166534) : const Color(0xFF991B1B),
+                                        color: supervisor.isActive
+                                            ? const Color(0xFF166534)
+                                            : const Color(0xFF991B1B),
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -210,14 +242,17 @@ class SupervisorsView extends StatelessWidget {
                                         supervisor.isActive ? 'إيقاف' : 'تفعيل',
                                         style: TextStyle(
                                           fontSize: 13,
-                                          color: supervisor.isActive ? AppColors.gray500 : AppColors.success,
+                                          color: supervisor.isActive
+                                              ? AppColors.gray500
+                                              : AppColors.success,
                                         ),
                                       ),
                                       const SizedBox(width: 8),
                                       Switch(
                                         value: supervisor.isActive,
                                         onChanged: (value) {
-                                          controller.toggleSupervisorStatus(supervisor.id, value);
+                                          controller.toggleSupervisorStatus(
+                                              supervisor.id, value);
                                         },
                                         activeThumbColor: Colors.white,
                                         activeTrackColor: Colors.black,
@@ -265,7 +300,9 @@ class SupervisorsView extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: textColor == AppColors.foreground ? AppColors.gray600 : textColor,
+              color: textColor == AppColors.foreground
+                  ? AppColors.gray600
+                  : textColor,
             ),
           ),
           const SizedBox(height: 8),

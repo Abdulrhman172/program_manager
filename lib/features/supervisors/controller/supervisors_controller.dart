@@ -1,33 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/supabase_service.dart';
 import '../model/supervisor_model.dart';
 
 class SupervisorsController extends ChangeNotifier {
-  final List<SupervisorModel> _supervisors = [
-    SupervisorModel(id: '1', name: 'د. محمد أحمد علي', department: 'إدارة أعمال عربي', email: 'mohamed@ust.edu.ye', researchCount: 8, isActive: true),
-    SupervisorModel(id: '2', name: 'د. فاطمة سالم حسن', department: 'إدارة أعمال انجليزي', email: 'fatima@ust.edu.ye', researchCount: 6, isActive: true),
-    SupervisorModel(id: '3', name: 'د. خالد يحيى محمود', department: 'إدارة أعمال دولية', email: 'khaled@ust.edu.ye', researchCount: 0, isActive: false),
-    SupervisorModel(id: '4', name: 'د. نورة عبدالله', department: 'تسويق رقمي', email: 'noura@ust.edu.ye', researchCount: 2, isActive: true),
-    SupervisorModel(id: '5', name: 'د. سالم سعيد', department: 'المحاسبة', email: 'salem@ust.edu.ye', researchCount: 4, isActive: true),
-    SupervisorModel(id: '6', name: 'د. هند عبدالرحمن', department: 'الترجمة', email: 'hind@ust.edu.ye', researchCount: 0, isActive: false),
-  ];
-
+  List<SupervisorModel> _supervisors = [];
   List<SupervisorModel> _filteredSupervisors = [];
   String _searchQuery = '';
-
-  SupervisorsController() {
-    _filteredSupervisors = _supervisors;
-  }
+  bool _isLoading = false;
+  String? _errorMessage;
 
   List<SupervisorModel> get supervisors => _filteredSupervisors;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
 
   int get totalSupervisors => _supervisors.length;
   int get activeSupervisors => _supervisors.where((s) => s.isActive).length;
   int get inactiveSupervisors => _supervisors.where((s) => !s.isActive).length;
 
-  void toggleSupervisorStatus(String id, bool newValue) {
+  SupervisorsController() {
+    fetchSupervisors();
+  }
+
+  Future<void> fetchSupervisors() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram == null) {
+        _errorMessage = 'لم يتم تحديد البرنامج';
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      final response = await SupabaseService.client
+          .from('supervisor')
+          .select()
+          .eq('program_id', idProgram);
+
+      _supervisors =
+          (response as List).map((e) => SupervisorModel.fromJson(e)).toList();
+      _filterList();
+    } catch (e) {
+      _errorMessage = 'حدث خطأ في جلب البيانات: ${e.toString()}';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> toggleSupervisorStatus(int id, bool newValue) async {
     final index = _supervisors.indexWhere((s) => s.id == id);
-    if (index != -1) {
-      _supervisors[index].isActive = newValue;
+    if (index == -1) return;
+
+    // تحديث محلي فوري للـ UI
+    _supervisors[index].isActive = newValue;
+    _filterList();
+    notifyListeners();
+
+    try {
+      await SupabaseService.client
+          .from('supervisor')
+          .update({'sprvsr_isactive': newValue}).eq('sprvsr_id', id);
+    } catch (e) {
+      // إعادة الحالة السابقة عند الخطأ
+      _supervisors[index].isActive = !newValue;
       _filterList();
       notifyListeners();
     }
@@ -45,8 +87,12 @@ class SupervisorsController extends ChangeNotifier {
     } else {
       _filteredSupervisors = _supervisors
           .where((supervisor) =>
-              supervisor.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              supervisor.email.toLowerCase().contains(_searchQuery.toLowerCase()))
+              supervisor.name
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              supervisor.email
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
           .toList();
     }
   }

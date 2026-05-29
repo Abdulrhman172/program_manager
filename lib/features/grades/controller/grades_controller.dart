@@ -1,66 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/supabase_service.dart';
 import '../model/grade_model.dart';
 
 class GradesController extends ChangeNotifier {
-  final List<GradeModel> _grades = [
-    GradeModel(
-      id: '1',
-      researchTitle: 'نظام إدارة المكتبة الإلكترونية',
-      supervisorName: 'د. محمد أحمد علي',
-      department: 'إدارة أعمال عربي',
-      supervisorGrade: 55.0,
-      adminGrade: 38.0,
-    ),
-    GradeModel(
-      id: '2',
-      researchTitle: 'تطبيق متابعة الحضور والغياب',
-      supervisorName: 'د. فاطمة سالم حسن',
-      department: 'إدارة أعمال انجليزي',
-      supervisorGrade: 58.0,
-      adminGrade: null, // بانتظار المسؤول
-    ),
-    GradeModel(
-      id: '3',
-      researchTitle: 'منصة التعليم الإلكتروني التفاعلية',
-      supervisorName: 'د. نورة عبدالله سعيد',
-      department: 'الترجمة',
-      supervisorGrade: null, // بانتظار المشرف
-      adminGrade: null,
-    ),
-    GradeModel(
-      id: '4',
-      researchTitle: 'نظام إدارة المطاعم الذكي',
-      supervisorName: 'د. أحمد حسين عمر',
-      department: 'تسويق رقمي',
-      supervisorGrade: 45.0,
-      adminGrade: 35.0,
-    ),
-    GradeModel(
-      id: '5',
-      researchTitle: 'تحليل البيانات الضخمة للشركات',
-      supervisorName: 'د. محمد أحمد علي',
-      department: 'إدارة أعمال دولية',
-      supervisorGrade: 59.0,
-      adminGrade: null, // بانتظار المسؤول
-    ),
-  ];
-
+  List<GradeModel> _grades = [];
   List<GradeModel> _filteredGrades = [];
   String _searchQuery = '';
-  String _statusFilter = 'الكل'; // 'الكل', 'بانتظار المشرف', 'بانتظار المسؤول', 'مكتملة'
-
-  GradesController() {
-    _applyFilter();
-  }
+  String _statusFilter = 'الكل';
+  bool _isLoading = false;
+  String? _errorMessage;
 
   List<GradeModel> get grades => _filteredGrades;
   String get statusFilter => _statusFilter;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
 
-  // Stats
   int get totalCount => _grades.length;
-  int get waitingSupervisorCount => _grades.where((g) => g.status == 'بانتظار المشرف').length;
-  int get waitingAdminCount => _grades.where((g) => g.status == 'بانتظار المسؤول').length;
-  int get completedCount => _grades.where((g) => g.status == 'مكتملة').length;
+  int get waitingSupervisorCount =>
+      _grades.where((g) => g.gradeStatus == 'بانتظار المشرف').length;
+  int get waitingAdminCount =>
+      _grades.where((g) => g.gradeStatus == 'بانتظار المسؤول').length;
+  int get completedCount =>
+      _grades.where((g) => g.gradeStatus == 'مكتملة').length;
+
+  GradesController() {
+    fetchGrades();
+  }
+
+  Future<void> fetchGrades() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram == null) {
+        _errorMessage = 'لم يتم تحديد البرنامج';
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      // جلب الدرجات مع أسماء المجموعات
+      final gradesResponse = await SupabaseService.client
+          .from('program_manager_grades')
+          .select()
+          .eq('id_program', idProgram);
+
+      // جلب أسماء المجموعات
+      final groupsResponse = await SupabaseService.client
+          .from('groups')
+          .select('group_id, group_name')
+          .eq('id_program', idProgram);
+
+      final groupNames = <int, String>{};
+      for (final g in groupsResponse as List) {
+        groupNames[(g['group_id'] as num).toInt()] =
+            g['group_name'] as String? ?? '';
+      }
+
+      _grades = (gradesResponse as List).map((e) {
+        final model = GradeModel.fromJson(e);
+        // إضافة اسم المجموعة
+        return GradeModel(
+          gradeId: model.gradeId,
+          groupId: model.groupId,
+          idProgram: model.idProgram,
+          groupName: groupNames[model.groupId] ?? 'مجموعة ${model.groupId}',
+          supervisorGrade: model.supervisorGrade,
+          programManagerGrade: model.programManagerGrade,
+          finalGrade: model.finalGrade,
+          gradeStatus: model.gradeStatus,
+          notes: model.notes,
+        );
+      }).toList();
+
+      _applyFilter();
+    } catch (e) {
+      _errorMessage = 'حدث خطأ في جلب الدرجات: ${e.toString()}';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateProgramManagerGrade(int gradeId, double newGrade) async {
+    final index = _grades.indexWhere((g) => g.gradeId == gradeId);
+    if (index == -1) return;
+
+    // تحديث محلي فوري
+    _grades[index].programManagerGrade = newGrade;
+    _grades[index].gradeStatus = 'مكتملة';
+    _applyFilter();
+    notifyListeners();
+
+    try {
+      await SupabaseService.client.from('program_manager_grades').update({
+        'program_manager_grade': newGrade,
+        'grade_status': 'مكتملة',
+      }).eq('grade_id', gradeId);
+    } catch (e) {
+      _errorMessage = 'فشل حفظ الدرجة: ${e.toString()}';
+      notifyListeners();
+    }
+  }
 
   void setFilter(String filter) {
     _statusFilter = filter;
@@ -78,26 +124,16 @@ class GradesController extends ChangeNotifier {
     List<GradeModel> temp = _grades;
 
     if (_statusFilter != 'الكل') {
-      temp = temp.where((g) => g.status == _statusFilter).toList();
+      temp = temp.where((g) => g.gradeStatus == _statusFilter).toList();
     }
 
     if (_searchQuery.isNotEmpty) {
       temp = temp
           .where((g) =>
-              g.researchTitle.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              g.supervisorName.toLowerCase().contains(_searchQuery.toLowerCase()))
+              g.groupName.toLowerCase().contains(_searchQuery.toLowerCase()))
           .toList();
     }
 
     _filteredGrades = temp;
-  }
-
-  void updateAdminGrade(String id, double newGrade) {
-    final index = _grades.indexWhere((g) => g.id == id);
-    if (index != -1) {
-      _grades[index].adminGrade = newGrade;
-      _applyFilter();
-      notifyListeners();
-    }
   }
 }

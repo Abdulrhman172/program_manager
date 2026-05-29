@@ -1,29 +1,38 @@
 class GradeModel {
-  final String id;
-  final String researchTitle;
-  final String supervisorName;
-  final String department;
-  final double? supervisorGrade; // Max 60
-  double? adminGrade; // Max 40
+  final int? gradeId;
+  final int groupId;
+  final int idProgram;
+  final String groupName;
+  double? supervisorGrade;
+  double? programManagerGrade;
+  double? finalGrade;
+  String gradeStatus;
+  String? notes;
 
   GradeModel({
-    required this.id,
-    required this.researchTitle,
-    required this.supervisorName,
-    required this.department,
+    this.gradeId,
+    required this.groupId,
+    required this.idProgram,
+    required this.groupName,
     this.supervisorGrade,
-    this.adminGrade,
+    this.programManagerGrade,
+    this.finalGrade,
+    required this.gradeStatus,
+    this.notes,
   });
 
-  double get totalGrade => (supervisorGrade ?? 0.0) + (adminGrade ?? 0.0);
-
-  String get status {
-    if (supervisorGrade == null) {
-      return 'بانتظار المشرف';
-    } else if (adminGrade == null) {
-      return 'بانتظار المسؤول';
-    } else {
-      return 'مكتملة';
-    }
+  factory GradeModel.fromJson(Map<String, dynamic> json) {
+    return GradeModel(
+      gradeId: (json['grade_id'] as num?)?.toInt(),
+      groupId: (json['id_group'] as num).toInt(),
+      idProgram: (json['id_program'] as num).toInt(),
+      groupName: json['group_name'] as String? ?? '',
+      supervisorGrade: (json['supervisor_grade'] as num?)?.toDouble(),
+      programManagerGrade:
+          (json['program_manager_grade'] as num?)?.toDouble(),
+      finalGrade: (json['final_grade'] as num?)?.toDouble(),
+      gradeStatus: json['grade_status'] as String? ?? 'بانتظار المشرف',
+      notes: json['notes'] as String?,
+    );
   }
 }

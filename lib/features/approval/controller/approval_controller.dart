@@ -1,84 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/supabase_service.dart';
 import '../model/approval_model.dart';
 
 class ApprovalController extends ChangeNotifier {
-  final List<ApprovalModel> _approvals = [
-    ApprovalModel(
-      id: '1',
-      title: 'نظام إدارة المكتبة الإلكترونية',
-      description: 'نظام شامل لإدارة المكتبات الجامعية إلكترونياً',
-      department: 'إدارة أعمال عربي',
-      members: ['عبدالله محمد', 'خالد أحمد', 'فاطمة سالم'],
-      supervisor: 'د. محمد أحمد علي',
-      submissionDate: '15-02-2026',
-      status: 'في الانتظار',
-    ),
-    ApprovalModel(
-      id: '2',
-      title: 'منصة التعليم التفاعلية',
-      description: 'منصة ذكية تهدف إلى تحسين جودة التعليم عن بعد باستخدام تقنيات الذكاء الاصطناعي',
-      department: 'إدارة أعمال انجليزي',
-      members: ['نور عبدالله', 'سعيد علي'],
-      supervisor: 'د. فاطمة سالم حسن',
-      submissionDate: '16-02-2026',
-      status: 'في الانتظار',
-    ),
-    ApprovalModel(
-      id: '3',
-      title: 'تطبيق متابعة الحضور والغياب',
-      description: 'تطبيق جوال يعتمد على تحديد الموقع لتسجيل حضور الطلاب',
-      department: 'إدارة أعمال دولية',
-      members: ['أحمد حسين', 'عمر خالد', 'يوسف أحمد'],
-      supervisor: 'د. خالد يحيى محمود',
-      submissionDate: '14-02-2026',
-      status: 'في الانتظار',
-    ),
-    ApprovalModel(
-      id: '4',
-      title: 'نظام تحليل البيانات للشركات',
-      description: 'نظام إحصائي لتحليل البيانات الكبيرة للشركات التجارية',
-      department: 'المحاسبة',
-      members: ['سارة محمد', 'علياء حسين'],
-      supervisor: 'د. محمد أحمد علي',
-      submissionDate: '10-02-2026',
-      status: 'معتمدة',
-    ),
-    ApprovalModel(
-      id: '5',
-      title: 'تطبيق طلب الطعام الجامعي',
-      description: 'تطبيق لتسهيل طلب الوجبات من كافتيريا الجامعة',
-      department: 'تسويق رقمي',
-      members: ['خالد سعد', 'حسن محمود'],
-      supervisor: 'د. نورة عبدالله',
-      submissionDate: '11-02-2026',
-      status: 'مرفوضة',
-    ),
-  ];
-
+  List<ApprovalModel> _approvals = [];
   List<ApprovalModel> _filteredApprovals = [];
   String _searchQuery = '';
-  String _statusFilter = 'الكل'; // 'الكل', 'في الانتظار', 'معتمدة', 'مرفوضة'
-
-  ApprovalController() {
-    _filteredApprovals = _approvals;
-  }
+  String _statusFilter = 'الكل';
+  bool _isLoading = false;
+  String? _errorMessage;
 
   List<ApprovalModel> get approvals => _filteredApprovals;
   String get currentFilter => _statusFilter;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
 
-  int get pendingCount => _approvals.where((a) => a.status == 'في الانتظار').length;
-  int get approvedCount => _approvals.where((a) => a.status == 'معتمدة').length;
-  int get rejectedCount => _approvals.where((a) => a.status == 'مرفوضة').length;
+  int get pendingCount =>
+      _approvals.where((a) => a.status == 'في الانتظار').length;
+  int get approvedCount =>
+      _approvals.where((a) => a.status == 'معتمدة').length;
+  int get rejectedCount =>
+      _approvals.where((a) => a.status == 'مرفوضة').length;
 
-  void changeStatus(String id, String newStatus, {String? reason}) {
-    final index = _approvals.indexWhere((a) => a.id == id);
-    if (index != -1) {
-      _approvals[index].status = newStatus;
-      if (newStatus == 'مرفوضة') {
-        _approvals[index].rejectionReason = reason;
-      } else {
-        _approvals[index].rejectionReason = null;
+  ApprovalController() {
+    fetchApprovals();
+  }
+
+  Future<void> fetchApprovals() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram == null) {
+        _errorMessage = 'لم يتم تحديد البرنامج';
+        _isLoading = false;
+        notifyListeners();
+        return;
       }
+
+      // جلب بيانات المرحلة الأولى مع ربطها بالمجموعات لفلترة البرنامج
+      final response = await SupabaseService.client
+          .from('first_stage_view')
+          .select()
+          .not('research_title', 'is', null);
+
+      // فلترة يدوية بـ id_program عبر جدول groups
+      // نجلب أولاً المجموعات التابعة للبرنامج
+      final groupsResponse = await SupabaseService.client
+          .from('groups')
+          .select('group_id')
+          .eq('id_program', idProgram);
+
+      final programGroupIds = (groupsResponse as List)
+          .map((g) => (g['group_id'] as num).toInt())
+          .toSet();
+
+      // تصفية نتائج المرحلة الأولى
+      _approvals = (response as List)
+          .where((row) {
+            final groupId = (row['group_id'] as num?)?.toInt();
+            return groupId != null && programGroupIds.contains(groupId);
+          })
+          .map((e) => ApprovalModel.fromJson(e))
+          .toList();
+
+      _filterList();
+    } catch (e) {
+      _errorMessage = 'حدث خطأ في جلب البيانات: ${e.toString()}';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> changeStatus(int stage1Id, bool? approved,
+      {String? reason}) async {
+    final index = _approvals.indexWhere((a) => a.stage1Id == stage1Id);
+    if (index == -1) return;
+
+    // تحديث محلي فوري
+    _approvals[index].prgrmMngrApproval = approved;
+    _approvals[index].rejectionReason = reason;
+    _filterList();
+    notifyListeners();
+
+    try {
+      await SupabaseService.client
+          .from('first stage')
+          .update({'prgrm_mngr_approval': approved}).eq('stage1_id', stage1Id);
+    } catch (e) {
+      // إعادة الحالة السابقة عند الخطأ
+      _approvals[index].prgrmMngrApproval = null;
       _filterList();
       notifyListeners();
     }
@@ -106,8 +123,9 @@ class ApprovalController extends ChangeNotifier {
     if (_searchQuery.isNotEmpty) {
       tempList = tempList
           .where((approval) =>
-              approval.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              approval.supervisor.toLowerCase().contains(_searchQuery.toLowerCase()))
+              approval.title
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
           .toList();
     }
 

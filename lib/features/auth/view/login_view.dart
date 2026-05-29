@@ -107,10 +107,10 @@ class _LoginScreenContent extends StatelessWidget {
                         // Form Fields
                         _buildTextField(
                           controller: controller.studentIdController,
-                          label: 'ادخل الرقم الجامعي',
+                          label: 'ادخل اسم المستخدم',
                           icon: Icons.person,
                           errorText: controller.studentIdError,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                         ),
                         const SizedBox(height: 16),
                         _buildTextField(
