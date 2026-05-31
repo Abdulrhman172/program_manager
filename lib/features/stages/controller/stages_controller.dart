@@ -80,12 +80,14 @@ class StagesController extends ChangeNotifier {
     // تحديث محلي
     _stages[index].startDate = startDateController.text;
     _stages[index].endDate = endDateController.text;
+    final isStageActive = _stages[index].isActive;
     closeEditForm();
 
     try {
       await SupabaseService.client.from('stages').update({
         'start_date': startDateController.text,
         'end_date': endDateController.text,
+        'stage_isactive': isStageActive,
       }).eq('stages_id', id);
     } catch (e) {
       _errorMessage = 'فشل حفظ التواريخ: ${e.toString()}';
