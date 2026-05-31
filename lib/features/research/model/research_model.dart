@@ -53,7 +53,7 @@ class ResearchModel {
       department: programName,
       currentPhase: stageName,
       lastUpdated: json['created_at'] != null ? json['created_at'].toString().split('T').first : 'غير محدد',
-      progress: (json['group_progress'] as num?)?.toDouble() ?? 0.0,
+      progress: ((json['group_progress'] as num?)?.toDouble() ?? 0.0) * 100.0,
       files: filesList,
       status: stateName ?? 'غير معروف',
       researchState: stateName ?? 'غير معروف',
