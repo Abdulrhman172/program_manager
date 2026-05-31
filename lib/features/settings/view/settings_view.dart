@@ -44,27 +44,55 @@ class _SettingsViewState extends State<SettingsView>
             ],
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            // Profile Tab
-            _buildProfileTab(),
+        body: Consumer<SettingsController>(
+          builder: (context, controller, child) {
+            if (controller.isLoading && controller.currentUser == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-            // Security Tab
-            _buildSecurityTab(),
-
-            // Notifications Tab
-            _buildNotificationsTab(),
-
-            // Danger Zone Tab
-            _buildDangerZoneTab(),
-          ],
+            return Stack(
+              children: [
+                TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildProfileTab(context, controller),
+                    _buildSecurityTab(context, controller),
+                    _buildNotificationsTab(context, controller),
+                    _buildDangerZoneTab(context, controller),
+                  ],
+                ),
+                if (controller.isLoading && controller.currentUser != null)
+                  Container(
+                    color: Colors.black.withOpacity(0.1),
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildProfileTab() {
+  Widget _buildProfileTab(BuildContext context, SettingsController controller) {
+    // Show messages if any
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.errorMessage != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(controller.errorMessage!), backgroundColor: Colors.red),
+        );
+        controller.clearMessages();
+      }
+      if (controller.successMessage != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(controller.successMessage!), backgroundColor: Colors.green),
+        );
+        controller.clearMessages();
+      }
+    });
+
+    final hasImage = controller.currentUser?.prmaImage != null && controller.currentUser!.prmaImage!.isNotEmpty;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -90,30 +118,24 @@ class _SettingsViewState extends State<SettingsView>
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFF60A5FA),
-                          AppColors.primary,
-                        ],
-                      ),
+                      color: AppColors.gray200,
                       borderRadius: BorderRadius.circular(12),
+                      image: hasImage ? DecorationImage(
+                        image: NetworkImage(controller.currentUser!.prmaImage!),
+                        fit: BoxFit.cover,
+                      ) : null,
                     ),
-                    child: const Center(
-                      child: Text(
-                        'م',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    child: !hasImage
+                        ? const Center(
+                            child: Icon(Icons.person, size: 40, color: AppColors.gray500),
+                          )
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.upload, size: 18),
-                    label: const Text('تغيير الصورة'),
+                    onPressed: controller.pickAndUploadImage,
+                    icon: Icon(hasImage ? Icons.edit : Icons.upload, size: 18),
+                    label: Text(hasImage ? 'تغيير الصورة' : 'أضف صورة'),
                   ),
                 ],
               ),
@@ -122,9 +144,9 @@ class _SettingsViewState extends State<SettingsView>
 
             // Form Fields
             TextField(
+              controller: controller.nameController,
               decoration: InputDecoration(
                 labelText: 'الاسم الكامل',
-                hintText: 'أ.د محمد علي',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -132,9 +154,9 @@ class _SettingsViewState extends State<SettingsView>
             ),
             const SizedBox(height: 16),
             TextField(
+              controller: controller.emailController,
               decoration: InputDecoration(
                 labelText: 'البريد الإلكتروني',
-                hintText: 'mohammad@university.edu',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -142,9 +164,10 @@ class _SettingsViewState extends State<SettingsView>
             ),
             const SizedBox(height: 16),
             TextField(
+              controller: controller.phoneController,
+              keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 labelText: 'رقم الهاتف',
-                hintText: '+966501234567',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -152,6 +175,7 @@ class _SettingsViewState extends State<SettingsView>
             ),
             const SizedBox(height: 16),
             TextField(
+              enabled: false,
               decoration: InputDecoration(
                 labelText: 'المنصب',
                 hintText: 'مسؤول البرنامج',
@@ -164,7 +188,7 @@ class _SettingsViewState extends State<SettingsView>
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: controller.updateProfile,
                 child: const Text('حفظ التغييرات'),
               ),
             ),
@@ -174,7 +198,7 @@ class _SettingsViewState extends State<SettingsView>
     );
   }
 
-  Widget _buildSecurityTab() {
+  Widget _buildSecurityTab(BuildContext context, SettingsController controller) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -205,6 +229,7 @@ class _SettingsViewState extends State<SettingsView>
                     ),
                     const SizedBox(height: 16),
                     TextField(
+                      controller: controller.currentPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'كلمة المرور الحالية',
@@ -215,6 +240,7 @@ class _SettingsViewState extends State<SettingsView>
                     ),
                     const SizedBox(height: 12),
                     TextField(
+                      controller: controller.newPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'كلمة المرور الجديدة',
@@ -225,6 +251,7 @@ class _SettingsViewState extends State<SettingsView>
                     ),
                     const SizedBox(height: 12),
                     TextField(
+                      controller: controller.confirmPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'تأكيد كلمة المرور',
@@ -235,7 +262,7 @@ class _SettingsViewState extends State<SettingsView>
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: controller.updatePassword,
                       child: const Text('تحديث كلمة المرور'),
                     ),
                   ],
@@ -271,7 +298,7 @@ class _SettingsViewState extends State<SettingsView>
                             ),
                             const SizedBox(height: 4),
                             const Text(
-                              'Windows 10 - Chrome',
+                              'تطبيق ويندوز المكتبي',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: AppColors.gray600,
@@ -309,68 +336,64 @@ class _SettingsViewState extends State<SettingsView>
     );
   }
 
-  Widget _buildNotificationsTab() {
-    return Consumer<SettingsController>(
-      builder: (context, controller, child) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'الإشعارات',
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'إدارة تفضيلات الإشعارات',
-                  style: TextStyle(color: AppColors.gray600),
-                ),
-                const SizedBox(height: 24),
-
-                // Notification Preferences
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        _buildNotificationToggle(
-                          'إشعارات البريد الإلكتروني',
-                          'استقبال الإشعارات عبر البريد الإلكتروني',
-                          controller.emailNotifications,
-                          controller.setEmailNotifications,
-                        ),
-                        const Divider(),
-                        _buildNotificationToggle(
-                          'إشعارات البحوث الجديدة',
-                          'إخطاري عند تقديم بحث جديد',
-                          controller.newResearchNotifications,
-                          controller.setNewResearchNotifications,
-                        ),
-                        const Divider(),
-                        _buildNotificationToggle(
-                          'إشعارات المواعيد النهائية',
-                          'إخطاري عند اقتراب المواعيد النهائية',
-                          controller.deadlineNotifications,
-                          controller.setDeadlineNotifications,
-                        ),
-                        const Divider(),
-                        _buildNotificationToggle(
-                          'إشعارات الاعتمادات',
-                          'إخطاري عند اعتماد أو رفض بحث',
-                          controller.approvalNotifications,
-                          controller.setApprovalNotifications,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+  Widget _buildNotificationsTab(BuildContext context, SettingsController controller) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'الإشعارات',
+              style: Theme.of(context).textTheme.displaySmall,
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 4),
+            const Text(
+              'إدارة تفضيلات الإشعارات (محفوظة محلياً فقط)',
+              style: TextStyle(color: AppColors.gray600),
+            ),
+            const SizedBox(height: 24),
+
+            // Notification Preferences
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildNotificationToggle(
+                      'إشعارات البريد الإلكتروني',
+                      'استقبال الإشعارات عبر البريد الإلكتروني',
+                      controller.emailNotifications,
+                      controller.setEmailNotifications,
+                    ),
+                    const Divider(),
+                    _buildNotificationToggle(
+                      'إشعارات البحوث الجديدة',
+                      'إخطاري عند تقديم بحث جديد',
+                      controller.newResearchNotifications,
+                      controller.setNewResearchNotifications,
+                    ),
+                    const Divider(),
+                    _buildNotificationToggle(
+                      'إشعارات المواعيد النهائية',
+                      'إخطاري عند اقتراب المواعيد النهائية',
+                      controller.deadlineNotifications,
+                      controller.setDeadlineNotifications,
+                    ),
+                    const Divider(),
+                    _buildNotificationToggle(
+                      'إشعارات الاعتمادات',
+                      'إخطاري عند اعتماد أو رفض بحث',
+                      controller.approvalNotifications,
+                      controller.setApprovalNotifications,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -410,7 +433,7 @@ class _SettingsViewState extends State<SettingsView>
     );
   }
 
-  Widget _buildDangerZoneTab() {
+  Widget _buildDangerZoneTab(BuildContext context, SettingsController controller) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -471,7 +494,7 @@ class _SettingsViewState extends State<SettingsView>
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () => controller.logout(context),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.error,
                           side: const BorderSide(color: AppColors.error),
@@ -528,7 +551,7 @@ class _SettingsViewState extends State<SettingsView>
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () => _confirmDeleteAccount(context, controller),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.error,
                           side: const BorderSide(color: AppColors.error),
@@ -542,6 +565,78 @@ class _SettingsViewState extends State<SettingsView>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _confirmDeleteAccount(BuildContext context, SettingsController controller) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('هل أنت متأكد؟', style: TextStyle(color: Colors.red)),
+        content: const Text('حذف الحساب سيؤدي إلى تعطيله بشكل نهائي ولن تتمكن من الدخول مرة أخرى. هل تريد المتابعة؟'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _showPinDialog(context, controller);
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('نعم، متأكد', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPinDialog(BuildContext context, SettingsController controller) {
+    final pinController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('تأكيد الحذف النهائي'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('يرجى إدخال رمز الحساب (كلمة المرور) لكي يتم الحذف:'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: pinController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'رمز الحساب',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final success = await controller.deleteAccount(pinController.text);
+              if (success && context.mounted) {
+                Navigator.pop(ctx);
+                controller.logout(context);
+              } else if (context.mounted) {
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(controller.errorMessage ?? 'فشل الحذف'), backgroundColor: Colors.red),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('حذف', style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
