@@ -6,15 +6,7 @@ import '../model/student_model.dart';
 class StudentsController extends ChangeNotifier {
   List<StudentModel> _students = [];
 
-  final List<String> departments = [
-    'تقنية معلومات',
-    'إدارة أعمال عربي',
-    'إدارة أعمال انجليزي',
-    'إدارة أعمال دولية',
-    'تسويق رقمي',
-    'المحاسبة',
-    'الترجمة',
-  ];
+  List<String> departments = [];
 
   List<StudentModel> _filteredStudents = [];
   String _searchQuery = '';
@@ -54,9 +46,20 @@ class StudentsController extends ChangeNotifier {
       final idProgram = prefs.getInt('id_program');
 
       if (idProgram != null) {
+        // Fetch program name
+        final programResponse = await SupabaseService.client
+            .from('program')
+            .select('program_name')
+            .eq('program_id', idProgram)
+            .single();
+        final programName = programResponse['program_name'] as String;
+        
+        departments = [programName];
+        _selectedDepartment = programName; // Default to this program
+
         final response = await SupabaseService.client
             .from('student')
-            .select()
+            .select('*, program(program_name)')
             .eq('id_program', idProgram);
 
         _students = (response as List).map((e) => StudentModel.fromJson(e)).toList();

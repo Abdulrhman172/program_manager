@@ -62,7 +62,7 @@ class ResearchController extends ChangeNotifier {
 
       final response = await SupabaseService.client
           .from('groups')
-          .select('*, supervisor(sprvsr_name), GroupState(states_name), AcademyYear(acye_years)')
+          .select('*, supervisor(sprvsr_name), GroupState(states_name), AcademyYear(acye_years), program(program_name)')
           .eq('id_program', idProgram);
 
       _researches = (response as List).map((e) => ResearchModel.fromJson(e)).toList();

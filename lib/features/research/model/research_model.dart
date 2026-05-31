@@ -37,6 +37,7 @@ class ResearchModel {
     final supervisorName = json['supervisor'] != null ? json['supervisor']['sprvsr_name'] : 'لم يحدد';
     final stateName = json['GroupState'] != null ? json['GroupState']['states_name'] : 'غير معروف';
     final academyYearName = json['AcademyYear'] != null ? json['AcademyYear']['acye_years'] : '2025/2026';
+    final programName = json['program'] != null ? json['program']['program_name'] : 'برنامج غير محدد';
 
     final finalDocUrl = json['final_document'] as String?;
     List<ResearchFile> filesList = [];
@@ -48,7 +49,7 @@ class ResearchModel {
       id: json['group_id']?.toString() ?? '',
       title: json['group_name']?.toString() ?? 'بدون عنوان',
       supervisor: supervisorName ?? 'لم يحدد',
-      department: 'تقنية معلومات', // Hardcoded for now
+      department: programName,
       currentPhase: json['project_stage']?.toString() ?? 'المرحلة الأولى',
       lastUpdated: json['created_at'] != null ? json['created_at'].toString().split('T').first : 'غير محدد',
       progress: (json['evaluation_degree'] as num?)?.toDouble() ?? 0.0,

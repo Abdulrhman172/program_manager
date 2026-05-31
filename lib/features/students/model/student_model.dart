@@ -14,10 +14,11 @@ class StudentModel {
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
+    final programName = json['program'] != null ? json['program']['program_name'] : 'برنامج غير محدد';
     return StudentModel(
       id: json['stud_college_num']?.toString() ?? '',
       name: json['stud_name']?.toString() ?? '',
-      department: 'تقنية معلومات', // سيتم تحديثه لاحقاً إذا لزم الأمر
+      department: programName,
       batchNumber: json['stud_cohort_num']?.toString() ?? '',
       academicYear: json['id_academy_year']?.toString() ?? '',
     );
