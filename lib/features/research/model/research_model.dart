@@ -36,8 +36,9 @@ class ResearchModel {
     // Extract related data if joined, otherwise fallback
     final supervisorName = json['supervisor'] != null ? json['supervisor']['sprvsr_name'] : 'لم يحدد';
     final stateName = json['GroupState'] != null ? json['GroupState']['states_name'] : 'غير معروف';
-    final academyYearName = json['AcademyYear'] != null ? json['AcademyYear']['acye_years'] : '2025/2026';
+    final academyYearName = json['AcademyYear'] != null ? json['AcademyYear']['acye_year'] : '2025/2026';
     final programName = json['program'] != null ? json['program']['program_name'] : 'برنامج غير محدد';
+    final stageName = json['stages'] != null ? json['stages']['stage_name'] : 'المرحلة الأولى';
 
     final finalDocUrl = json['final_document'] as String?;
     List<ResearchFile> filesList = [];
@@ -50,9 +51,9 @@ class ResearchModel {
       title: json['group_name']?.toString() ?? 'بدون عنوان',
       supervisor: supervisorName ?? 'لم يحدد',
       department: programName,
-      currentPhase: json['project_stage']?.toString() ?? 'المرحلة الأولى',
+      currentPhase: stageName,
       lastUpdated: json['created_at'] != null ? json['created_at'].toString().split('T').first : 'غير محدد',
-      progress: (json['evaluation_degree'] as num?)?.toDouble() ?? 0.0,
+      progress: (json['group_progress'] as num?)?.toDouble() ?? 0.0,
       files: filesList,
       status: stateName ?? 'غير معروف',
       researchState: stateName ?? 'غير معروف',
