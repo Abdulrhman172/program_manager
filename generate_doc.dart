@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -58,6 +60,35 @@ void main() async {
 <h1 style="text-align: center;">قاموس البيانات (Data Dictionary)</h1>
 ''');
 
+  String generateDescription(String tableName, String columnName) {
+    final lowerCol = columnName.toLowerCase();
+    if (lowerCol == 'id' || lowerCol == '${tableName.toLowerCase()}_id') return 'المعرف الفريد (الرقم الأساسي)';
+    if (lowerCol.contains('id_') || lowerCol.contains('_id')) return 'معرف مرتبط بجدول آخر (مفتاح أجنبي)';
+    if (lowerCol.contains('name')) return 'الاسم';
+    if (lowerCol.contains('email')) return 'البريد الإلكتروني';
+    if (lowerCol.contains('phone') || lowerCol.contains('num')) return 'رقم الهاتف أو العدد';
+    if (lowerCol.contains('date') || lowerCol.contains('created_at') || lowerCol.contains('updated_at')) return 'تاريخ ووقت الإجراء';
+    if (lowerCol.contains('isactive') || lowerCol.contains('is_active')) return 'الحالة (نشط/غير نشط)';
+    if (lowerCol.contains('status')) return 'حالة العنصر';
+    if (lowerCol.contains('password') || lowerCol.contains('pass')) return 'كلمة المرور المشفرة';
+    if (lowerCol.contains('image') || lowerCol.contains('url') || lowerCol.contains('pdf') || lowerCol.contains('file')) return 'رابط الملف أو الصورة';
+    if (lowerCol.contains('desc')) return 'وصف تفصيلي';
+    if (lowerCol.contains('title')) return 'العنوان';
+    if (lowerCol.contains('grade') || lowerCol.contains('percentage')) return 'الدرجة أو النسبة المئوية';
+    if (lowerCol.contains('note') || lowerCol.contains('comment')) return 'ملاحظات وتوجيهات';
+    if (lowerCol.contains('approval')) return 'حالة الاعتماد أو الموافقة';
+    if (lowerCol.contains('type')) return 'النوع أو التصنيف';
+    if (lowerCol.contains('message') || lowerCol.contains('text') || lowerCol.contains('content')) return 'نص المحتوى أو الرسالة';
+    if (lowerCol.contains('progress')) return 'مستوى التقدم والإنجاز';
+    if (lowerCol.contains('read')) return 'حالة القراءة (مقروء/غير مقروء)';
+    if (lowerCol.contains('archived')) return 'حالة الأرشفة';
+    if (lowerCol.contains('username')) return 'اسم المستخدم';
+    if (lowerCol.contains('stage')) return 'المرحلة الحالية';
+    if (lowerCol.contains('role')) return 'الدور أو الصلاحية';
+    
+    return 'معلومات عن $columnName';
+  }
+
   // Master Data Dictionary
   buffer.writeln('<h2>قاموس البيانات الشامل</h2>');
   buffer.writeln('<table>');
@@ -68,7 +99,7 @@ void main() async {
     final tName = entry.key;
     for (var col in entry.value) {
       final colName = col['column_name'] ?? '';
-      final colDesc = col['column_description'] ?? '';
+      final colDesc = col['column_description'] ?? generateDescription(tName, colName);
       final dataType = col['data_type'] ?? '';
       final charLen = col['character_maximum_length']?.toString() ?? 'متغير';
       final constraint = col['constraint_type'] ?? (col['is_nullable'] == 'NO' ? 'مطلوب' : 'اختياري');
@@ -103,7 +134,7 @@ void main() async {
     
     for (var col in entry.value) {
       final colName = col['column_name'] ?? '';
-      final colDesc = col['column_description'] ?? '';
+      final colDesc = col['column_description'] ?? generateDescription(tName, colName);
       final dataType = col['data_type'] ?? '';
       final constraint = col['constraint_type'] ?? (col['is_nullable'] == 'NO' ? 'NOTNULL' : '');
       

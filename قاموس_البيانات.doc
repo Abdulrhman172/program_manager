@@ -21,7 +21,7 @@
 <tr>
 <td>1</td>
 <td>acye_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -32,7 +32,7 @@
 <tr>
 <td>2</td>
 <td>acye_year</td>
-<td></td>
+<td>معلومات عن acye_year</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -43,7 +43,7 @@
 <tr>
 <td>3</td>
 <td>group_state_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -54,7 +54,7 @@
 <tr>
 <td>4</td>
 <td>states_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -65,7 +65,7 @@
 <tr>
 <td>5</td>
 <td>head_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -76,7 +76,7 @@
 <tr>
 <td>6</td>
 <td>head_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -87,7 +87,7 @@
 <tr>
 <td>7</td>
 <td>head_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -98,7 +98,7 @@
 <tr>
 <td>8</td>
 <td>head_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -109,7 +109,7 @@
 <tr>
 <td>9</td>
 <td>assign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -120,7 +120,7 @@
 <tr>
 <td>10</td>
 <td>resign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -131,7 +131,7 @@
 <tr>
 <td>11</td>
 <td>head_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -142,7 +142,7 @@
 <tr>
 <td>12</td>
 <td>id_dep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -153,7 +153,7 @@
 <tr>
 <td>13</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -164,7 +164,7 @@
 <tr>
 <td>14</td>
 <td>head_username</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -175,7 +175,7 @@
 <tr>
 <td>15</td>
 <td>head_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -186,7 +186,7 @@
 <tr>
 <td>16</td>
 <td>prma_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -197,7 +197,7 @@
 <tr>
 <td>17</td>
 <td>prma_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -208,7 +208,7 @@
 <tr>
 <td>18</td>
 <td>prma_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -219,7 +219,7 @@
 <tr>
 <td>19</td>
 <td>prma_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -230,7 +230,7 @@
 <tr>
 <td>20</td>
 <td>assign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -241,7 +241,7 @@
 <tr>
 <td>21</td>
 <td>resign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -252,7 +252,7 @@
 <tr>
 <td>22</td>
 <td>prma_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -263,7 +263,7 @@
 <tr>
 <td>23</td>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -274,7 +274,7 @@
 <tr>
 <td>24</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -285,7 +285,7 @@
 <tr>
 <td>25</td>
 <td>prma_username</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -296,7 +296,7 @@
 <tr>
 <td>26</td>
 <td>prma_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -307,7 +307,7 @@
 <tr>
 <td>27</td>
 <td>prma_image</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -318,7 +318,7 @@
 <tr>
 <td>28</td>
 <td>id_title</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -329,7 +329,7 @@
 <tr>
 <td>29</td>
 <td>title_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -340,7 +340,7 @@
 <tr>
 <td>30</td>
 <td>report_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -351,7 +351,7 @@
 <tr>
 <td>31</td>
 <td>report_title</td>
-<td></td>
+<td>العنوان</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -362,7 +362,7 @@
 <tr>
 <td>32</td>
 <td>report_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -373,7 +373,7 @@
 <tr>
 <td>33</td>
 <td>report_type</td>
-<td></td>
+<td>النوع أو التصنيف</td>
 <td>character varying</td>
 <td>50</td>
 <td>إدخال / تلقائي</td>
@@ -384,7 +384,7 @@
 <tr>
 <td>34</td>
 <td>report_content</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -395,7 +395,7 @@
 <tr>
 <td>35</td>
 <td>pdf_url</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -406,7 +406,7 @@
 <tr>
 <td>36</td>
 <td>id_dep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -417,7 +417,7 @@
 <tr>
 <td>37</td>
 <td>created_by</td>
-<td></td>
+<td>معلومات عن created_by</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -428,7 +428,7 @@
 <tr>
 <td>38</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -439,7 +439,7 @@
 <tr>
 <td>39</td>
 <td>chat_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -450,7 +450,7 @@
 <tr>
 <td>40</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -461,7 +461,7 @@
 <tr>
 <td>41</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -472,7 +472,7 @@
 <tr>
 <td>42</td>
 <td>last_message</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -483,7 +483,7 @@
 <tr>
 <td>43</td>
 <td>last_message_time</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -494,7 +494,7 @@
 <tr>
 <td>44</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -505,7 +505,7 @@
 <tr>
 <td>45</td>
 <td>dean_id</td>
-<td></td>
+<td>المعرف الفريد (الرقم الأساسي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -516,7 +516,7 @@
 <tr>
 <td>46</td>
 <td>dean_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -527,7 +527,7 @@
 <tr>
 <td>47</td>
 <td>dean_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -538,7 +538,7 @@
 <tr>
 <td>48</td>
 <td>dean_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -549,7 +549,7 @@
 <tr>
 <td>49</td>
 <td>assign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -560,7 +560,7 @@
 <tr>
 <td>50</td>
 <td>resign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -571,7 +571,7 @@
 <tr>
 <td>51</td>
 <td>dean_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -582,7 +582,7 @@
 <tr>
 <td>52</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -593,7 +593,7 @@
 <tr>
 <td>53</td>
 <td>dep_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -604,7 +604,7 @@
 <tr>
 <td>54</td>
 <td>dep_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -615,7 +615,7 @@
 <tr>
 <td>55</td>
 <td>title_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -626,7 +626,7 @@
 <tr>
 <td>56</td>
 <td>title_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -637,7 +637,7 @@
 <tr>
 <td>57</td>
 <td>stage5_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -648,7 +648,7 @@
 <tr>
 <td>58</td>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -659,7 +659,7 @@
 <tr>
 <td>59</td>
 <td>title_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -670,7 +670,7 @@
 <tr>
 <td>60</td>
 <td>pdf_file</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -681,7 +681,7 @@
 <tr>
 <td>61</td>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -692,7 +692,7 @@
 <tr>
 <td>62</td>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -703,7 +703,7 @@
 <tr>
 <td>63</td>
 <td>stage1_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -714,7 +714,7 @@
 <tr>
 <td>64</td>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -725,7 +725,7 @@
 <tr>
 <td>65</td>
 <td>research_title</td>
-<td></td>
+<td>العنوان</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -736,7 +736,7 @@
 <tr>
 <td>66</td>
 <td>research_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -747,7 +747,7 @@
 <tr>
 <td>67</td>
 <td>head_dep_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -758,7 +758,7 @@
 <tr>
 <td>68</td>
 <td>prgrm_mngr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -769,7 +769,7 @@
 <tr>
 <td>69</td>
 <td>sprvsr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -780,7 +780,7 @@
 <tr>
 <td>70</td>
 <td>id_sprvsr_proced</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -791,7 +791,7 @@
 <tr>
 <td>71</td>
 <td>id_prgrm_mngr_proced</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -802,7 +802,7 @@
 <tr>
 <td>72</td>
 <td>id_head_dep_proced</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -813,7 +813,7 @@
 <tr>
 <td>73</td>
 <td>stages_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -824,7 +824,7 @@
 <tr>
 <td>74</td>
 <td>stage1_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -835,7 +835,7 @@
 <tr>
 <td>75</td>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -846,7 +846,7 @@
 <tr>
 <td>76</td>
 <td>research_title</td>
-<td></td>
+<td>العنوان</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -857,7 +857,7 @@
 <tr>
 <td>77</td>
 <td>research_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -868,7 +868,7 @@
 <tr>
 <td>78</td>
 <td>head_dep_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -879,7 +879,7 @@
 <tr>
 <td>79</td>
 <td>prgrm_mngr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -890,7 +890,7 @@
 <tr>
 <td>80</td>
 <td>sprvsr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -901,7 +901,7 @@
 <tr>
 <td>81</td>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -912,7 +912,7 @@
 <tr>
 <td>82</td>
 <td>prgrm_mngr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -923,7 +923,7 @@
 <tr>
 <td>83</td>
 <td>head_dep_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -934,7 +934,7 @@
 <tr>
 <td>84</td>
 <td>leader_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -945,7 +945,7 @@
 <tr>
 <td>85</td>
 <td>stage4_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -956,7 +956,7 @@
 <tr>
 <td>86</td>
 <td>stage4_pdf</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -967,7 +967,7 @@
 <tr>
 <td>87</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -978,7 +978,7 @@
 <tr>
 <td>88</td>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -989,7 +989,7 @@
 <tr>
 <td>89</td>
 <td>sprvsr_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1000,7 +1000,7 @@
 <tr>
 <td>90</td>
 <td>haed_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1011,7 +1011,7 @@
 <tr>
 <td>91</td>
 <td>dean_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1022,7 +1022,7 @@
 <tr>
 <td>92</td>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1033,7 +1033,7 @@
 <tr>
 <td>93</td>
 <td>group_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1044,7 +1044,7 @@
 <tr>
 <td>94</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1055,7 +1055,7 @@
 <tr>
 <td>95</td>
 <td>id_group_state</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1066,7 +1066,7 @@
 <tr>
 <td>96</td>
 <td>group_led_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1077,7 +1077,7 @@
 <tr>
 <td>97</td>
 <td>id_acye</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1088,7 +1088,7 @@
 <tr>
 <td>98</td>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1099,7 +1099,7 @@
 <tr>
 <td>99</td>
 <td>final_document</td>
-<td></td>
+<td>معلومات عن final_document</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1110,7 +1110,7 @@
 <tr>
 <td>100</td>
 <td>archived</td>
-<td></td>
+<td>حالة الأرشفة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1121,7 +1121,7 @@
 <tr>
 <td>101</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1132,7 +1132,7 @@
 <tr>
 <td>102</td>
 <td>group_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1143,7 +1143,7 @@
 <tr>
 <td>103</td>
 <td>group_progress</td>
-<td></td>
+<td>مستوى التقدم والإنجاز</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1154,7 +1154,7 @@
 <tr>
 <td>104</td>
 <td>current_stage</td>
-<td></td>
+<td>المرحلة الحالية</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1165,7 +1165,7 @@
 <tr>
 <td>105</td>
 <td>num_grops</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1176,7 +1176,7 @@
 <tr>
 <td>106</td>
 <td>message_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1187,7 +1187,7 @@
 <tr>
 <td>107</td>
 <td>id_chat</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1198,7 +1198,7 @@
 <tr>
 <td>108</td>
 <td>sender_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1209,7 +1209,7 @@
 <tr>
 <td>109</td>
 <td>sender_role</td>
-<td></td>
+<td>الدور أو الصلاحية</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1220,7 +1220,7 @@
 <tr>
 <td>110</td>
 <td>message_text</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1231,7 +1231,7 @@
 <tr>
 <td>111</td>
 <td>is_read</td>
-<td></td>
+<td>حالة القراءة (مقروء/غير مقروء)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1242,7 +1242,7 @@
 <tr>
 <td>112</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1253,7 +1253,7 @@
 <tr>
 <td>113</td>
 <td>notification_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1264,7 +1264,7 @@
 <tr>
 <td>114</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1275,7 +1275,7 @@
 <tr>
 <td>115</td>
 <td>notification_title</td>
-<td></td>
+<td>العنوان</td>
 <td>character varying</td>
 <td>255</td>
 <td>إدخال / تلقائي</td>
@@ -1286,7 +1286,7 @@
 <tr>
 <td>116</td>
 <td>notification_message</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1297,7 +1297,7 @@
 <tr>
 <td>117</td>
 <td>notification_type</td>
-<td></td>
+<td>النوع أو التصنيف</td>
 <td>character varying</td>
 <td>50</td>
 <td>إدخال / تلقائي</td>
@@ -1308,7 +1308,7 @@
 <tr>
 <td>118</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1319,7 +1319,7 @@
 <tr>
 <td>119</td>
 <td>is_read</td>
-<td></td>
+<td>حالة القراءة (مقروء/غير مقروء)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1330,7 +1330,7 @@
 <tr>
 <td>120</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1341,7 +1341,7 @@
 <tr>
 <td>121</td>
 <td>proced_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1352,7 +1352,7 @@
 <tr>
 <td>122</td>
 <td>proed_note_name</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1363,7 +1363,7 @@
 <tr>
 <td>123</td>
 <td>program_id</td>
-<td></td>
+<td>المعرف الفريد (الرقم الأساسي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1374,7 +1374,7 @@
 <tr>
 <td>124</td>
 <td>program_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1385,7 +1385,7 @@
 <tr>
 <td>125</td>
 <td>current_groups</td>
-<td></td>
+<td>معلومات عن current_groups</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1396,7 +1396,7 @@
 <tr>
 <td>126</td>
 <td>groups_sitting</td>
-<td></td>
+<td>معلومات عن groups_sitting</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1407,7 +1407,7 @@
 <tr>
 <td>127</td>
 <td>id_dep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1418,7 +1418,7 @@
 <tr>
 <td>128</td>
 <td>grade_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1429,7 +1429,7 @@
 <tr>
 <td>129</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1440,7 +1440,7 @@
 <tr>
 <td>130</td>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1451,7 +1451,7 @@
 <tr>
 <td>131</td>
 <td>supervisor_grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1462,7 +1462,7 @@
 <tr>
 <td>132</td>
 <td>program_manager_grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1473,7 +1473,7 @@
 <tr>
 <td>133</td>
 <td>final_grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1484,7 +1484,7 @@
 <tr>
 <td>134</td>
 <td>grade_status</td>
-<td></td>
+<td>حالة العنصر</td>
 <td>character varying</td>
 <td>50</td>
 <td>إدخال / تلقائي</td>
@@ -1495,7 +1495,7 @@
 <tr>
 <td>135</td>
 <td>notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1506,7 +1506,7 @@
 <tr>
 <td>136</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1517,7 +1517,7 @@
 <tr>
 <td>137</td>
 <td>stage_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1528,7 +1528,7 @@
 <tr>
 <td>138</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1539,7 +1539,7 @@
 <tr>
 <td>139</td>
 <td>stage_name</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td>255</td>
 <td>إدخال / تلقائي</td>
@@ -1550,7 +1550,7 @@
 <tr>
 <td>140</td>
 <td>stage_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1561,7 +1561,7 @@
 <tr>
 <td>141</td>
 <td>is_completed</td>
-<td></td>
+<td>معلومات عن is_completed</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1572,7 +1572,7 @@
 <tr>
 <td>142</td>
 <td>start_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1583,7 +1583,7 @@
 <tr>
 <td>143</td>
 <td>end_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1594,7 +1594,7 @@
 <tr>
 <td>144</td>
 <td>due_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1605,7 +1605,7 @@
 <tr>
 <td>145</td>
 <td>completion_percentage</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1616,7 +1616,7 @@
 <tr>
 <td>146</td>
 <td>stage_status</td>
-<td></td>
+<td>حالة العنصر</td>
 <td>character varying</td>
 <td>50</td>
 <td>إدخال / تلقائي</td>
@@ -1627,7 +1627,7 @@
 <tr>
 <td>147</td>
 <td>file_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1638,7 +1638,7 @@
 <tr>
 <td>148</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1649,7 +1649,7 @@
 <tr>
 <td>149</td>
 <td>file_name</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td>255</td>
 <td>إدخال / تلقائي</td>
@@ -1660,7 +1660,7 @@
 <tr>
 <td>150</td>
 <td>file_url</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1671,7 +1671,7 @@
 <tr>
 <td>151</td>
 <td>file_type</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td>50</td>
 <td>إدخال / تلقائي</td>
@@ -1682,7 +1682,7 @@
 <tr>
 <td>152</td>
 <td>file_size</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1693,7 +1693,7 @@
 <tr>
 <td>153</td>
 <td>uploaded_by</td>
-<td></td>
+<td>معلومات عن uploaded_by</td>
 <td>character varying</td>
 <td>255</td>
 <td>إدخال / تلقائي</td>
@@ -1704,7 +1704,7 @@
 <tr>
 <td>154</td>
 <td>uploaded_at</td>
-<td></td>
+<td>معلومات عن uploaded_at</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1715,7 +1715,7 @@
 <tr>
 <td>155</td>
 <td>file_description</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1726,7 +1726,7 @@
 <tr>
 <td>156</td>
 <td>file_stage</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td>100</td>
 <td>إدخال / تلقائي</td>
@@ -1737,7 +1737,7 @@
 <tr>
 <td>157</td>
 <td>supervisor_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1748,7 +1748,7 @@
 <tr>
 <td>158</td>
 <td>comment_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1759,7 +1759,7 @@
 <tr>
 <td>159</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1770,7 +1770,7 @@
 <tr>
 <td>160</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1781,7 +1781,7 @@
 <tr>
 <td>161</td>
 <td>comment_text</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1792,7 +1792,7 @@
 <tr>
 <td>162</td>
 <td>comment_type</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>50</td>
 <td>إدخال / تلقائي</td>
@@ -1803,7 +1803,7 @@
 <tr>
 <td>163</td>
 <td>comment_rating</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1814,7 +1814,7 @@
 <tr>
 <td>164</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1825,7 +1825,7 @@
 <tr>
 <td>165</td>
 <td>updated_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1836,7 +1836,7 @@
 <tr>
 <td>166</td>
 <td>is_resolved</td>
-<td></td>
+<td>معلومات عن is_resolved</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1847,7 +1847,7 @@
 <tr>
 <td>167</td>
 <td>comment_stage</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1858,7 +1858,7 @@
 <tr>
 <td>168</td>
 <td>stage6_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1869,7 +1869,7 @@
 <tr>
 <td>169</td>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1880,7 +1880,7 @@
 <tr>
 <td>170</td>
 <td>discuss_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1891,7 +1891,7 @@
 <tr>
 <td>171</td>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1902,7 +1902,7 @@
 <tr>
 <td>172</td>
 <td>stage2_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1913,7 +1913,7 @@
 <tr>
 <td>173</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1924,7 +1924,7 @@
 <tr>
 <td>174</td>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1935,7 +1935,7 @@
 <tr>
 <td>175</td>
 <td>dean_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1946,7 +1946,7 @@
 <tr>
 <td>176</td>
 <td>head_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1957,7 +1957,7 @@
 <tr>
 <td>177</td>
 <td>pdf_file</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1968,7 +1968,7 @@
 <tr>
 <td>178</td>
 <td>stage_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1979,7 +1979,7 @@
 <tr>
 <td>179</td>
 <td>student_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -1990,7 +1990,7 @@
 <tr>
 <td>180</td>
 <td>stages_id</td>
-<td></td>
+<td>المعرف الفريد (الرقم الأساسي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2001,7 +2001,7 @@
 <tr>
 <td>181</td>
 <td>stage_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2012,7 +2012,7 @@
 <tr>
 <td>182</td>
 <td>start_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2023,7 +2023,7 @@
 <tr>
 <td>183</td>
 <td>end_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2034,7 +2034,7 @@
 <tr>
 <td>184</td>
 <td>stage_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2045,7 +2045,7 @@
 <tr>
 <td>185</td>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2056,7 +2056,7 @@
 <tr>
 <td>186</td>
 <td>state_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2067,7 +2067,7 @@
 <tr>
 <td>187</td>
 <td>id_stages</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2078,7 +2078,7 @@
 <tr>
 <td>188</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2089,7 +2089,7 @@
 <tr>
 <td>189</td>
 <td>stage_state</td>
-<td></td>
+<td>المرحلة الحالية</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2100,7 +2100,7 @@
 <tr>
 <td>190</td>
 <td>percentage</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2111,7 +2111,7 @@
 <tr>
 <td>191</td>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2122,7 +2122,7 @@
 <tr>
 <td>192</td>
 <td>stud_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2133,7 +2133,7 @@
 <tr>
 <td>193</td>
 <td>stud_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2144,7 +2144,7 @@
 <tr>
 <td>194</td>
 <td>stud_college_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2155,7 +2155,7 @@
 <tr>
 <td>195</td>
 <td>stud_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2166,7 +2166,7 @@
 <tr>
 <td>196</td>
 <td>stud_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2177,7 +2177,7 @@
 <tr>
 <td>197</td>
 <td>id_academy_year</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2188,7 +2188,7 @@
 <tr>
 <td>198</td>
 <td>stud_cohort_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2199,7 +2199,7 @@
 <tr>
 <td>199</td>
 <td>stud_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2210,7 +2210,7 @@
 <tr>
 <td>200</td>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2221,7 +2221,7 @@
 <tr>
 <td>201</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2232,7 +2232,7 @@
 <tr>
 <td>202</td>
 <td>create_at</td>
-<td></td>
+<td>معلومات عن create_at</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2243,7 +2243,7 @@
 <tr>
 <td>203</td>
 <td>stud_verfi_code</td>
-<td></td>
+<td>معلومات عن stud_verfi_code</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2254,7 +2254,7 @@
 <tr>
 <td>204</td>
 <td>grade_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2265,7 +2265,7 @@
 <tr>
 <td>205</td>
 <td>id_student</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2276,7 +2276,7 @@
 <tr>
 <td>206</td>
 <td>id_student</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2287,7 +2287,7 @@
 <tr>
 <td>207</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2298,7 +2298,7 @@
 <tr>
 <td>208</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2309,7 +2309,7 @@
 <tr>
 <td>209</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2320,7 +2320,7 @@
 <tr>
 <td>210</td>
 <td>grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2331,7 +2331,7 @@
 <tr>
 <td>211</td>
 <td>notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2342,7 +2342,7 @@
 <tr>
 <td>212</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2353,7 +2353,7 @@
 <tr>
 <td>213</td>
 <td>updated_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2364,7 +2364,7 @@
 <tr>
 <td>214</td>
 <td>stud_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2375,7 +2375,7 @@
 <tr>
 <td>215</td>
 <td>stud_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2386,7 +2386,7 @@
 <tr>
 <td>216</td>
 <td>id_academy_year</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2397,7 +2397,7 @@
 <tr>
 <td>217</td>
 <td>stud_college_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2408,7 +2408,7 @@
 <tr>
 <td>218</td>
 <td>stud_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2419,7 +2419,7 @@
 <tr>
 <td>219</td>
 <td>stud_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2430,7 +2430,7 @@
 <tr>
 <td>220</td>
 <td>stud_cohort_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2441,7 +2441,7 @@
 <tr>
 <td>221</td>
 <td>stud_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2452,7 +2452,7 @@
 <tr>
 <td>222</td>
 <td>create_at</td>
-<td></td>
+<td>معلومات عن create_at</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2463,7 +2463,7 @@
 <tr>
 <td>223</td>
 <td>stud_verfi_code</td>
-<td></td>
+<td>معلومات عن stud_verfi_code</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2474,7 +2474,7 @@
 <tr>
 <td>224</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2485,7 +2485,7 @@
 <tr>
 <td>225</td>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2496,7 +2496,7 @@
 <tr>
 <td>226</td>
 <td>acye_year</td>
-<td></td>
+<td>معلومات عن acye_year</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2507,7 +2507,7 @@
 <tr>
 <td>227</td>
 <td>program_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2518,7 +2518,7 @@
 <tr>
 <td>228</td>
 <td>dep_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2529,7 +2529,7 @@
 <tr>
 <td>229</td>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2540,7 +2540,7 @@
 <tr>
 <td>230</td>
 <td>group_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2551,7 +2551,7 @@
 <tr>
 <td>231</td>
 <td>final_document</td>
-<td></td>
+<td>معلومات عن final_document</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2562,7 +2562,7 @@
 <tr>
 <td>232</td>
 <td>archived</td>
-<td></td>
+<td>حالة الأرشفة</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2573,7 +2573,7 @@
 <tr>
 <td>233</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2584,7 +2584,7 @@
 <tr>
 <td>234</td>
 <td>group_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2595,7 +2595,7 @@
 <tr>
 <td>235</td>
 <td>group_progress</td>
-<td></td>
+<td>مستوى التقدم والإنجاز</td>
 <td>double precision</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2606,7 +2606,7 @@
 <tr>
 <td>236</td>
 <td>num_grops</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2617,7 +2617,7 @@
 <tr>
 <td>237</td>
 <td>group_led_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2628,7 +2628,7 @@
 <tr>
 <td>238</td>
 <td>stage_name_current</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2639,7 +2639,7 @@
 <tr>
 <td>239</td>
 <td>group_state</td>
-<td></td>
+<td>معلومات عن group_state</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2650,7 +2650,7 @@
 <tr>
 <td>240</td>
 <td>sprvsr_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2661,7 +2661,7 @@
 <tr>
 <td>241</td>
 <td>sprvsr_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2672,7 +2672,7 @@
 <tr>
 <td>242</td>
 <td>sprvsr_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2683,7 +2683,7 @@
 <tr>
 <td>243</td>
 <td>sprvsr_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2694,7 +2694,7 @@
 <tr>
 <td>244</td>
 <td>sprvsr_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2705,7 +2705,7 @@
 <tr>
 <td>245</td>
 <td>sprvsr_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2716,7 +2716,7 @@
 <tr>
 <td>246</td>
 <td>sprvsr_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2727,7 +2727,7 @@
 <tr>
 <td>247</td>
 <td>sprvsr_username</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2738,7 +2738,7 @@
 <tr>
 <td>248</td>
 <td>sprvsr_password</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>character varying</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2749,7 +2749,7 @@
 <tr>
 <td>249</td>
 <td>program_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2760,7 +2760,7 @@
 <tr>
 <td>250</td>
 <td>sprvsr_project_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2771,7 +2771,7 @@
 <tr>
 <td>251</td>
 <td>sprvsr_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2782,7 +2782,7 @@
 <tr>
 <td>252</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2793,7 +2793,7 @@
 <tr>
 <td>253</td>
 <td>settings_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2804,7 +2804,7 @@
 <tr>
 <td>254</td>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2815,7 +2815,7 @@
 <tr>
 <td>255</td>
 <td>email_notifications</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2826,7 +2826,7 @@
 <tr>
 <td>256</td>
 <td>push_notifications</td>
-<td></td>
+<td>معلومات عن push_notifications</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2837,7 +2837,7 @@
 <tr>
 <td>257</td>
 <td>weekly_reports</td>
-<td></td>
+<td>معلومات عن weekly_reports</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2848,7 +2848,7 @@
 <tr>
 <td>258</td>
 <td>language</td>
-<td></td>
+<td>معلومات عن language</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2859,7 +2859,7 @@
 <tr>
 <td>259</td>
 <td>timezone</td>
-<td></td>
+<td>معلومات عن timezone</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2870,7 +2870,7 @@
 <tr>
 <td>260</td>
 <td>profile_image_url</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2881,7 +2881,7 @@
 <tr>
 <td>261</td>
 <td>phone_number</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2892,7 +2892,7 @@
 <tr>
 <td>262</td>
 <td>employee_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2903,7 +2903,7 @@
 <tr>
 <td>263</td>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2914,7 +2914,7 @@
 <tr>
 <td>264</td>
 <td>updated_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2925,7 +2925,7 @@
 <tr>
 <td>265</td>
 <td>stage3_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2936,7 +2936,7 @@
 <tr>
 <td>266</td>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2947,7 +2947,7 @@
 <tr>
 <td>267</td>
 <td>discussion_state</td>
-<td></td>
+<td>معلومات عن discussion_state</td>
 <td>boolean</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2958,7 +2958,7 @@
 <tr>
 <td>268</td>
 <td>discussion_percent</td>
-<td></td>
+<td>معلومات عن discussion_percent</td>
 <td>real</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2969,7 +2969,7 @@
 <tr>
 <td>269</td>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2980,7 +2980,7 @@
 <tr>
 <td>270</td>
 <td>discus_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -2991,7 +2991,7 @@
 <tr>
 <td>271</td>
 <td>id_user_manager</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -3002,7 +3002,7 @@
 <tr>
 <td>272</td>
 <td>id_dean</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -3013,7 +3013,7 @@
 <tr>
 <td>273</td>
 <td>id_headofdep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -3024,7 +3024,7 @@
 <tr>
 <td>274</td>
 <td>id_programmanager</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -3035,7 +3035,7 @@
 <tr>
 <td>275</td>
 <td>username_user_manager</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -3046,7 +3046,7 @@
 <tr>
 <td>276</td>
 <td>pass_user_manager</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>text</td>
 <td>متغير</td>
 <td>إدخال / تلقائي</td>
@@ -3061,13 +3061,13 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>acye_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>acye_year</td>
-<td></td>
+<td>معلومات عن acye_year</td>
 <td>character varying</td>
 <td></td>
 </tr>
@@ -3078,13 +3078,13 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>group_state_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>states_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3095,67 +3095,67 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>head_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>head_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>head_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>head_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>assign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>resign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>head_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>id_dep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>head_username</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>head_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3166,73 +3166,73 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>prma_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>prma_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>prma_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>prma_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>assign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>resign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>prma_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>prma_username</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>prma_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>prma_image</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3243,13 +3243,13 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>id_title</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>title_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3260,55 +3260,55 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>report_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>report_title</td>
-<td></td>
+<td>العنوان</td>
 <td>text</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>report_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>report_type</td>
-<td></td>
+<td>النوع أو التصنيف</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>report_content</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>pdf_url</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>id_dep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>created_by</td>
-<td></td>
+<td>معلومات عن created_by</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -3319,37 +3319,37 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>chat_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>last_message</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>last_message_time</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -3360,49 +3360,49 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>dean_id</td>
-<td></td>
+<td>المعرف الفريد (الرقم الأساسي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>dean_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>dean_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>dean_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>assign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>resign_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>dean_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>NOTNULL</td>
 </tr>
@@ -3413,13 +3413,13 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>dep_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>dep_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3430,13 +3430,13 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>title_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>title_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3447,37 +3447,37 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage5_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>title_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>pdf_file</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -3488,67 +3488,67 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage1_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>research_title</td>
-<td></td>
+<td>العنوان</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>research_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>head_dep_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>prgrm_mngr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>id_sprvsr_proced</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_prgrm_mngr_proced</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_head_dep_proced</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>stages_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
@@ -3559,67 +3559,67 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage1_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>research_title</td>
-<td></td>
+<td>العنوان</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>research_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>head_dep_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>prgrm_mngr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>prgrm_mngr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>head_dep_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>leader_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
@@ -3630,43 +3630,43 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage4_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>stage4_pdf</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>haed_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>dean_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
@@ -3677,85 +3677,85 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>group_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_group_state</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>group_led_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_acye</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>final_document</td>
-<td></td>
+<td>معلومات عن final_document</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>archived</td>
-<td></td>
+<td>حالة الأرشفة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>group_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>group_progress</td>
-<td></td>
+<td>مستوى التقدم والإنجاز</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>current_stage</td>
-<td></td>
+<td>المرحلة الحالية</td>
 <td>bigint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>num_grops</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
@@ -3766,43 +3766,43 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>message_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_chat</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>sender_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>sender_role</td>
-<td></td>
+<td>الدور أو الصلاحية</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>message_text</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>is_read</td>
-<td></td>
+<td>حالة القراءة (مقروء/غير مقروء)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -3813,49 +3813,49 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>notification_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>notification_title</td>
-<td></td>
+<td>العنوان</td>
 <td>character varying</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>notification_message</td>
-<td></td>
+<td>نص المحتوى أو الرسالة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>notification_type</td>
-<td></td>
+<td>النوع أو التصنيف</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>is_read</td>
-<td></td>
+<td>حالة القراءة (مقروء/غير مقروء)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -3866,13 +3866,13 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>proced_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>proed_note_name</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td></td>
 </tr>
@@ -3883,31 +3883,31 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>program_id</td>
-<td></td>
+<td>المعرف الفريد (الرقم الأساسي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>program_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>current_groups</td>
-<td></td>
+<td>معلومات عن current_groups</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>groups_sitting</td>
-<td></td>
+<td>معلومات عن groups_sitting</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>id_dep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>FK</td>
 </tr>
@@ -3918,55 +3918,55 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>grade_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>supervisor_grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>program_manager_grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>final_grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>grade_status</td>
-<td></td>
+<td>حالة العنصر</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -3977,61 +3977,61 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>stage_name</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>stage_description</td>
-<td></td>
+<td>وصف تفصيلي</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>is_completed</td>
-<td></td>
+<td>معلومات عن is_completed</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>start_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>end_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>due_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>completion_percentage</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>stage_status</td>
-<td></td>
+<td>حالة العنصر</td>
 <td>character varying</td>
 <td></td>
 </tr>
@@ -4042,67 +4042,67 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>file_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>file_name</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>file_url</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>file_type</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>file_size</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>uploaded_by</td>
-<td></td>
+<td>معلومات عن uploaded_by</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>uploaded_at</td>
-<td></td>
+<td>معلومات عن uploaded_at</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>file_description</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>file_stage</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>supervisor_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -4113,61 +4113,61 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>comment_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>comment_text</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>comment_type</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>comment_rating</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>updated_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>is_resolved</td>
-<td></td>
+<td>معلومات عن is_resolved</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>comment_stage</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>character varying</td>
 <td></td>
 </tr>
@@ -4178,25 +4178,25 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage6_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>discuss_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td></td>
 </tr>
 <tr>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
@@ -4207,49 +4207,49 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage2_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>dean_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>head_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>pdf_file</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>stage_approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>student_notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
@@ -4260,37 +4260,37 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stages_id</td>
-<td></td>
+<td>المعرف الفريد (الرقم الأساسي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>stage_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>start_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td></td>
 </tr>
 <tr>
 <td>end_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td></td>
 </tr>
 <tr>
 <td>stage_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
@@ -4301,37 +4301,37 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>state_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_stages</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>stage_state</td>
-<td></td>
+<td>المرحلة الحالية</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>percentage</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>approval</td>
-<td></td>
+<td>حالة الاعتماد أو الموافقة</td>
 <td>boolean</td>
 <td></td>
 </tr>
@@ -4342,73 +4342,73 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stud_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>stud_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>stud_college_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>id_academy_year</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>stud_cohort_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>create_at</td>
-<td></td>
+<td>معلومات عن create_at</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_verfi_code</td>
-<td></td>
+<td>معلومات عن stud_verfi_code</td>
 <td>integer</td>
 <td></td>
 </tr>
@@ -4419,61 +4419,61 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>grade_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_student</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_student</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>UNIQUE</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>UNIQUE</td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>grade</td>
-<td></td>
+<td>الدرجة أو النسبة المئوية</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>notes</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>updated_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -4484,175 +4484,175 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stud_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>id_academy_year</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_college_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_cohort_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_pass</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>create_at</td>
-<td></td>
+<td>معلومات عن create_at</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>stud_verfi_code</td>
-<td></td>
+<td>معلومات عن stud_verfi_code</td>
 <td>integer</td>
 <td></td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>id_program</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>acye_year</td>
-<td></td>
+<td>معلومات عن acye_year</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>program_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>dep_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>group_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>group_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>final_document</td>
-<td></td>
+<td>معلومات عن final_document</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>archived</td>
-<td></td>
+<td>حالة الأرشفة</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>group_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>group_progress</td>
-<td></td>
+<td>مستوى التقدم والإنجاز</td>
 <td>double precision</td>
 <td></td>
 </tr>
 <tr>
 <td>num_grops</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>group_led_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>stage_name_current</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>group_state</td>
-<td></td>
+<td>معلومات عن group_state</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
@@ -4663,61 +4663,61 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>sprvsr_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>sprvsr_name</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_email</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_phone_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>bigint</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_username</td>
-<td></td>
+<td>الاسم</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_password</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>character varying</td>
 <td></td>
 </tr>
 <tr>
 <td>program_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>sprvsr_project_num</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>smallint</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_isactive</td>
-<td></td>
+<td>الحالة (نشط/غير نشط)</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td>NOTNULL</td>
 </tr>
@@ -4728,73 +4728,73 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>settings_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_sprvsr</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>integer</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>email_notifications</td>
-<td></td>
+<td>البريد الإلكتروني</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>push_notifications</td>
-<td></td>
+<td>معلومات عن push_notifications</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>weekly_reports</td>
-<td></td>
+<td>معلومات عن weekly_reports</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>language</td>
-<td></td>
+<td>معلومات عن language</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>timezone</td>
-<td></td>
+<td>معلومات عن timezone</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>profile_image_url</td>
-<td></td>
+<td>رابط الملف أو الصورة</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>phone_number</td>
-<td></td>
+<td>رقم الهاتف أو العدد</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>employee_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>created_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
 <tr>
 <td>updated_at</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>timestamp with time zone</td>
 <td></td>
 </tr>
@@ -4805,37 +4805,37 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>stage3_id</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_group</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>discussion_state</td>
-<td></td>
+<td>معلومات عن discussion_state</td>
 <td>boolean</td>
 <td></td>
 </tr>
 <tr>
 <td>discussion_percent</td>
-<td></td>
+<td>معلومات عن discussion_percent</td>
 <td>real</td>
 <td></td>
 </tr>
 <tr>
 <td>sprvsr_note</td>
-<td></td>
+<td>ملاحظات وتوجيهات</td>
 <td>text</td>
 <td></td>
 </tr>
 <tr>
 <td>discus_date</td>
-<td></td>
+<td>تاريخ ووقت الإجراء</td>
 <td>date</td>
 <td></td>
 </tr>
@@ -4846,37 +4846,37 @@
 <tr><th>اسم الحقل</th><th>الوصف</th><th>النوع</th><th>القيود</th></tr>
 <tr>
 <td>id_user_manager</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>bigint</td>
 <td>PK</td>
 </tr>
 <tr>
 <td>id_dean</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_headofdep</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>id_programmanager</td>
-<td></td>
+<td>معرف مرتبط بجدول آخر (مفتاح أجنبي)</td>
 <td>smallint</td>
 <td>FK</td>
 </tr>
 <tr>
 <td>username_user_manager</td>
-<td></td>
+<td>الاسم</td>
 <td>text</td>
 <td>NOTNULL</td>
 </tr>
 <tr>
 <td>pass_user_manager</td>
-<td></td>
+<td>كلمة المرور المشفرة</td>
 <td>text</td>
 <td></td>
 </tr>
