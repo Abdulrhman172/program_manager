@@ -11,6 +11,7 @@ class ResearchController extends ChangeNotifier {
   
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
 
   // For archived drill-down
   String? _selectedArchiveYear; // null = show year list, String = show that year's researches
@@ -71,8 +72,10 @@ class ResearchController extends ChangeNotifier {
     } catch (e) {
       _errorMessage = 'حدث خطأ في جلب البيانات: $e';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -149,5 +152,11 @@ class ResearchController extends ChangeNotifier {
         duration: const Duration(seconds: 2),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 }

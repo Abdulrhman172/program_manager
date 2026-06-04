@@ -8,6 +8,7 @@ class StagesController extends ChangeNotifier {
   List<StageModel> _stages = [];
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
 
   String? _editingStageId;
   final TextEditingController startDateController = TextEditingController();
@@ -54,8 +55,10 @@ class StagesController extends ChangeNotifier {
     } catch (e) {
       _errorMessage = 'حدث خطأ في جلب المراحل: ${e.toString()}';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -77,21 +80,47 @@ class StagesController extends ChangeNotifier {
     final index = _stages.indexWhere((s) => s.id == id);
     if (index == -1) return;
 
+    // احفظ القيم قبل مسح الحقول
+    final newStartDate = startDateController.text;
+    final newEndDate = endDateController.text;
+
+    // احسب ما إذا كانت المرحلة ستصبح نشطة بناءً على التواريخ الجديدة
+    bool newIsActive = false;
+    if (newStartDate.isNotEmpty && newEndDate.isNotEmpty) {
+      try {
+        final now = DateTime.now();
+        final start = DateTime.parse(newStartDate);
+        final end = DateTime.parse(newEndDate).add(const Duration(days: 1));
+        newIsActive = now.isAfter(start) && now.isBefore(end);
+      } catch (_) {}
+    }
+
     // تحديث محلي
-    _stages[index].startDate = startDateController.text;
-    _stages[index].endDate = endDateController.text;
-    final isStageActive = _stages[index].isActive;
+    _stages[index].startDate = newStartDate;
+    _stages[index].endDate = newEndDate;
+
+    // أغلق النموذج (هذا يمسح controllers - لذلك نفعل هذا بعد حفظ القيم)
     closeEditForm();
 
     try {
-      await SupabaseService.client.from('stages').update({
-        'start_date': startDateController.text,
-        'end_date': endDateController.text,
-        'stage_isactive': isStageActive,
-      }).eq('stages_id', id);
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+      
+      if (idProgram != null) {
+        await SupabaseService.client.from('stages').update({
+          'start_date': newStartDate.isEmpty ? null : newStartDate,
+          'end_date': newEndDate.isEmpty ? null : newEndDate,
+          'stage_isactive': newIsActive,
+        }).eq('stages_id', id).eq('id_program', idProgram);
+
+        // أعد تحميل البيانات لضمان التزامن مع قاعدة البيانات
+        await fetchStages();
+      }
     } catch (e) {
-      _errorMessage = 'فشل حفظ التواريخ: ${e.toString()}';
-      notifyListeners();
+      if (!_isDisposed) {
+        _errorMessage = 'فشل حفظ التواريخ: ${e.toString()}';
+        notifyListeners();
+      }
     }
   }
 
@@ -131,6 +160,7 @@ class StagesController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _isDisposed = true;
     startDateController.dispose();
     endDateController.dispose();
     super.dispose();

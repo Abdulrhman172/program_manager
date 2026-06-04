@@ -10,6 +10,7 @@ class ApprovalController extends ChangeNotifier {
   String _statusFilter = 'الكل';
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
 
   List<ApprovalModel> get approvals => _filteredApprovals;
   String get currentFilter => _statusFilter;
@@ -43,13 +44,6 @@ class ApprovalController extends ChangeNotifier {
         return;
       }
 
-      // جلب بيانات المرحلة الأولى مع ربطها بالمجموعات لفلترة البرنامج
-      final response = await SupabaseService.client
-          .from('first_stage_view')
-          .select()
-          .not('research_title', 'is', null);
-
-      // فلترة يدوية بـ id_program عبر جدول groups
       // نجلب أولاً المجموعات التابعة للبرنامج
       final groupsResponse = await SupabaseService.client
           .from('groups')
@@ -58,14 +52,23 @@ class ApprovalController extends ChangeNotifier {
 
       final programGroupIds = (groupsResponse as List)
           .map((g) => (g['group_id'] as num).toInt())
-          .toSet();
+          .toList();
+
+      if (programGroupIds.isEmpty) {
+        _approvals = [];
+        _filterList();
+        return;
+      }
+
+      // جلب بيانات المرحلة الأولى المفلترة من قاعدة البيانات مباشرة
+      final response = await SupabaseService.client
+          .from('first_stage_view')
+          .select()
+          .not('research_title', 'is', null)
+          .inFilter('group_id', programGroupIds);
 
       // تصفية نتائج المرحلة الأولى
       _approvals = (response as List)
-          .where((row) {
-            final groupId = (row['group_id'] as num?)?.toInt();
-            return groupId != null && programGroupIds.contains(groupId);
-          })
           .map((e) => ApprovalModel.fromJson(e))
           .toList();
 
@@ -73,8 +76,10 @@ class ApprovalController extends ChangeNotifier {
     } catch (e) {
       _errorMessage = 'حدث خطأ في جلب البيانات: ${e.toString()}';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -115,10 +120,12 @@ class ApprovalController extends ChangeNotifier {
           .eq('stage1_id', stage1Id);
     } catch (e) {
       // إعادة الحالة السابقة عند الخطأ
-      _approvals[index].prgrmMngrApproval = null;
-      _approvals[index].rejectionReason = null;
-      _filterList();
-      notifyListeners();
+      if (!_isDisposed) {
+        _approvals[index].prgrmMngrApproval = null;
+        _approvals[index].rejectionReason = null;
+        _filterList();
+        notifyListeners();
+      }
     }
   }
 
@@ -151,5 +158,11 @@ class ApprovalController extends ChangeNotifier {
     }
 
     _filteredApprovals = tempList;
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 }

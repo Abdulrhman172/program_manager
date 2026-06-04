@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
@@ -70,6 +69,12 @@ class SettingsController extends ChangeNotifier {
         nameController.text = _currentUser!.prmaName;
         emailController.text = _currentUser!.prmaEmail;
         phoneController.text = '0${_currentUser!.prmaPhoneNum}';
+        
+        if (_currentUser!.prmaImage != null) {
+          await prefs.setString('prma_image', _currentUser!.prmaImage!);
+        } else {
+          await prefs.remove('prma_image');
+        }
       }
     } catch (e) {
       _errorMessage = 'حدث خطأ أثناء جلب البيانات: $e';
@@ -130,7 +135,7 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final file = File(image.path);
+      final bytes = await image.readAsBytes();
       final fileExt = path.extension(image.path);
       final fileName = '${_currentUser!.prmaId}_${DateTime.now().millisecondsSinceEpoch}$fileExt';
       final filePath = 'profile_pictures/$fileName';
@@ -139,7 +144,7 @@ class SettingsController extends ChangeNotifier {
       // Note: Make sure the 'profiles' bucket exists in your Supabase project and is public.
       await SupabaseService.client.storage
           .from('profiles')
-          .upload(filePath, file);
+          .uploadBinary(filePath, bytes);
 
       // 2. Get Public URL
       final imageUrl = SupabaseService.client.storage
@@ -155,6 +160,41 @@ class SettingsController extends ChangeNotifier {
       await _loadProfile();
     } catch (e) {
       _errorMessage = 'حدث خطأ أثناء رفع الصورة: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteImage() async {
+    if (_currentUser == null || _currentUser!.prmaImage == null) return;
+
+    _isLoading = true;
+    clearMessages();
+    notifyListeners();
+
+    try {
+      // 1. Delete from storage (extract filename from URL)
+      final imageUrl = _currentUser!.prmaImage!;
+      final uri = Uri.parse(imageUrl);
+      final pathSegments = uri.pathSegments;
+      // URL format: .../storage/v1/object/public/profiles/profile_pictures/filename.jpg
+      final fileName = pathSegments.last;
+      final filePath = 'profile_pictures/$fileName';
+
+      await SupabaseService.client.storage
+          .from('profiles')
+          .remove([filePath]);
+
+      // 2. Update Database to null
+      await SupabaseService.client.from('ProgramManager').update({
+        'prma_image': null,
+      }).eq('prma_id', _currentUser!.prmaId);
+
+      _successMessage = 'تم حذف الصورة الشخصية بنجاح';
+      await _loadProfile();
+    } catch (e) {
+      _errorMessage = 'حدث خطأ أثناء حذف الصورة: $e';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -211,12 +251,9 @@ class SettingsController extends ChangeNotifier {
     }
   }
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    if (context.mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-    }
   }
 
   Future<bool> deleteAccount(String pin) async {

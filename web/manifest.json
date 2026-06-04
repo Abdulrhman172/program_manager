@@ -1,6 +1,6 @@
-{
-    "name": "headofdepartment",
-    "short_name": "headofdepartment",
+﻿{
+    "name": "program_manager",
+    "short_name": "program_manager",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
@@ -33,3 +33,4 @@
         }
     ]
 }
+

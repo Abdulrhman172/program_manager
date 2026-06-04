@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/supabase_service.dart';
+import '../../stages/model/stage_model.dart';
 
 /// Controller for the Dashboard screen.
 /// Manages navigation state and provides dashboard data.
 class DashboardController extends ChangeNotifier {
   String _currentRoute = '/';
-  
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
   int _studentsCount = 0;
   int _supervisorsCount = 0;
   int _activeResearchesCount = 0;
   int _finishedResearchesCount = 0;
+  
+  String _userName = 'مسؤول البرنامج';
+  String? _userImage;
+  
+  List<StageModel> _stages = [];
 
   String get currentRoute => _currentRoute;
   bool get isLoading => _isLoading;
@@ -21,6 +27,9 @@ class DashboardController extends ChangeNotifier {
   int get supervisorsCount => _supervisorsCount;
   int get activeResearchesCount => _activeResearchesCount;
   int get finishedResearchesCount => _finishedResearchesCount;
+  String get userName => _userName;
+  String? get userImage => _userImage;
+  List<StageModel> get stages => _stages;
 
   DashboardController() {
     fetchStats();
@@ -34,6 +43,13 @@ class DashboardController extends ChangeNotifier {
   void resetRoute() {
     _currentRoute = '/';
     notifyListeners();
+  }
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    _userName = prefs.getString('prma_name') ?? 'مسؤول البرنامج';
+    _userImage = prefs.getString('prma_image');
+    if (!_isDisposed) notifyListeners();
   }
 
   Future<void> fetchStats() async {
@@ -51,6 +67,9 @@ class DashboardController extends ChangeNotifier {
         notifyListeners();
         return;
       }
+
+      _userName = prefs.getString('prma_name') ?? 'مسؤول البرنامج';
+      _userImage = prefs.getString('prma_image');
 
       // 1. عدد الطلاب
       final studentsRes = await SupabaseService.client
@@ -85,11 +104,28 @@ class DashboardController extends ChangeNotifier {
         }
       }
 
+      // 4. المراحل
+      final stagesRes = await SupabaseService.client
+          .from('stages')
+          .select()
+          .eq('id_program', idProgram)
+          .order('stages_id', ascending: true);
+          
+      _stages = (stagesRes as List).map((e) => StageModel.fromJson(e)).toList();
+
     } catch (e) {
       _errorMessage = 'حدث خطأ أثناء جلب الإحصائيات: $e';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 }

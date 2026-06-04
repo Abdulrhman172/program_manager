@@ -147,29 +147,32 @@ class DashboardView extends StatelessWidget {
                 const SizedBox(height: 16),
                 SizedBox(
                   height: 100,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    reverse: true, // RTL layout
-                    children: const [
-                      _StageCard(
-                        title: 'المرحلة الأولى - اختيار عنوان البحث',
-                        dateInfo: 'نشطة - تنتهي في 28/02/2026',
-                        isActive: true,
-                      ),
-                      SizedBox(width: 16),
-                      _StageCard(
-                        title: 'المرحلة الثانية - إنجاز الخطة',
-                        dateInfo: 'نشطة - تنتهي في 25/03/2026',
-                        isActive: true,
-                      ),
-                      SizedBox(width: 16),
-                      _StageCard(
-                        title: 'المرحلة الثالثة - مناقشة الخطة',
-                        dateInfo: 'قادمة - تبدأ في 26/03/2026',
-                        isActive: false,
-                      ),
-                    ],
-                  ),
+                  child: controller.stages.isEmpty 
+                      ? const Center(child: Text('لا توجد مراحل حالياً'))
+                      : ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          reverse: true, // RTL layout
+                          itemCount: controller.stages.length,
+                          separatorBuilder: (context, index) => const SizedBox(width: 16),
+                          itemBuilder: (context, index) {
+                            final stage = controller.stages[index];
+                            final isActive = stage.status == 'نشطة';
+                            String dateInfo = '';
+                            if (stage.status == 'نشطة' || stage.status == 'منتهية') {
+                              dateInfo = '${stage.status} - تنتهي في ${stage.endDate}';
+                            } else if (stage.status == 'قادمة') {
+                              dateInfo = '${stage.status} - تبدأ في ${stage.startDate}';
+                            } else {
+                              dateInfo = stage.status;
+                            }
+                            
+                            return _StageCard(
+                              title: stage.title,
+                              dateInfo: dateInfo,
+                              isActive: isActive,
+                            );
+                          },
+                        ),
                 ),
               ],
             ),

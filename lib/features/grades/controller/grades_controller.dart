@@ -10,6 +10,7 @@ class GradesController extends ChangeNotifier {
   String _statusFilter = 'الكل';
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
 
   List<GradeModel> get grades => _filteredGrades;
   String get statusFilter => _statusFilter;
@@ -82,8 +83,10 @@ class GradesController extends ChangeNotifier {
     } catch (e) {
       _errorMessage = 'حدث خطأ في جلب الدرجات: ${e.toString()}';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -98,13 +101,20 @@ class GradesController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await SupabaseService.client.from('program_manager_grades').update({
-        'program_manager_grade': newGrade,
-        'grade_status': 'مكتملة',
-      }).eq('grade_id', gradeId);
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram != null) {
+        await SupabaseService.client.from('program_manager_grades').update({
+          'program_manager_grade': newGrade,
+          'grade_status': 'مكتملة',
+        }).eq('grade_id', gradeId).eq('id_program', idProgram);
+      }
     } catch (e) {
-      _errorMessage = 'فشل حفظ الدرجة: ${e.toString()}';
-      notifyListeners();
+      if (!_isDisposed) {
+        _errorMessage = 'فشل حفظ الدرجة: ${e.toString()}';
+        notifyListeners();
+      }
     }
   }
 
@@ -135,5 +145,11 @@ class GradesController extends ChangeNotifier {
     }
 
     _filteredGrades = temp;
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 }

@@ -71,6 +71,9 @@ class AuthController extends ChangeNotifier {
       await prefs.setString('prma_email', manager.prmaEmail);
       await prefs.setString('prma_username', manager.prmaUsername);
       await prefs.setInt('id_program', manager.idProgram);
+      if (manager.prmaImage != null) {
+        await prefs.setString('prma_image', manager.prmaImage!);
+      }
 
       notifyListeners();
       return true;

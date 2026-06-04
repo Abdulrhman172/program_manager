@@ -17,6 +17,7 @@ class StudentsController extends ChangeNotifier {
   String? _editingStudentId;
   String? _formError;
   String? _selectedDepartment;
+  bool _isDisposed = false;
 
   // Controllers for the new/edit student form
   final TextEditingController nameController = TextEditingController();
@@ -68,8 +69,10 @@ class StudentsController extends ChangeNotifier {
     } catch (e) {
       _formError = 'حدث خطأ في جلب البيانات: $e';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -175,7 +178,8 @@ class StudentsController extends ChangeNotifier {
         await SupabaseService.client
             .from('student')
             .update(studentData)
-            .eq('stud_college_num', int.tryParse(_editingStudentId!) ?? 0);
+            .eq('stud_college_num', int.tryParse(_editingStudentId!) ?? 0)
+            .eq('id_program', idProgram);
       } else {
         // Add new
         await SupabaseService.client.from('student').insert(studentData);
@@ -189,8 +193,10 @@ class StudentsController extends ChangeNotifier {
     } catch (e) {
       _formError = 'حدث خطأ أثناء الحفظ: $e';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -217,15 +223,23 @@ class StudentsController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await SupabaseService.client
-          .from('student')
-          .delete()
-          .eq('stud_college_num', int.tryParse(id) ?? 0);
-      await fetchStudents();
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+
+      if (idProgram != null) {
+        await SupabaseService.client
+            .from('student')
+            .delete()
+            .eq('stud_college_num', int.tryParse(id) ?? 0)
+            .eq('id_program', idProgram);
+        await fetchStudents();
+      }
     } catch (e) {
-      _formError = 'حدث خطأ أثناء الحذف: $e';
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _formError = 'حدث خطأ أثناء الحذف: $e';
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -241,6 +255,7 @@ class StudentsController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _isDisposed = true;
     nameController.dispose();
     idController.dispose();
     batchNumberController.dispose();

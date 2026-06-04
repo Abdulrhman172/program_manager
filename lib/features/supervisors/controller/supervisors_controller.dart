@@ -9,6 +9,7 @@ class SupervisorsController extends ChangeNotifier {
   String _searchQuery = '';
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
 
   List<SupervisorModel> get supervisors => _filteredSupervisors;
   bool get isLoading => _isLoading;
@@ -49,8 +50,10 @@ class SupervisorsController extends ChangeNotifier {
     } catch (e) {
       _errorMessage = 'حدث خطأ في جلب البيانات: ${e.toString()}';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -64,14 +67,23 @@ class SupervisorsController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await SupabaseService.client
-          .from('supervisor')
-          .update({'sprvsr_isactive': newValue}).eq('sprvsr_id', id);
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+      
+      if (idProgram != null) {
+        await SupabaseService.client
+            .from('supervisor')
+            .update({'sprvsr_isactive': newValue})
+            .eq('sprvsr_id', id)
+            .eq('program_id', idProgram);
+      }
     } catch (e) {
       // إعادة الحالة السابقة عند الخطأ
-      _supervisors[index].isActive = !newValue;
-      _filterList();
-      notifyListeners();
+      if (!_isDisposed) {
+        _supervisors[index].isActive = !newValue;
+        _filterList();
+        notifyListeners();
+      }
     }
   }
 
@@ -95,5 +107,11 @@ class SupervisorsController extends ChangeNotifier {
                   .contains(_searchQuery.toLowerCase()))
           .toList();
     }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 }

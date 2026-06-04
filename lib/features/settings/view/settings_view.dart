@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../auth/view/login_view.dart';
 import '../controller/settings_controller.dart';
 
 class SettingsView extends StatefulWidget {
@@ -63,7 +64,7 @@ class _SettingsViewState extends State<SettingsView>
                 ),
                 if (controller.isLoading && controller.currentUser != null)
                   Container(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     child: const Center(child: CircularProgressIndicator()),
                   ),
               ],
@@ -132,11 +133,33 @@ class _SettingsViewState extends State<SettingsView>
                         : null,
                   ),
                   const SizedBox(height: 12),
-                  ElevatedButton.icon(
-                    onPressed: controller.pickAndUploadImage,
-                    icon: Icon(hasImage ? Icons.edit : Icons.upload, size: 18),
-                    label: Text(hasImage ? 'تغيير الصورة' : 'أضف صورة'),
-                  ),
+                  if (hasImage)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: controller.pickAndUploadImage,
+                          icon: const Icon(Icons.edit, size: 18),
+                          label: const Text('تغيير الصورة'),
+                        ),
+                        const SizedBox(width: 8),
+                        OutlinedButton.icon(
+                          onPressed: () => _confirmDeleteImage(context, controller),
+                          icon: const Icon(Icons.delete, size: 18),
+                          label: const Text('حذف'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            side: const BorderSide(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    ElevatedButton.icon(
+                      onPressed: controller.pickAndUploadImage,
+                      icon: const Icon(Icons.upload, size: 18),
+                      label: const Text('أضف صورة'),
+                    ),
                 ],
               ),
             ),
@@ -494,7 +517,15 @@ class _SettingsViewState extends State<SettingsView>
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () => controller.logout(context),
+                        onPressed: () async {
+                          await controller.logout();
+                          if (context.mounted) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => const LoginView()),
+                              (route) => false,
+                            );
+                          }
+                        },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.error,
                           side: const BorderSide(color: AppColors.error),
@@ -625,13 +656,43 @@ class _SettingsViewState extends State<SettingsView>
               final success = await controller.deleteAccount(pinController.text);
               if (success && context.mounted) {
                 Navigator.pop(ctx);
-                controller.logout(context);
+                await controller.logout();
+                if (context.mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const LoginView()),
+                    (route) => false,
+                  );
+                }
               } else if (context.mounted) {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(controller.errorMessage ?? 'فشل الحذف'), backgroundColor: Colors.red),
                 );
               }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('حذف', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDeleteImage(BuildContext context, SettingsController controller) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('حذف الصورة الشخصية'),
+        content: const Text('هل أنت متأكد من رغبتك في حذف صورتك الشخصية؟'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              controller.deleteImage();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('حذف', style: TextStyle(color: Colors.white)),

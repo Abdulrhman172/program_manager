@@ -14,6 +14,12 @@ import '../../features/research/view/research_view.dart';
 import '../../features/grades/view/grades_view.dart';
 import '../theme/app_theme.dart';
 import 'app_drawer.dart';
+import '../../features/supervisors/controller/supervisors_controller.dart';
+import '../../features/stages/controller/stages_controller.dart';
+import '../../features/approval/controller/approval_controller.dart';
+import '../../features/research/controller/research_controller.dart';
+import '../../features/teams/controller/teams_controller.dart';
+import '../../features/grades/controller/grades_controller.dart';
 
 class MainLayout extends StatelessWidget {
   const MainLayout({super.key});
@@ -48,11 +54,21 @@ class MainLayout extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final isDesktop = size.width > 800;
 
-    return Consumer<DashboardController>(
-      builder: (context, controller, _) {
-        return Scaffold(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DashboardController()),
+        ChangeNotifierProvider(create: (_) => SupervisorsController()),
+        ChangeNotifierProvider(create: (_) => StagesController()),
+        ChangeNotifierProvider(create: (_) => ApprovalController()),
+        ChangeNotifierProvider(create: (_) => ResearchController()),
+        ChangeNotifierProvider(create: (_) => TeamsController()),
+        ChangeNotifierProvider(create: (_) => GradesController()),
+      ],
+      child: Consumer<DashboardController>(
+        builder: (context, controller, _) {
+          return Scaffold(
           backgroundColor: AppColors.background,
-          appBar: _buildTopBar(context),
+          appBar: _buildTopBar(context, controller),
           drawer: !isDesktop
               ? Drawer(
                   child: AppDrawer(
@@ -88,10 +104,12 @@ class MainLayout extends StatelessWidget {
           ),
         );
       },
-    );
-  }
+    ),
+  );
+}
 
-  PreferredSizeWidget _buildTopBar(BuildContext context) {
+
+  PreferredSizeWidget _buildTopBar(BuildContext context, DashboardController controller) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -104,18 +122,11 @@ class MainLayout extends StatelessWidget {
           height: 1.0,
         ),
       ),
-      title: FutureBuilder<SharedPreferences>(
-        future: SharedPreferences.getInstance(),
-        builder: (context, snapshot) {
-          final prefs = snapshot.data;
-          final userName = prefs?.getString('prma_name') ?? 'مسؤول البرنامج';
-          return _buildTopBarContent(context, userName);
-        },
-      ),
+      title: _buildTopBarContent(context, controller.userName, controller.userImage),
     );
   }
 
-  Widget _buildTopBarContent(BuildContext context, String userName) {
+  Widget _buildTopBarContent(BuildContext context, String userName, String? userImage) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       reverse: true, // For RTL
@@ -161,43 +172,65 @@ class MainLayout extends StatelessWidget {
               ),
               const SizedBox(width: 16),
 
-              // معلومات المستخدم
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.foreground,
-                    ),
-                  ),
-                  const Text(
-                    'مسؤول البرنامج',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.gray500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 12),
+              // معلومات المستخدم مع إمكانية النقر
+              InkWell(
+                onTap: () {
+                  Provider.of<DashboardController>(context, listen: false).setCurrentRoute('/settings');
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            userName,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.foreground,
+                            ),
+                          ),
+                          const Text(
+                            'مسؤول البرنامج',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: AppColors.gray500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 12),
 
-              // الأيقونة الشخصية
-              Container(
-                width: 36,
-                height: 36,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
+                      // الأيقونة الشخصية
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                          image: userImage != null
+                              ? DecorationImage(
+                                  image: NetworkImage(userImage),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: userImage == null
+                            ? const Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              )
+                            : null,
+                      ),
+                    ],
                   ),
                 ),
               ),

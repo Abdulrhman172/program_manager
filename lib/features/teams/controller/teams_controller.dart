@@ -9,6 +9,7 @@ class TeamsController extends ChangeNotifier {
   String _searchQuery = '';
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isDisposed = false;
 
   List<TeamModel> get teams => _filteredTeams;
   bool get isLoading => _isLoading;
@@ -79,8 +80,10 @@ class TeamsController extends ChangeNotifier {
     } catch (e) {
       _errorMessage = 'حدث خطأ في جلب البيانات: ${e.toString()}';
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (!_isDisposed) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -107,5 +110,11 @@ class TeamsController extends ChangeNotifier {
                   m.name.toLowerCase().contains(_searchQuery.toLowerCase())))
           .toList();
     }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 }
