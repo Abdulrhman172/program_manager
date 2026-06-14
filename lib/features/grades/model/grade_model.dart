@@ -1,3 +1,15 @@
+class StudentGradeModel {
+  final int studentId;
+  final String studentName;
+  double? programManagerGrade;
+
+  StudentGradeModel({
+    required this.studentId,
+    required this.studentName,
+    this.programManagerGrade,
+  });
+}
+
 class GradeModel {
   final int? gradeId;
   final int groupId;
@@ -7,7 +19,7 @@ class GradeModel {
   double? programManagerGrade;
   double? finalGrade;
   String gradeStatus;
-  String? notes;
+  List<StudentGradeModel> students;
 
   GradeModel({
     this.gradeId,
@@ -18,7 +30,7 @@ class GradeModel {
     this.programManagerGrade,
     this.finalGrade,
     required this.gradeStatus,
-    this.notes,
+    this.students = const [],
   });
 
   factory GradeModel.fromJson(Map<String, dynamic> json) {
@@ -32,7 +44,6 @@ class GradeModel {
           (json['program_manager_grade'] as num?)?.toDouble(),
       finalGrade: (json['final_grade'] as num?)?.toDouble(),
       gradeStatus: json['grade_status'] as String? ?? 'بانتظار المشرف',
-      notes: json['notes'] as String?,
     );
   }
 }

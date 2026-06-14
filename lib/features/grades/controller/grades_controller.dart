@@ -63,9 +63,45 @@ class GradesController extends ChangeNotifier {
             g['group_name'] as String? ?? '';
       }
 
+      // جلب الطلاب في هذا البرنامج
+      final studentsResponse = await SupabaseService.client
+          .from('student')
+          .select('stud_id, stud_name, id_group')
+          .eq('id_program', idProgram);
+
+      // جلب درجات الطلاب (إذا كانت موجودة)
+      final studentGradesResponse = await SupabaseService.client
+          .from('student_grades')
+          .select('id_student, program_manager_grade')
+          .not('program_manager_grade', 'is', null);
+
+      final studentGradesMap = <int, double>{};
+      for (final sg in studentGradesResponse as List) {
+        studentGradesMap[(sg['id_student'] as num).toInt()] =
+            (sg['program_manager_grade'] as num).toDouble();
+      }
+
+      // تجميع الطلاب حسب المجموعة
+      final studentsByGroup = <int, List<StudentGradeModel>>{};
+      for (final s in studentsResponse as List) {
+        final groupId = (s['id_group'] as num?)?.toInt();
+        if (groupId != null) {
+          final studId = (s['stud_id'] as num).toInt();
+          final stud = StudentGradeModel(
+            studentId: studId,
+            studentName: s['stud_name'] as String? ?? 'طالب',
+            programManagerGrade: studentGradesMap[studId],
+          );
+          if (!studentsByGroup.containsKey(groupId)) {
+            studentsByGroup[groupId] = [];
+          }
+          studentsByGroup[groupId]!.add(stud);
+        }
+      }
+
       _grades = (gradesResponse as List).map((e) {
         final model = GradeModel.fromJson(e);
-        // إضافة اسم المجموعة
+        // إضافة اسم المجموعة والطلاب
         return GradeModel(
           gradeId: model.gradeId,
           groupId: model.groupId,
@@ -75,7 +111,7 @@ class GradesController extends ChangeNotifier {
           programManagerGrade: model.programManagerGrade,
           finalGrade: model.finalGrade,
           gradeStatus: model.gradeStatus,
-          notes: model.notes,
+          students: studentsByGroup[model.groupId] ?? [],
         );
       }).toList();
 
@@ -90,12 +126,25 @@ class GradesController extends ChangeNotifier {
     }
   }
 
-  Future<void> updateProgramManagerGrade(int gradeId, double newGrade) async {
+  Future<void> updateProgramManagerGrades(
+      int gradeId, int groupId, Map<int, double> studentGradesMap) async {
     final index = _grades.indexWhere((g) => g.gradeId == gradeId);
     if (index == -1) return;
 
     // تحديث محلي فوري
-    _grades[index].programManagerGrade = newGrade;
+    double totalGrades = 0.0;
+    for (final student in _grades[index].students) {
+      if (studentGradesMap.containsKey(student.studentId)) {
+        student.programManagerGrade = studentGradesMap[student.studentId];
+      }
+      totalGrades += student.programManagerGrade ?? 0.0;
+    }
+    
+    final averageGrade = _grades[index].students.isNotEmpty 
+        ? totalGrades / _grades[index].students.length 
+        : 0.0;
+
+    _grades[index].programManagerGrade = averageGrade;
     _grades[index].gradeStatus = 'مكتملة';
     _applyFilter();
     notifyListeners();
@@ -105,8 +154,35 @@ class GradesController extends ChangeNotifier {
       final idProgram = prefs.getInt('id_program');
 
       if (idProgram != null) {
+        // حفظ درجات الطلاب الفردية
+        for (var entry in studentGradesMap.entries) {
+          final studentId = entry.key;
+          final grade = entry.value;
+
+          // التحقق مما إذا كان الطالب لديه سجل درجات مسبقاً
+          final existingGrade = await SupabaseService.client
+              .from('student_grades')
+              .select('grade_id')
+              .eq('id_student', studentId)
+              .maybeSingle();
+
+          if (existingGrade != null) {
+            await SupabaseService.client
+                .from('student_grades')
+                .update({'program_manager_grade': grade})
+                .eq('id_student', studentId);
+          } else {
+            await SupabaseService.client.from('student_grades').insert({
+              'id_student': studentId,
+              'id_group': groupId,
+              'program_manager_grade': grade,
+            });
+          }
+        }
+
+        // حفظ المتوسط في جدول program_manager_grades
         await SupabaseService.client.from('program_manager_grades').update({
-          'program_manager_grade': newGrade,
+          'program_manager_grade': averageGrade,
           'grade_status': 'مكتملة',
         }).eq('grade_id', gradeId).eq('id_program', idProgram);
       }

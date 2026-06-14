@@ -572,7 +572,7 @@ class ResearchView extends StatelessWidget {
           Row(
             children: [
               OutlinedButton.icon(
-                onPressed: () => controller.downloadAllFiles(context),
+                onPressed: () => controller.downloadAllFiles(context, research.files),
                 icon: const Icon(Icons.download_outlined, size: 16),
                 label: const Text('تحميل'),
                 style: OutlinedButton.styleFrom(
@@ -682,7 +682,7 @@ class ResearchView extends StatelessWidget {
                         OutlinedButton.icon(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            controller.downloadSingleFile(context, file.name);
+                            controller.downloadSingleFile(context, file);
                           },
                           icon: const Icon(Icons.download_outlined, size: 16),
                           label: const Text('تحميل'),

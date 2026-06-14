@@ -1,8 +1,9 @@
 class ResearchFile {
   final String name;
   final String size;
+  final String url;
 
-  ResearchFile({required this.name, required this.size});
+  ResearchFile({required this.name, required this.size, required this.url});
 }
 
 class ResearchModel {
@@ -42,8 +43,42 @@ class ResearchModel {
 
     final finalDocUrl = json['final_document'] as String?;
     List<ResearchFile> filesList = [];
+    
+    // Helper function to safely extract URL from a stage list
+    String? extractUrl(dynamic stageData, String key) {
+      if (stageData != null && stageData is List && stageData.isNotEmpty) {
+        return stageData.first[key] as String?;
+      }
+      return null;
+    }
+
+    final stage1Url = extractUrl(json['first stage'], 'pdf_file');
+    final stage2Url = extractUrl(json['stage2_titles_approval'], 'pdf_file');
+    final stage3Url = extractUrl(json['third stage(discussion)'], 'pdf_file');
+    final stage4Url = extractUrl(json['fourth stage'], 'stage4_pdf');
+    final stage5Url = extractUrl(json['fifth_Stage'], 'pdf_file');
+    final stage6Url = extractUrl(json['stage 6 (trio discussion)'], 'pdf_file');
+
+    if (stage1Url != null && stage1Url.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'ملف المرحلة الأولى', size: 'غير محدد', url: stage1Url));
+    }
+    if (stage2Url != null && stage2Url.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'ملف المرحلة الثانية', size: 'غير محدد', url: stage2Url));
+    }
+    if (stage3Url != null && stage3Url.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'ملف المرحلة الثالثة', size: 'غير محدد', url: stage3Url));
+    }
+    if (stage4Url != null && stage4Url.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'ملف المرحلة الرابعة', size: 'غير محدد', url: stage4Url));
+    }
+    if (stage5Url != null && stage5Url.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'ملف المرحلة الخامسة', size: 'غير محدد', url: stage5Url));
+    }
+    if (stage6Url != null && stage6Url.isNotEmpty) {
+      filesList.add(ResearchFile(name: 'ملف المرحلة السادسة', size: 'غير محدد', url: stage6Url));
+    }
     if (finalDocUrl != null && finalDocUrl.isNotEmpty) {
-      filesList.add(ResearchFile(name: 'المستند النهائي', size: 'Unknown'));
+      filesList.add(ResearchFile(name: 'المستند النهائي', size: 'غير محدد', url: finalDocUrl));
     }
 
     return ResearchModel(

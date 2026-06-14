@@ -316,16 +316,53 @@ class GradesView extends StatelessWidget {
               ),
             ],
           ),
-          if (grade.notes != null && grade.notes!.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              'ملاحظات: ${grade.notes}',
-              style:
-                  const TextStyle(fontSize: 13, color: AppColors.gray600),
+
+          const SizedBox(height: 16),
+          if (grade.students.isNotEmpty) ...[
+            const Text(
+              'درجات الطلاب:',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: AppColors.foreground,
+              ),
               textAlign: TextAlign.right,
             ),
+            const SizedBox(height: 8),
+            ...grade.students.map((student) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      student.programManagerGrade != null
+                          ? '${student.programManagerGrade} / 40'
+                          : '- / 40',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: student.programManagerGrade != null 
+                            ? AppColors.primary 
+                            : AppColors.gray500,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        student.studentName,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppColors.gray700,
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+            const SizedBox(height: 16),
           ],
-          const SizedBox(height: 16),
           const Divider(color: AppColors.gray200),
           const SizedBox(height: 16),
 
@@ -413,8 +450,8 @@ class GradesView extends StatelessWidget {
               icon: const Icon(Icons.edit, size: 16, color: Colors.white),
               label: Text(
                 grade.programManagerGrade == null
-                    ? 'رصد درجة المسؤول'
-                    : 'تعديل درجة المسؤول',
+                    ? 'رصد درجات الطلاب'
+                    : 'تعديل درجات الطلاب',
                 style: const TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
@@ -433,11 +470,16 @@ class GradesView extends StatelessWidget {
 
   void _showAddGradeDialog(BuildContext context, GradesController controller,
       GradeModel grade) {
-    final gradeController = TextEditingController(
-      text: grade.programManagerGrade != null
-          ? grade.programManagerGrade.toString()
-          : '',
-    );
+    // Map to hold controllers for each student
+    final studentControllers = <int, TextEditingController>{};
+    for (final student in grade.students) {
+      studentControllers[student.studentId] = TextEditingController(
+        text: student.programManagerGrade != null
+            ? student.programManagerGrade.toString()
+            : '',
+      );
+    }
+    
     String? errorText;
 
     showDialog(
@@ -447,47 +489,89 @@ class GradesView extends StatelessWidget {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16)),
-            title: const Text('رصد الدرجة', textAlign: TextAlign.right),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'أدخل درجة مسؤول البرنامج للمجموعة "${grade.groupName}"',
-                  textAlign: TextAlign.right,
-                  style:
-                      const TextStyle(fontSize: 14, color: AppColors.gray700),
-                ),
-                const SizedBox(height: 16),
-                const Text('الدرجة (من 40):',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 13)),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: gradeController,
-                  textAlign: TextAlign.right,
-                  keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true),
-                  decoration: InputDecoration(
-                    hintText: 'مثال: 35',
-                    hintStyle:
-                        const TextStyle(color: AppColors.gray400),
-                    errorText: errorText,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.gray200),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.primary),
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xFFF8FAFC),
+            title: const Text('رصد الدرجات للطلاب', textAlign: TextAlign.right),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'أدخل درجة مسؤول البرنامج لطلاب المجموعة "${grade.groupName}"',
+                    textAlign: TextAlign.right,
+                    style:
+                        const TextStyle(fontSize: 14, color: AppColors.gray700),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  if (errorText != null) ...[
+                    Text(
+                      errorText!,
+                      style: const TextStyle(color: AppColors.error, fontSize: 13),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (grade.students.isEmpty)
+                    const Center(
+                      child: Text('لا يوجد طلاب في هذه المجموعة',
+                          style: TextStyle(color: AppColors.gray500)),
+                    )
+                  else
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.4,
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: grade.students.length,
+                        itemBuilder: (context, index) {
+                          final student = grade.students[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 80,
+                                  child: TextField(
+                                    controller: studentControllers[student.studentId],
+                                    textAlign: TextAlign.center,
+                                    keyboardType: const TextInputType.numberWithOptions(
+                                        decimal: true),
+                                    decoration: InputDecoration(
+                                      hintText: 'من 40',
+                                      hintStyle:
+                                          const TextStyle(color: AppColors.gray400, fontSize: 12),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                            const BorderSide(color: AppColors.gray200),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide:
+                                            const BorderSide(color: AppColors.primary),
+                                      ),
+                                      filled: true,
+                                      fillColor: const Color(0xFFF8FAFC),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    student.studentName,
+                                    textAlign: TextAlign.right,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              ),
             ),
             actionsAlignment: MainAxisAlignment.start,
             actions: [
@@ -497,27 +581,37 @@ class GradesView extends StatelessWidget {
                     style: TextStyle(color: AppColors.gray600)),
               ),
               ElevatedButton(
-                onPressed: () {
-                  final text = gradeController.text.trim();
-                  if (text.isEmpty) {
-                    setState(() => errorText = 'يرجى إدخال الدرجة');
-                    return;
+                onPressed: grade.students.isEmpty ? null : () {
+                  final studentGradesMap = <int, double>{};
+                  bool hasError = false;
+
+                  for (final entry in studentControllers.entries) {
+                    final text = entry.value.text.trim();
+                    if (text.isEmpty) {
+                      setState(() => errorText = 'يرجى إدخال جميع الدرجات');
+                      hasError = true;
+                      break;
+                    }
+                    final parsedGrade = double.tryParse(text);
+                    if (parsedGrade == null) {
+                      setState(() => errorText = 'يرجى إدخال أرقام صحيحة');
+                      hasError = true;
+                      break;
+                    }
+                    if (parsedGrade < 0 || parsedGrade > 40) {
+                      setState(() =>
+                          errorText = 'يجب أن تكون الدرجات بين 0 و 40');
+                      hasError = true;
+                      break;
+                    }
+                    studentGradesMap[entry.key] = parsedGrade;
                   }
-                  final parsedGrade = double.tryParse(text);
-                  if (parsedGrade == null) {
-                    setState(() => errorText = 'يرجى إدخال رقم صحيح');
-                    return;
+
+                  if (!hasError && grade.gradeId != null) {
+                    controller.updateProgramManagerGrades(
+                        grade.gradeId!, grade.groupId, studentGradesMap);
+                    Navigator.of(ctx).pop();
                   }
-                  if (parsedGrade < 0 || parsedGrade > 40) {
-                    setState(() =>
-                        errorText = 'يجب أن تكون الدرجة بين 0 و 40');
-                    return;
-                  }
-                  if (grade.gradeId != null) {
-                    controller.updateProgramManagerGrade(
-                        grade.gradeId!, parsedGrade);
-                  }
-                  Navigator.of(ctx).pop();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),

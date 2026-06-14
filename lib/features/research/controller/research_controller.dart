@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/research_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ResearchController extends ChangeNotifier {
   List<ResearchModel> _researches = [];
@@ -63,7 +64,7 @@ class ResearchController extends ChangeNotifier {
 
       final response = await SupabaseService.client
           .from('groups')
-          .select('*, supervisor(sprvsr_name), GroupState(states_name), AcademyYear(acye_year), program(program_name), stages(stage_name)')
+          .select('*, supervisor(sprvsr_name), GroupState(states_name), AcademyYear(acye_year), program(program_name), stages(stage_name), "first stage"(pdf_file), stage2_titles_approval(pdf_file), "third stage(discussion)"(pdf_file), "fourth stage"(stage4_pdf), fifth_Stage(pdf_file), "stage 6 (trio discussion)"(pdf_file)')
           .eq('id_program', idProgram);
 
       _researches = (response as List).map((e) => ResearchModel.fromJson(e)).toList();
@@ -134,24 +135,69 @@ class ResearchController extends ChangeNotifier {
     _filteredResearches = temp;
   }
 
-  void downloadAllFiles(BuildContext context) {
+  Future<void> downloadAllFiles(BuildContext context, List<ResearchFile> files) async {
+    if (files.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('لا توجد ملفات مرفقة لهذا البحث', textAlign: TextAlign.right),
+          backgroundColor: Color(0xFFDC2626),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('جاري تحميل جميع الملفات...', textAlign: TextAlign.right),
+        content: Text('جاري فتح الملفات...', textAlign: TextAlign.right),
         backgroundColor: Color(0xFF2563EB),
         duration: Duration(seconds: 2),
       ),
     );
+
+    for (final file in files) {
+      await _launchFileUrl(context, file.url);
+      // تأخير بسيط إذا كان هناك عدة ملفات لتجنب حظر المتصفح
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
   }
 
-  void downloadSingleFile(BuildContext context, String fileName) {
+  Future<void> downloadSingleFile(BuildContext context, ResearchFile file) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('جاري تحميل $fileName...', textAlign: TextAlign.right),
+        content: Text('جاري فتح ${file.name}...', textAlign: TextAlign.right),
         backgroundColor: const Color(0xFF2563EB),
         duration: const Duration(seconds: 2),
       ),
     );
+    await _launchFileUrl(context, file.url);
+  }
+
+  Future<void> _launchFileUrl(BuildContext context, String urlString) async {
+    try {
+      final uri = Uri.parse(urlString);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('لا يمكن فتح الرابط', textAlign: TextAlign.right),
+              backgroundColor: Color(0xFFDC2626),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('خطأ في فتح الملف: $e', textAlign: TextAlign.right),
+            backgroundColor: const Color(0xFFDC2626),
+          ),
+        );
+      }
+    }
   }
 
   @override
