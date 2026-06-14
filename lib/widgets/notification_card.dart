@@ -8,12 +8,12 @@ class NotificationCard extends StatelessWidget {
   final String? timestamp;
 
   const NotificationCard({
-    Key? key,
+    super.key,
     required this.type,
     required this.title,
     required this.description,
     this.timestamp,
-  }) : super(key: key);
+  });
 
   Color _getBackgroundColor() {
     switch (type) {

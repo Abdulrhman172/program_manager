@@ -3,7 +3,7 @@ import '../theme/app_theme.dart';
 import '../models/stage_model.dart';
 
 class StagesScreen extends StatefulWidget {
-  const StagesScreen({Key? key}) : super(key: key);
+  const StagesScreen({super.key});
 
   @override
   State<StagesScreen> createState() => _StagesScreenState();

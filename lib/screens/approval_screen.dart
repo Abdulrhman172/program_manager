@@ -3,7 +3,7 @@ import '../theme/app_theme.dart';
 import '../models/research_model.dart';
 
 class ApprovalScreen extends StatefulWidget {
-  const ApprovalScreen({Key? key}) : super(key: key);
+  const ApprovalScreen({super.key});
 
   @override
   State<ApprovalScreen> createState() => _ApprovalScreenState();

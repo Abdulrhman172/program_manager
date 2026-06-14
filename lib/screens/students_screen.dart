@@ -3,7 +3,7 @@ import '../theme/app_theme.dart';
 import '../models/student_model.dart';
 
 class StudentsScreen extends StatefulWidget {
-  const StudentsScreen({Key? key}) : super(key: key);
+  const StudentsScreen({super.key});
 
   @override
   State<StudentsScreen> createState() => _StudentsScreenState();

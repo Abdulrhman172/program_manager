@@ -11,7 +11,7 @@ import 'notifications_screen.dart';
 import 'settings_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -109,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: PopupMenuButton(
-              itemBuilder: (context) => [
+              itemBuilder: (context) => <PopupMenuEntry<dynamic>>[
                 const PopupMenuItem(
                   child: Text('الملف الشخصي'),
                 ),

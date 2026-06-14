@@ -10,14 +10,14 @@ class StatCard extends StatelessWidget {
   final String color; // blue, green, orange, red
 
   const StatCard({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.value,
     this.change,
     this.changeLabel,
     this.color = 'blue',
-  }) : super(key: key);
+  });
 
   Color _getBackgroundColor() {
     switch (color) {

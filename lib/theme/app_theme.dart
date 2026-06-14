@@ -51,12 +51,10 @@ class AppTheme {
         secondary: AppColors.primaryLight,
         tertiary: AppColors.primaryDark,
         surface: AppColors.surface,
-        background: AppColors.background,
         error: AppColors.error,
         onPrimary: AppColors.white,
         onSecondary: AppColors.white,
         onSurface: AppColors.foreground,
-        onBackground: AppColors.foreground,
         onError: AppColors.white,
       ),
 
@@ -75,7 +73,7 @@ class AppTheme {
       ),
 
       // Card Theme
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.white,
         elevation: 1,
         shape: RoundedRectangleBorder(

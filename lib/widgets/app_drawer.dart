@@ -6,10 +6,10 @@ class AppDrawer extends StatefulWidget {
   final String currentRoute;
 
   const AppDrawer({
-    Key? key,
+    super.key,
     required this.onItemSelected,
     required this.currentRoute,
-  }) : super(key: key);
+  });
 
   @override
   State<AppDrawer> createState() => _AppDrawerState();

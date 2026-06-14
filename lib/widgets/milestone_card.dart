@@ -8,12 +8,12 @@ class MilestoneCard extends StatelessWidget {
   final String? description;
 
   const MilestoneCard({
-    Key? key,
+    super.key,
     required this.stage,
     required this.status,
     required this.date,
     this.description,
-  }) : super(key: key);
+  });
 
   Color _getBackgroundColor() {
     switch (status) {
