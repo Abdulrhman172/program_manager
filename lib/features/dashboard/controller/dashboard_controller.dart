@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../../stages/model/stage_model.dart';
 
@@ -19,6 +20,8 @@ class DashboardController extends ChangeNotifier {
   String? _userImage;
   
   List<StageModel> _stages = [];
+  
+  RealtimeChannel? _subscription;
 
   String get currentRoute => _currentRoute;
   bool get isLoading => _isLoading;
@@ -33,6 +36,16 @@ class DashboardController extends ChangeNotifier {
 
   DashboardController() {
     fetchStats();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client.channel('public:dashboard')
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'student', callback: (payload) { fetchStats(); })
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'supervisor', callback: (payload) { fetchStats(); })
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'groups', callback: (payload) { fetchStats(); })
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'stages', callback: (payload) { fetchStats(); })
+      .subscribe();
   }
 
   void setCurrentRoute(String route) {
@@ -126,6 +139,7 @@ class DashboardController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     super.dispose();
   }
 }

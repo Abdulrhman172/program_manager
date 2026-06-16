@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/grade_model.dart';
 
@@ -11,6 +12,8 @@ class GradesController extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   List<GradeModel> get grades => _filteredGrades;
   String get statusFilter => _statusFilter;
@@ -27,6 +30,14 @@ class GradesController extends ChangeNotifier {
 
   GradesController() {
     fetchGrades();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client.channel('public:grades')
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'program_manager_grades', callback: (payload) { fetchGrades(); })
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'student_grades', callback: (payload) { fetchGrades(); })
+      .subscribe();
   }
 
   Future<void> fetchGrades() async {
@@ -226,6 +237,7 @@ class GradesController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     super.dispose();
   }
 }

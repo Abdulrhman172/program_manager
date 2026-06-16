@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/team_model.dart';
 
@@ -10,6 +11,8 @@ class TeamsController extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   List<TeamModel> get teams => _filteredTeams;
   bool get isLoading => _isLoading;
@@ -27,6 +30,14 @@ class TeamsController extends ChangeNotifier {
 
   TeamsController() {
     fetchTeams();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client.channel('public:teams')
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'groups', callback: (payload) { fetchTeams(); })
+      .onPostgresChanges(event: PostgresChangeEvent.all, schema: 'public', table: 'student', callback: (payload) { fetchTeams(); })
+      .subscribe();
   }
 
   Future<void> fetchTeams() async {
@@ -115,6 +126,7 @@ class TeamsController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     super.dispose();
   }
 }

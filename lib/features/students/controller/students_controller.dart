@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/student_model.dart';
 
@@ -18,6 +19,8 @@ class StudentsController extends ChangeNotifier {
   String? _formError;
   String? _selectedDepartment;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   // Controllers for the new/edit student form
   final TextEditingController nameController = TextEditingController();
@@ -28,6 +31,21 @@ class StudentsController extends ChangeNotifier {
 
   StudentsController() {
     fetchStudents();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client
+      .channel('public:student')
+      .onPostgresChanges(
+        event: PostgresChangeEvent.all,
+        schema: 'public',
+        table: 'student',
+        callback: (payload) {
+          fetchStudents();
+        },
+      )
+      .subscribe();
   }
 
   List<StudentModel> get students => _filteredStudents;
@@ -256,6 +274,7 @@ class StudentsController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     nameController.dispose();
     idController.dispose();
     batchNumberController.dispose();

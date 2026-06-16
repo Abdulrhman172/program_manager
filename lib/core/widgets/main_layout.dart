@@ -149,29 +149,6 @@ class MainLayout extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // الإشعارات
-              Stack(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications_none),
-                    onPressed: () {},
-                  ),
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.error,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 16),
-
               // معلومات المستخدم مع إمكانية النقر
               InkWell(
                 onTap: () {

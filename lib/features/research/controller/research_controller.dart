@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/research_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,12 +14,29 @@ class ResearchController extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   // For archived drill-down
   String? _selectedArchiveYear; // null = show year list, String = show that year's researches
 
   ResearchController() {
     fetchResearches();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client
+      .channel('public:research')
+      .onPostgresChanges(
+        event: PostgresChangeEvent.all,
+        schema: 'public',
+        table: 'groups',
+        callback: (payload) {
+          fetchResearches();
+        },
+      )
+      .subscribe();
   }
 
   List<ResearchModel> get researches => _filteredResearches;
@@ -204,6 +222,7 @@ class ResearchController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     super.dispose();
   }
 }

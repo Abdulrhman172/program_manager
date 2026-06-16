@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/supervisor_model.dart';
 
@@ -10,6 +11,8 @@ class SupervisorsController extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   List<SupervisorModel> get supervisors => _filteredSupervisors;
   bool get isLoading => _isLoading;
@@ -21,6 +24,21 @@ class SupervisorsController extends ChangeNotifier {
 
   SupervisorsController() {
     fetchSupervisors();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client
+      .channel('public:supervisor')
+      .onPostgresChanges(
+        event: PostgresChangeEvent.all,
+        schema: 'public',
+        table: 'supervisor',
+        callback: (payload) {
+          fetchSupervisors();
+        },
+      )
+      .subscribe();
   }
 
   Future<void> fetchSupervisors() async {
@@ -112,6 +130,7 @@ class SupervisorsController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     super.dispose();
   }
 }

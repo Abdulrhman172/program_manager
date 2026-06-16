@@ -7,7 +7,6 @@ import '../widgets/app_drawer.dart';
 import 'students_screen.dart';
 import 'stages_screen.dart';
 import 'approval_screen.dart';
-import 'notifications_screen.dart';
 import 'settings_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -35,9 +34,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         break;
       case '/approval':
         screen = const ApprovalScreen();
-        break;
-      case '/notifications':
-        screen = const NotificationsScreen();
         break;
       case '/settings':
         screen = const SettingsScreen();
@@ -84,25 +80,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
 
           // Notifications
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () => _navigateTo('/notifications'),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.error,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () {},
           ),
 
           // User Menu

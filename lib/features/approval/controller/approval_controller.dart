@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/approval_model.dart';
 
@@ -11,6 +12,8 @@ class ApprovalController extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   List<ApprovalModel> get approvals => _filteredApprovals;
   String get currentFilter => _statusFilter;
@@ -26,6 +29,21 @@ class ApprovalController extends ChangeNotifier {
 
   ApprovalController() {
     fetchApprovals();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client
+      .channel('public:first_stage')
+      .onPostgresChanges(
+        event: PostgresChangeEvent.all,
+        schema: 'public',
+        table: 'first stage',
+        callback: (payload) {
+          fetchApprovals();
+        },
+      )
+      .subscribe();
   }
 
   Future<void> fetchApprovals() async {
@@ -163,6 +181,7 @@ class ApprovalController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     super.dispose();
   }
 }

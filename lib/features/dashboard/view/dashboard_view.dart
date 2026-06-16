@@ -85,55 +85,6 @@ class DashboardView extends StatelessWidget {
                   ),
                 const SizedBox(height: 32),
 
-                // Notifications Section
-                Row(
-                  children: [
-                    const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      'الإشعارات الهامة',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.gray200),
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  child: const Column(
-                    children: [
-                      _NotificationItem(
-                        title: 'أبحاث جديدة تحتاج للاعتماد',
-                        subtitle: 'هناك 12 بحث تخرج في انتظار اعتماد المرحلة الأولى',
-                        time: 'منذ ساعتين',
-                        bgColor: Color(0xFFFFF7ED), // Orange light
-                        accentColor: Color(0xFFEA580C), // Orange
-                      ),
-                      SizedBox(height: 12),
-                      _NotificationItem(
-                        title: 'انتهاء موعد المرحلة الثانية',
-                        subtitle: 'سينتهي موعد تسليم المرحلة الثانية خلال 5 أيام',
-                        time: 'منذ 5 ساعات',
-                        bgColor: Color(0xFFEFF6FF), // Blue light
-                        accentColor: AppColors.primary,
-                      ),
-                      SizedBox(height: 12),
-                      _NotificationItem(
-                        title: 'تم تفعيل مشرف جديد',
-                        subtitle: 'تم تفعيل د. سالم أحمد كمشرف أكاديمي في النظام',
-                        time: 'أمس',
-                        bgColor: Color(0xFFF0FDF4), // Green light
-                        accentColor: AppColors.success,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-
                 // Current Stages Section
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -145,35 +96,47 @@ class DashboardView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                SizedBox(
-                  height: 100,
-                  child: controller.stages.isEmpty 
-                      ? const Center(child: Text('لا توجد مراحل حالياً'))
-                      : ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          reverse: true, // RTL layout
-                          itemCount: controller.stages.length,
-                          separatorBuilder: (context, index) => const SizedBox(width: 16),
-                          itemBuilder: (context, index) {
-                            final stage = controller.stages[index];
-                            final isActive = stage.status == 'نشطة';
-                            String dateInfo = '';
-                            if (stage.status == 'نشطة' || stage.status == 'منتهية') {
-                              dateInfo = '${stage.status} - تنتهي في ${stage.endDate}';
-                            } else if (stage.status == 'قادمة') {
-                              dateInfo = '${stage.status} - تبدأ في ${stage.startDate}';
-                            } else {
-                              dateInfo = stage.status;
-                            }
-                            
-                            return _StageCard(
-                              title: stage.title,
-                              dateInfo: dateInfo,
-                              isActive: isActive,
-                            );
-                          },
-                        ),
-                ),
+                if (controller.stages.isEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.gray200),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'لا توجد مراحل حالياً',
+                        style: TextStyle(color: AppColors.gray500, fontSize: 16),
+                      ),
+                    ),
+                  )
+                else
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.stages.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final stage = controller.stages[index];
+                      final isActive = stage.status == 'نشطة';
+                      String dateInfo = '';
+                      if (stage.status == 'نشطة' || stage.status == 'منتهية') {
+                        dateInfo = '${stage.status} - تنتهي في ${stage.endDate}';
+                      } else if (stage.status == 'قادمة') {
+                        dateInfo = '${stage.status} - تبدأ في ${stage.startDate}';
+                      } else {
+                        dateInfo = stage.status;
+                      }
+                      
+                      return _StageCard(
+                        title: stage.title,
+                        dateInfo: dateInfo,
+                        isActive: isActive,
+                      );
+                    },
+                  ),
               ],
             ),
           ),
@@ -239,72 +202,6 @@ class _SimpleStatCard extends StatelessWidget {
   }
 }
 
-class _NotificationItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String time;
-  final Color bgColor;
-  final Color accentColor;
-
-  const _NotificationItem({
-    required this.title,
-    required this.subtitle,
-    required this.time,
-    required this.bgColor,
-    required this.accentColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border(
-          right: BorderSide(color: accentColor, width: 4), // Accent border on the right
-        ),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            time,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.gray500,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.foreground,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.gray600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _StageCard extends StatelessWidget {
   final String title;
@@ -320,52 +217,70 @@ class _StageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
         color: isActive ? const Color(0xFFF0FDF4) : Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isActive ? const Color(0xFF86EFAC) : AppColors.gray200,
         ),
+        boxShadow: isActive 
+          ? [BoxShadow(color: const Color(0xFF86EFAC).withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 2))]
+          : null,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.foreground,
+          // التاريخ أو الحالة على اليسار
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: isActive ? AppColors.success.withValues(alpha: 0.1) : AppColors.gray100,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              dateInfo,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: isActive ? AppColors.success : AppColors.gray600,
+              ),
+            ),
+          ),
+          
+          const SizedBox(width: 16),
+          
+          // العنوان والنقطة على اليمين
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+                      color: isActive ? AppColors.foreground : AppColors.gray700,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                margin: const EdgeInsets.only(top: 4),
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: isActive ? AppColors.success : AppColors.gray400,
-                  shape: BoxShape.circle,
+                const SizedBox(width: 12),
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: isActive ? AppColors.success : AppColors.gray300,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isActive ? const Color(0xFFDCFCE7) : AppColors.gray200,
+                      width: 2,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            dateInfo,
-            style: TextStyle(
-              fontSize: 12,
-              color: isActive ? AppColors.success : AppColors.gray500,
+              ],
             ),
           ),
         ],

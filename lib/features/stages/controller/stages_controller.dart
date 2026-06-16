@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/services/supabase_service.dart';
 import '../model/stage_model.dart';
 
@@ -9,6 +10,8 @@ class StagesController extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isDisposed = false;
+  
+  RealtimeChannel? _subscription;
 
   String? _editingStageId;
   final TextEditingController startDateController = TextEditingController();
@@ -26,6 +29,21 @@ class StagesController extends ChangeNotifier {
 
   StagesController() {
     fetchStages();
+    _setupRealtime();
+  }
+
+  void _setupRealtime() {
+    _subscription = SupabaseService.client
+      .channel('public:stages')
+      .onPostgresChanges(
+        event: PostgresChangeEvent.all,
+        schema: 'public',
+        table: 'stages',
+        callback: (payload) {
+          fetchStages();
+        },
+      )
+      .subscribe();
   }
 
   Future<void> fetchStages() async {
@@ -161,6 +179,7 @@ class StagesController extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _subscription?.unsubscribe();
     startDateController.dispose();
     endDateController.dispose();
     super.dispose();

@@ -18,7 +18,7 @@ class _SettingsViewState extends State<SettingsView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -40,7 +40,6 @@ class _SettingsViewState extends State<SettingsView>
             tabs: const [
               Tab(text: 'الملف الشخصي'),
               Tab(text: 'الأمان'),
-              Tab(text: 'الإشعارات'),
               Tab(text: 'منطقة الخطر'),
             ],
           ),
@@ -58,7 +57,6 @@ class _SettingsViewState extends State<SettingsView>
                   children: [
                     _buildProfileTab(context, controller),
                     _buildSecurityTab(context, controller),
-                    _buildNotificationsTab(context, controller),
                     _buildDangerZoneTab(context, controller),
                   ],
                 ),
@@ -197,11 +195,11 @@ class _SettingsViewState extends State<SettingsView>
               ),
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
+              initialValue: 'مسؤول البرنامج',
               enabled: false,
               decoration: InputDecoration(
                 labelText: 'المنصب',
-                hintText: 'مسؤول البرنامج',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -359,102 +357,6 @@ class _SettingsViewState extends State<SettingsView>
     );
   }
 
-  Widget _buildNotificationsTab(BuildContext context, SettingsController controller) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'الإشعارات',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'إدارة تفضيلات الإشعارات (محفوظة محلياً فقط)',
-              style: TextStyle(color: AppColors.gray600),
-            ),
-            const SizedBox(height: 24),
-
-            // Notification Preferences
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildNotificationToggle(
-                      'إشعارات البريد الإلكتروني',
-                      'استقبال الإشعارات عبر البريد الإلكتروني',
-                      controller.emailNotifications,
-                      controller.setEmailNotifications,
-                    ),
-                    const Divider(),
-                    _buildNotificationToggle(
-                      'إشعارات البحوث الجديدة',
-                      'إخطاري عند تقديم بحث جديد',
-                      controller.newResearchNotifications,
-                      controller.setNewResearchNotifications,
-                    ),
-                    const Divider(),
-                    _buildNotificationToggle(
-                      'إشعارات المواعيد النهائية',
-                      'إخطاري عند اقتراب المواعيد النهائية',
-                      controller.deadlineNotifications,
-                      controller.setDeadlineNotifications,
-                    ),
-                    const Divider(),
-                    _buildNotificationToggle(
-                      'إشعارات الاعتمادات',
-                      'إخطاري عند اعتماد أو رفض بحث',
-                      controller.approvalNotifications,
-                      controller.setApprovalNotifications,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNotificationToggle(
-    String title,
-    String description,
-    bool value,
-    ValueChanged<bool> onChanged,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildDangerZoneTab(BuildContext context, SettingsController controller) {
     return SingleChildScrollView(
