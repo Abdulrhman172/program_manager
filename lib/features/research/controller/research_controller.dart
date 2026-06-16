@@ -156,6 +156,7 @@ class ResearchController extends ChangeNotifier {
     );
 
     for (final file in files) {
+      if (!context.mounted) return;
       await _launchFileUrl(context, file.url);
       // تأخير بسيط إذا كان هناك عدة ملفات لتجنب حظر المتصفح
       await Future.delayed(const Duration(milliseconds: 500));
