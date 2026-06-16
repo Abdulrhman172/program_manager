@@ -32,7 +32,7 @@ class _AppDrawerState extends State<AppDrawer> {
     ),
     DrawerItem(
       id: 'supervisors',
-      label: 'تفعيل وإيقاف المشرفين',
+      label: 'إدارة المشرفين',
       icon: Icons.people_outline,
       route: '/supervisors',
     ),
