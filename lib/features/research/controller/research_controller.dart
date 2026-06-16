@@ -47,7 +47,7 @@ class ResearchController extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   // Stats (always from active researches only)
-  List<ResearchModel> get _activeResearches => _researches.where((r) => r.researchState != 'مؤرشف').toList();
+  List<ResearchModel> get _activeResearches => _researches.where((r) => !r.isArchived).toList();
   int get totalCount => _activeResearches.length;
   int get advancedPhaseCount => _activeResearches.where((r) => r.status == 'المرحلة المتقدمة' || r.progress >= 70).length;
   int get inProgressCount => _activeResearches.where((r) => r.status == 'قيد التنفيذ' || (r.progress < 70 && r.progress > 0)).length;
@@ -56,12 +56,47 @@ class ResearchController extends ChangeNotifier {
   // Archive academic years available
   List<String> get archiveYears {
     final years = _researches
-        .where((r) => r.researchState == 'مؤرشف')
+        .where((r) => r.isArchived)
         .map((r) => r.academicYear)
         .toSet()
         .toList();
     years.sort((a, b) => b.compareTo(a)); // newest first
     return years;
+  }
+
+  List<ResearchModel> get researchesReadyToArchive {
+    return _researches.where((r) => !r.isArchived && r.currentStage == 7 && r.hasFinalDocument).toList();
+  }
+
+  Future<void> archiveResearch(BuildContext context, String groupId) async {
+    try {
+      await SupabaseService.client
+          .from('groups')
+          .update({'archived': true})
+          .eq('group_id', int.parse(groupId));
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم أرشفة البحث بنجاح', textAlign: TextAlign.right),
+            backgroundColor: Color(0xFF16A34A),
+          ),
+        );
+      }
+      
+      // We don't necessarily need to call fetchResearches() if Realtime is active,
+      // but calling it ensures immediate UI update.
+      fetchResearches();
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('خطأ في أرشفة البحث: $e', textAlign: TextAlign.right),
+            backgroundColor: const Color(0xFFDC2626),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> fetchResearches() async {
@@ -128,18 +163,18 @@ class ResearchController extends ChangeNotifier {
 
     if (_stateFilter == 'مؤرشف') {
       if (_selectedArchiveYear != null) {
-        temp = _researches.where((r) => r.researchState == 'مؤرشف' && r.academicYear == _selectedArchiveYear).toList();
+        temp = _researches.where((r) => r.isArchived && r.academicYear == _selectedArchiveYear).toList();
       } else {
         _filteredResearches = [];
         return;
       }
     } else if (_stateFilter == 'الكل') {
       // "All" excludes archived
-      temp = _researches.where((r) => r.researchState != 'مؤرشف').toList();
+      temp = _researches.where((r) => !r.isArchived).toList();
     } else {
       final stateMap = {'نشط': 'نشط', 'متوقف': 'متوقف'};
       final mapped = stateMap[_stateFilter] ?? _stateFilter;
-      temp = _researches.where((r) => r.researchState == mapped).toList();
+      temp = _researches.where((r) => !r.isArchived && r.researchState == mapped).toList();
     }
 
     if (_searchQuery.isNotEmpty) {

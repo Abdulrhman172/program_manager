@@ -11,7 +11,7 @@ import '../../features/teams/view/teams_view.dart';
 import '../../features/settings/view/settings_view.dart';
 import '../../features/auth/view/login_view.dart';
 import '../../features/research/view/research_view.dart';
-import '../../features/grades/view/grades_view.dart';
+
 import '../theme/app_theme.dart';
 import 'app_drawer.dart';
 import '../../features/supervisors/controller/supervisors_controller.dart';
@@ -19,7 +19,7 @@ import '../../features/stages/controller/stages_controller.dart';
 import '../../features/approval/controller/approval_controller.dart';
 import '../../features/research/controller/research_controller.dart';
 import '../../features/teams/controller/teams_controller.dart';
-import '../../features/grades/controller/grades_controller.dart';
+
 
 class MainLayout extends StatelessWidget {
   const MainLayout({super.key});
@@ -40,8 +40,7 @@ class MainLayout extends StatelessWidget {
         return const ResearchView();
       case '/teams':
         return const TeamsView();
-      case '/grades':
-        return const GradesView();
+
       case '/settings':
         return const SettingsView();
       default:
@@ -62,7 +61,7 @@ class MainLayout extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ApprovalController()),
         ChangeNotifierProvider(create: (_) => ResearchController()),
         ChangeNotifierProvider(create: (_) => TeamsController()),
-        ChangeNotifierProvider(create: (_) => GradesController()),
+
       ],
       child: Consumer<DashboardController>(
         builder: (context, controller, _) {

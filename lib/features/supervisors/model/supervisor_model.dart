@@ -4,6 +4,8 @@ class SupervisorModel {
   final String email;
   final String? phoneNum;
   final int researchCount;
+  final String? username;
+  final String? password;
   bool isActive;
 
   SupervisorModel({
@@ -13,6 +15,8 @@ class SupervisorModel {
     this.phoneNum,
     required this.researchCount,
     required this.isActive,
+    this.username,
+    this.password,
   });
 
   factory SupervisorModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,8 @@ class SupervisorModel {
       phoneNum: json['sprvsr_phone_num']?.toString(),
       researchCount: (json['sprvsr_project_num'] as num?)?.toInt() ?? 0,
       isActive: json['sprvsr_isactive'] as bool? ?? true,
+      username: json['sprvsr_username'] as String?,
+      password: json['sprvsr_password'] as String?,
     );
   }
 }

@@ -60,12 +60,7 @@ class _AppDrawerState extends State<AppDrawer> {
       icon: Icons.groups_outlined,
       route: '/teams',
     ),
-    DrawerItem(
-      id: 'grades',
-      label: 'رصد الدرجات',
-      icon: Icons.grade_outlined,
-      route: '/grades',
-    ),
+
     DrawerItem(
       id: 'settings',
       label: 'الإعدادات',

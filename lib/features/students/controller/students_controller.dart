@@ -12,6 +12,9 @@ class StudentsController extends ChangeNotifier {
   List<StudentModel> _filteredStudents = [];
   String _searchQuery = '';
   
+  List<Map<String, dynamic>> academicYears = [];
+  int? _selectedAcademicYearId;
+  
   bool _isLoading = false;
   bool _isAddingStudent = false;
   bool _isEditing = false;
@@ -26,7 +29,6 @@ class StudentsController extends ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController idController = TextEditingController();
   final TextEditingController batchNumberController = TextEditingController();
-  final TextEditingController academicYearController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   StudentsController() {
@@ -54,6 +56,7 @@ class StudentsController extends ChangeNotifier {
   bool get isEditing => _isEditing;
   String? get formError => _formError;
   String? get selectedDepartment => _selectedDepartment;
+  int? get selectedAcademicYearId => _selectedAcademicYearId;
 
   Future<void> fetchStudents() async {
     _isLoading = true;
@@ -76,10 +79,25 @@ class StudentsController extends ChangeNotifier {
         departments = [programName];
         _selectedDepartment = programName; // Default to this program
 
+        // Fetch Academic Years
+        try {
+          final yearResponse = await SupabaseService.client
+              .from('AcademyYear')
+              .select('acye_id, acye_year')
+              .order('acye_year', ascending: false);
+          academicYears = List<Map<String, dynamic>>.from(yearResponse);
+          if (academicYears.isNotEmpty && _selectedAcademicYearId == null) {
+            _selectedAcademicYearId = academicYears.first['acye_id'];
+          }
+        } catch (e) {
+          debugPrint('Error fetching AcademyYear: $e');
+        }
+
         final response = await SupabaseService.client
             .from('student')
-            .select('*, program(program_name)')
-            .eq('id_program', idProgram);
+            .select('*, program(program_name), AcademyYear(acye_year)')
+            .eq('id_program', idProgram)
+            .order('create_at', ascending: false);
 
         _students = (response as List).map((e) => StudentModel.fromJson(e)).toList();
         _filterList();
@@ -118,8 +136,15 @@ class StudentsController extends ChangeNotifier {
     nameController.text = student.name;
     idController.text = student.id;
     batchNumberController.text = student.batchNumber;
-    academicYearController.text = student.academicYear;
     passwordController.text = ''; // Usually don't show password on edit
+
+    // Set academic year
+    final matchedYear = academicYears.where((y) => y['acye_year'].toString() == student.academicYear).toList();
+    if (matchedYear.isNotEmpty) {
+      _selectedAcademicYearId = matchedYear.first['acye_id'];
+    } else {
+      _selectedAcademicYearId = null;
+    }
     
     // Set department if it exists in the list
     if (departments.contains(student.department)) {
@@ -133,6 +158,11 @@ class StudentsController extends ChangeNotifier {
 
   void setSelectedDepartment(String? dept) {
     _selectedDepartment = dept;
+    notifyListeners();
+  }
+
+  void setSelectedAcademicYear(int? id) {
+    _selectedAcademicYearId = id;
     notifyListeners();
   }
 
@@ -151,9 +181,9 @@ class StudentsController extends ChangeNotifier {
     if (nameController.text.trim().isEmpty ||
         idController.text.trim().isEmpty ||
         batchNumberController.text.trim().isEmpty ||
-        academicYearController.text.trim().isEmpty ||
+        _selectedAcademicYearId == null ||
         _selectedDepartment == null) {
-      _formError = 'يرجى تعبئة جميع الحقول وإختيار القسم';
+      _formError = 'يرجى تعبئة جميع الحقول وإختيار القسم والسنة الدراسية';
       notifyListeners();
       return;
     }
@@ -183,7 +213,7 @@ class StudentsController extends ChangeNotifier {
         'stud_name': nameController.text.trim(),
         'stud_college_num': int.tryParse(idController.text.trim()) ?? 0,
         'stud_cohort_num': int.tryParse(batchNumberController.text.trim()) ?? 0,
-        'id_academy_year': int.tryParse(academicYearController.text.trim()) ?? 1,
+        'id_academy_year': _selectedAcademicYearId,
         'id_program': idProgram,
       };
 
@@ -197,10 +227,14 @@ class StudentsController extends ChangeNotifier {
             .from('student')
             .update(studentData)
             .eq('stud_college_num', int.tryParse(_editingStudentId!) ?? 0)
-            .eq('id_program', idProgram);
+            .eq('id_program', idProgram)
+            .select('*, program(program_name), AcademyYear(acye_year)');
       } else {
         // Add new
-        await SupabaseService.client.from('student').insert(studentData);
+        await SupabaseService.client
+            .from('student')
+            .insert(studentData)
+            .select('*, program(program_name), AcademyYear(acye_year)');
       }
 
       await fetchStudents();
@@ -265,9 +299,13 @@ class StudentsController extends ChangeNotifier {
     nameController.clear();
     idController.clear();
     batchNumberController.clear();
-    academicYearController.clear();
     passwordController.clear();
     _selectedDepartment = null;
+    if (academicYears.isNotEmpty) {
+      _selectedAcademicYearId = academicYears.first['acye_id'];
+    } else {
+      _selectedAcademicYearId = null;
+    }
     _formError = null;
   }
 
@@ -278,7 +316,6 @@ class StudentsController extends ChangeNotifier {
     nameController.dispose();
     idController.dispose();
     batchNumberController.dispose();
-    academicYearController.dispose();
     passwordController.dispose();
     super.dispose();
   }

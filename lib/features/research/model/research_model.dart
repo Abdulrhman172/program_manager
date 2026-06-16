@@ -18,6 +18,9 @@ class ResearchModel {
   final String status;       // label shown in stats cards
   final String researchState; // 'نشط', 'متوقف', 'مؤرشف'
   final String academicYear;  // e.g. '2025/2026'
+  final bool isArchived;
+  final int currentStage;
+  final bool hasFinalDocument;
 
   ResearchModel({
     required this.id,
@@ -31,6 +34,9 @@ class ResearchModel {
     required this.status,
     required this.researchState,
     required this.academicYear,
+    required this.isArchived,
+    required this.currentStage,
+    required this.hasFinalDocument,
   });
 
   factory ResearchModel.fromJson(Map<String, dynamic> json) {
@@ -93,6 +99,9 @@ class ResearchModel {
       status: stateName ?? 'غير معروف',
       researchState: stateName ?? 'غير معروف',
       academicYear: academyYearName ?? '2025/2026',
+      isArchived: json['archived'] == true,
+      currentStage: (json['current_stage'] as num?)?.toInt() ?? 1,
+      hasFinalDocument: finalDocUrl != null && finalDocUrl.isNotEmpty,
     );
   }
 }

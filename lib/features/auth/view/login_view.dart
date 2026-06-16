@@ -83,7 +83,7 @@ class _LoginScreenContent extends StatelessWidget {
 
                         // Titles
                         const Text(
-                          'نظام إدارة مشاريع\nالتخرج',
+                          'نظام إدارة أبحاث\nالتخرج',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 24,
@@ -122,26 +122,6 @@ class _LoginScreenContent extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
 
-                        // Forgot Password
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: const Text(
-                              'هل نسيت كلمة المرور ؟',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 24),
 
                         // Login Button

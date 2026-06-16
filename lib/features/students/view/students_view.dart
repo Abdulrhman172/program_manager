@@ -256,7 +256,7 @@ class _StudentsScreenContent extends StatelessWidget {
                   label: 'الرقم الجامعي',
                   controller: controller.idController,
                   isNumeric: true,
-                  readOnly: controller.isEditing, // لا يمكن تعديل الرقم الجامعي
+                  readOnly: false, // تمكين تعديل الرقم الجامعي
                 ),
               ),
             ],
@@ -289,9 +289,11 @@ class _StudentsScreenContent extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _buildFormField(
+                child: _buildAcademicYearDropdown(
                   label: 'السنة الدراسية',
-                  controller: controller.academicYearController,
+                  value: controller.selectedAcademicYearId,
+                  items: controller.academicYears,
+                  onChanged: controller.setSelectedAcademicYear,
                 ),
               ),
               const SizedBox(width: 24),
@@ -440,6 +442,62 @@ class _StudentsScreenContent extends StatelessWidget {
                 return DropdownMenuItem<String>(
                   value: item,
                   child: Text(item, textAlign: TextAlign.right),
+                );
+              }).toList(),
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAcademicYearDropdown({
+    required String label,
+    required int? value,
+    required List<Map<String, dynamic>> items,
+    required ValueChanged<int?> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.gray700,
+          ),
+        ),
+        const SizedBox(height: 8),
+        InputDecorator(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFFF8FAFC),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.gray200),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.gray200),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+            ),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<int>(
+              value: value,
+              isExpanded: true,
+              isDense: true,
+              icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.gray500),
+              items: items.map((item) {
+                return DropdownMenuItem<int>(
+                  value: item['acye_id'] as int,
+                  child: Text(item['acye_year'].toString(), textAlign: TextAlign.right),
                 );
               }).toList(),
               onChanged: onChanged,

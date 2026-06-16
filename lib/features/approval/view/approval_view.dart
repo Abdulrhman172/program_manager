@@ -149,7 +149,7 @@ class ApprovalView extends StatelessWidget {
                     onChanged: controller.search,
                     textAlign: TextAlign.right,
                     decoration: const InputDecoration(
-                      hintText: 'البحث عن مشروع...',
+                      hintText: 'البحث عن بحث...',
                       hintStyle: TextStyle(color: AppColors.gray400),
                       border: InputBorder.none,
                       suffixIcon:
@@ -170,7 +170,7 @@ class ApprovalView extends StatelessWidget {
                               size: 64, color: AppColors.gray300),
                           const SizedBox(height: 16),
                           Text(
-                            'لا توجد مشاريع في هذه الحالة',
+                            'لا توجد أبحاث في هذه الحالة',
                             style: TextStyle(
                                 color: AppColors.gray500, fontSize: 16),
                           ),
@@ -447,7 +447,7 @@ class ApprovalView extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('تأكيد الاعتماد', textAlign: TextAlign.right),
         content: Text(
-          'هل أنت متأكد من اعتماد مشروع "${approval.title}"؟',
+          'هل أنت متأكد من اعتماد بحث "${approval.title}"؟',
           textAlign: TextAlign.right,
         ),
         actionsAlignment: MainAxisAlignment.start,
@@ -492,7 +492,7 @@ class ApprovalView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'يرجى كتابة سبب رفض مشروع "${approval.title}":',
+                  'يرجى كتابة سبب رفض بحث "${approval.title}":',
                   textAlign: TextAlign.right,
                   style: const TextStyle(
                       fontSize: 14, color: AppColors.gray700),
@@ -621,43 +621,88 @@ class ApprovalView extends StatelessWidget {
                     ],
                   ),
 
-                  // ملاحظات المشرف
+                  // أسباب الرفض أو الملاحظات
                   if (approval.sprvsrNote != null &&
                       approval.sprvsrNote!.isNotEmpty) ...[
-                    const SizedBox(height: 16),
-                    const Text('ملاحظة المشرف:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14)),
-                    const SizedBox(height: 4),
-                    Text(approval.sprvsrNote!,
-                        style: const TextStyle(
-                            fontSize: 14, color: AppColors.gray700)),
-                  ],
-
-                  if (approval.rejectionReason != null) ...[
                     const SizedBox(height: 16),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFEF2F2),
+                        color: approval.sprvsrApproval == false ? const Color(0xFFFEF2F2) : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                            color: const Color(0xFFFECACA)),
+                        border: Border.all(color: approval.sprvsrApproval == false ? const Color(0xFFFECACA) : const Color(0xFFE2E8F0)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Text('سبب الرفض:',
+                          Text(approval.sprvsrApproval == false ? 'سبب الرفض (المشرف):' : 'ملاحظة المشرف:',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
-                                  color: Color(0xFFDC2626))),
+                                  color: approval.sprvsrApproval == false ? const Color(0xFFDC2626) : AppColors.gray700)),
                           const SizedBox(height: 4),
-                          Text(approval.rejectionReason!,
-                              style: const TextStyle(
+                          Text(approval.sprvsrNote!,
+                              style: TextStyle(
+                                  fontSize: 13, color: approval.sprvsrApproval == false ? const Color(0xFFDC2626) : AppColors.gray700),
+                              textAlign: TextAlign.right),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  if ((approval.prgrmMngrNote != null && approval.prgrmMngrNote!.isNotEmpty) ||
+                      (approval.rejectionReason != null && approval.rejectionReason!.isNotEmpty)) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: approval.prgrmMngrApproval == false ? const Color(0xFFFEF2F2) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: approval.prgrmMngrApproval == false ? const Color(0xFFFECACA) : const Color(0xFFE2E8F0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(approval.prgrmMngrApproval == false ? 'سبب الرفض (مدير البرنامج):' : 'ملاحظة مدير البرنامج:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 13,
-                                  color: Color(0xFFDC2626)),
+                                  color: approval.prgrmMngrApproval == false ? const Color(0xFFDC2626) : AppColors.gray700)),
+                          const SizedBox(height: 4),
+                          Text(approval.prgrmMngrNote ?? approval.rejectionReason!,
+                              style: TextStyle(
+                                  fontSize: 13, color: approval.prgrmMngrApproval == false ? const Color(0xFFDC2626) : AppColors.gray700),
+                              textAlign: TextAlign.right),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  if (approval.headDepNote != null &&
+                      approval.headDepNote!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: approval.headDepApproval == false ? const Color(0xFFFEF2F2) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: approval.headDepApproval == false ? const Color(0xFFFECACA) : const Color(0xFFE2E8F0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(approval.headDepApproval == false ? 'سبب الرفض (رئيس القسم / البرنامج):' : 'ملاحظة رئيس القسم:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: approval.headDepApproval == false ? const Color(0xFFDC2626) : AppColors.gray700)),
+                          const SizedBox(height: 4),
+                          Text(approval.headDepNote!,
+                              style: TextStyle(
+                                  fontSize: 13, color: approval.headDepApproval == false ? const Color(0xFFDC2626) : AppColors.gray700),
                               textAlign: TextAlign.right),
                         ],
                       ),

@@ -286,15 +286,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               type: 'info',
                               title: 'موعد المرحلة الثانية اقترب',
                               description:
-                                  'يتبقى 5 أيام لانتهاء المرحلة الثانية من المشروع',
+                                  'يتبقى 5 أيام لانتهاء المرحلة الثانية من البحث',
                               timestamp: 'منذ 3 ساعات',
                             ),
                             SizedBox(height: 12),
                             NotificationCard(
                               type: 'success',
-                              title: 'تم اعتماد مشروع جديد',
+                              title: 'تم اعتماد بحث جديد',
                               description:
-                                  'تم اعتماد مشروع "نظام إدارة المكتبات الذكية" بنجاح',
+                                  'تم اعتماد بحث "نظام إدارة المكتبات الذكية" بنجاح',
                               timestamp: 'أمس',
                             ),
                           ],

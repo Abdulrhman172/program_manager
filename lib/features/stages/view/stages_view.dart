@@ -25,7 +25,7 @@ class StagesView extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'إدارة مراحل مشاريع التخرج وتحديث المواعيد',
+                  'إدارة مراحل أبحاث التخرج وتحديث المواعيد',
                   style: TextStyle(
                     color: AppColors.gray500,
                     fontSize: 14,

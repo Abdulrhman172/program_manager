@@ -142,6 +142,10 @@ class ResearchView extends StatelessWidget {
                 if (controller.isInArchivedMode)
                   _buildArchivedContent(context, controller)
                 else ...[
+                  // Archive Banners
+                  if (!controller.isInArchivedMode)
+                    _buildArchiveBanners(context, controller),
+
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
@@ -252,6 +256,55 @@ class ResearchView extends StatelessWidget {
           );
         }).toList(),
       ),
+    );
+  }
+
+  // ---------- Archive Banners ----------
+  Widget _buildArchiveBanners(BuildContext context, ResearchController controller) {
+    final readyToArchive = controller.researchesReadyToArchive;
+    if (readyToArchive.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      children: readyToArchive.map((research) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF0FDF4),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFF86EFAC)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () => controller.archiveResearch(context, research.id),
+                icon: const Icon(Icons.archive, size: 16, color: Colors.white),
+                label: const Text('أرشفة البحث', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16A34A),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  elevation: 0,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  'تم تسليم البحث النهائي واستكمال بحث "${research.title}". هل تريد أرشفة البحث؟',
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Color(0xFF166534),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Icon(Icons.check_circle_outline, color: Color(0xFF16A34A), size: 28),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
