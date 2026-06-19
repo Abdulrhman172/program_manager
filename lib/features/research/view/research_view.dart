@@ -167,17 +167,41 @@ class ResearchView extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  if (controller.researches.isEmpty)
+                  if (controller.errorMessage != null)
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 48),
                         child: Column(
                           children: [
-                            Icon(Icons.inbox_outlined, size: 64, color: AppColors.gray300),
+                            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                            const SizedBox(height: 16),
+                            Text(
+                              controller.errorMessage!,
+                              style: const TextStyle(color: Colors.red, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else if (controller.isLoading)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 48),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else if (controller.researches.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 48),
+                        child: Column(
+                          children: [
+                            const Icon(Icons.inbox_outlined, size: 64, color: Color(0xFFD1D5DB)), // AppColors.gray300
                             const SizedBox(height: 16),
                             const Text(
                               'لا توجد أبحاث في هذه الحالة',
-                              style: TextStyle(color: AppColors.gray500, fontSize: 16),
+                              style: TextStyle(color: Color(0xFF6B7280), fontSize: 16), // AppColors.gray500
                             ),
                           ],
                         ),
@@ -187,20 +211,21 @@ class ResearchView extends StatelessWidget {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final isMobile = constraints.maxWidth < 800;
-                        return GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: isMobile ? 1 : 2,
-                            crossAxisSpacing: 24,
-                            mainAxisSpacing: 24,
-                            childAspectRatio: isMobile ? 0.8 : 1.3,
-                          ),
-                          itemCount: controller.researches.length,
-                          itemBuilder: (context, index) {
-                            return _buildResearchCard(
-                                context, controller, controller.researches[index]);
-                          },
+                        final w = constraints.maxWidth;
+                        int cols = isMobile ? 1 : 2;
+                        final spacing = 24.0;
+                        final itemWidth = (w - (cols - 1) * spacing) / cols;
+                        
+                        return Wrap(
+                          spacing: spacing,
+                          runSpacing: spacing,
+                          children: List.generate(controller.researches.length, (index) {
+                            return SizedBox(
+                              width: itemWidth,
+                              child: _buildResearchCard(
+                                  context, controller, controller.researches[index]),
+                            );
+                          }),
                         );
                       },
                     ),
@@ -332,57 +357,58 @@ class ResearchView extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final isMobile = constraints.maxWidth < 600;
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isMobile ? 1 : 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: isMobile ? 4.0 : 3.0,
-              ),
-              itemCount: years.length,
-              itemBuilder: (context, index) {
+            final w = constraints.maxWidth;
+            int cols = isMobile ? 1 : 2;
+            final spacing = 16.0;
+            final itemWidth = (w - (cols - 1) * spacing) / cols;
+            
+            return Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              children: List.generate(years.length, (index) {
                 final year = years[index];
-                return GestureDetector(
-                  onTap: () => controller.selectArchiveYear(year),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.gray200),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(8),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(Icons.chevron_left, color: AppColors.gray400),
-                        Row(
-                          children: [
-                            const Icon(Icons.archive_outlined, color: Color(0xFF6B7280), size: 20),
-                            const SizedBox(width: 10),
-                            Text(
-                              'السنة الدراسية $year',
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.foreground,
+                return SizedBox(
+                  width: itemWidth,
+                  child: GestureDetector(
+                    onTap: () => controller.selectArchiveYear(year),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.gray200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(8),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(Icons.chevron_left, color: AppColors.gray400),
+                          Row(
+                            children: [
+                              const Icon(Icons.archive_outlined, color: Color(0xFF6B7280), size: 20),
+                              const SizedBox(width: 10),
+                              Text(
+                                'السنة الدراسية $year',
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.foreground,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
-              },
+              }),
             );
           },
         ),

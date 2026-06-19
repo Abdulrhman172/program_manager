@@ -132,15 +132,16 @@ class _SettingsViewState extends State<SettingsView>
                   ),
                   const SizedBox(height: 12),
                   if (hasImage)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
                         ElevatedButton.icon(
                           onPressed: controller.pickAndUploadImage,
                           icon: const Icon(Icons.edit, size: 18),
                           label: const Text('تغيير الصورة'),
                         ),
-                        const SizedBox(width: 8),
                         OutlinedButton.icon(
                           onPressed: () => _confirmDeleteImage(context, controller),
                           icon: const Icon(Icons.delete, size: 18),

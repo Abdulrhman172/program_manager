@@ -57,35 +57,45 @@ class DashboardView extends StatelessWidget {
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final width = constraints.maxWidth;
-                      final columns = width < 480 ? 2 : (width < 900 ? 2 : 4);
-                      final ratio = width < 480 ? 1.5 : (width < 900 ? 1.8 : 2.0);
-                      return GridView.count(
-                        crossAxisCount: columns,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        shrinkWrap: true,
-                        childAspectRatio: ratio,
-                        physics: const NeverScrollableScrollPhysics(),
+                      final columns = width < 480 ? 1 : (width < 900 ? 2 : 4);
+                      final spacing = 12.0;
+                      final itemWidth = (width - (columns - 1) * spacing) / columns;
+                      
+                      return Wrap(
+                        spacing: spacing,
+                        runSpacing: spacing,
                         children: [
-                          _SimpleStatCard(
-                            title: 'الأبحاث النشطة حالياً',
-                            value: controller.activeResearchesCount.toString(),
-                            icon: Icons.check_circle_outline,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'الأبحاث النشطة حالياً',
+                              value: controller.activeResearchesCount.toString(),
+                              icon: Icons.check_circle_outline,
+                            ),
                           ),
-                          _SimpleStatCard(
-                            title: 'عدد المشرفين المفعلين',
-                            value: controller.supervisorsCount.toString(),
-                            icon: Icons.person_outline,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'عدد المشرفين المفعلين',
+                              value: controller.supervisorsCount.toString(),
+                              icon: Icons.person_outline,
+                            ),
                           ),
-                          _SimpleStatCard(
-                            title: 'عدد الطلاب المسجلين',
-                            value: controller.studentsCount.toString(),
-                            icon: Icons.people_outline,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'عدد الطلاب المسجلين',
+                              value: controller.studentsCount.toString(),
+                              icon: Icons.people_outline,
+                            ),
                           ),
-                          _SimpleStatCard(
-                            title: 'عدد الأبحاث المكتملة',
-                            value: controller.finishedResearchesCount.toString(),
-                            icon: Icons.description_outlined,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'عدد الأبحاث المكتملة',
+                              value: controller.finishedResearchesCount.toString(),
+                              icon: Icons.description_outlined,
+                            ),
                           ),
                         ],
                       );

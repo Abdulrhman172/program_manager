@@ -225,95 +225,100 @@ class _StudentsScreenState extends State<StudentsScreen> {
               // Stats - متكيفة مع الشاشة
               LayoutBuilder(
                 builder: (context, constraints) {
+                  final w = constraints.maxWidth;
                   int cols = 3;
-                  double ratio = 1.6;
-                  if (constraints.maxWidth < 500) {
+                  if (w < 500) {
                     cols = 1;
-                    ratio = 3.0;
-                  } else if (constraints.maxWidth < 900) {
+                  } else if (w < 900) {
                     cols = 2;
-                    ratio = 2.0;
                   }
+                  final spacing = 12.0;
+                  final itemWidth = (w - (cols - 1) * spacing) / cols;
                   
-                  return GridView.count(
-                    crossAxisCount: cols,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    childAspectRatio: ratio,
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
                     children: [
-                      Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'إجمالي الطلاب',
-                            style: Theme.of(context).textTheme.bodySmall,
+                      SizedBox(
+                        width: itemWidth,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'إجمالي الطلاب',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  filteredStudents.length.toString(),
+                                  style: Theme.of(context).textTheme.displaySmall,
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            filteredStudents.length.toString(),
-                            style: Theme.of(context).textTheme.displaySmall,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'الطلاب النشطين',
-                            style: Theme.of(context).textTheme.bodySmall,
+                      SizedBox(
+                        width: itemWidth,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'الطلاب النشطين',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  filteredStudents
+                                      .where((s) => s.status == 'active')
+                                      .length
+                                      .toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(color: AppColors.success),
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            filteredStudents
-                                .where((s) => s.status == 'active')
-                                .length
-                                .toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(color: AppColors.success),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'التخصصات',
-                            style: Theme.of(context).textTheme.bodySmall,
+                      SizedBox(
+                        width: itemWidth,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'التخصصات',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  filteredStudents
+                                      .map((s) => s.specialization)
+                                      .toSet()
+                                      .length
+                                      .toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(color: AppColors.primary),
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            filteredStudents
-                                .map((s) => s.specialization)
-                                .toSet()
-                                .length
-                                .toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(color: AppColors.primary),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
                   );
                 },
               ),

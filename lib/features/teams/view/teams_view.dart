@@ -159,19 +159,20 @@ class TeamsView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 800;
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: isMobile ? 1 : 2,
-                        crossAxisSpacing: 24,
-                        mainAxisSpacing: 24,
-                        childAspectRatio: isMobile ? 0.7 : 0.8,
-                      ),
-                      itemCount: controller.teams.length,
-                      itemBuilder: (context, index) {
-                        return _buildTeamCard(context, controller.teams[index]);
-                      },
+                    final w = constraints.maxWidth;
+                    int cols = isMobile ? 1 : 2;
+                    final spacing = 24.0;
+                    final itemWidth = (w - (cols - 1) * spacing) / cols;
+
+                    return Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: List.generate(controller.teams.length, (index) {
+                        return SizedBox(
+                          width: itemWidth,
+                          child: _buildTeamCard(context, controller.teams[index]),
+                        );
+                      }),
                     );
                   },
                 ),
