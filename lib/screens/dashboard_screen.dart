@@ -212,49 +212,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 12),
-              GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 1200
-                    ? 4
-                    : MediaQuery.of(context).size.width > 800
-                        ? 2
-                        : 1,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  StatCard(
-                    icon: Icons.book,
-                    label: 'إجمالي البحوث',
-                    value: 45,
-                    change: 12,
-                    changeLabel: 'منذ الشهر الماضي',
-                    color: 'blue',
-                  ),
-                  StatCard(
-                    icon: Icons.people,
-                    label: 'الطلاب المسجلين',
-                    value: 135,
-                    change: 8,
-                    changeLabel: 'نشطين هذا الفصل',
-                    color: 'green',
-                  ),
-                  StatCard(
-                    icon: Icons.person_outline,
-                    label: 'المشرفين',
-                    value: 28,
-                    change: -2,
-                    changeLabel: 'متاح للإشراف',
-                    color: 'orange',
-                  ),
-                  StatCard(
-                    icon: Icons.check_circle,
-                    label: 'المراحل المكتملة',
-                    value: 2,
-                    changeLabel: 'من 5 مراحل',
-                    color: 'red',
-                  ),
-                ],
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final w = constraints.maxWidth;
+                  final cols = w > 900 ? 4 : (w > 500 ? 2 : 1);
+                  final ratio = w > 900 ? 2.0 : (w > 500 ? 1.8 : 2.5);
+                  return GridView.count(
+                    crossAxisCount: cols,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    shrinkWrap: true,
+                    childAspectRatio: ratio,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      StatCard(
+                        icon: Icons.book,
+                        label: 'إجمالي البحوث',
+                        value: 45,
+                        change: 12,
+                        changeLabel: 'منذ الشهر الماضي',
+                        color: 'blue',
+                      ),
+                      StatCard(
+                        icon: Icons.people,
+                        label: 'الطلاب المسجلين',
+                        value: 135,
+                        change: 8,
+                        changeLabel: 'نشطين هذا الفصل',
+                        color: 'green',
+                      ),
+                      StatCard(
+                        icon: Icons.person_outline,
+                        label: 'المشرفين',
+                        value: 28,
+                        change: -2,
+                        changeLabel: 'متاح للإشراف',
+                        color: 'orange',
+                      ),
+                      StatCard(
+                        icon: Icons.check_circle,
+                        label: 'المراحل المكتملة',
+                        value: 2,
+                        changeLabel: 'من 5 مراحل',
+                        color: 'red',
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 24),
 

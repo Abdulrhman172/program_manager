@@ -81,30 +81,63 @@ class _StudentsScreenState extends State<StudentsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              // Header - متكيف مع الموبايل
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isMobile = constraints.maxWidth < 500;
+                  if (isMobile) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'الطلاب والمشرفين',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        const Text(
+                          'إدارة بيانات الطلاب والمشرفين الأكاديميين',
+                          style: TextStyle(color: AppColors.gray600, fontSize: 12),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.add, size: 18),
+                            label: const Text('إضافة طالب'),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'الطلاب والمشرفين',
-                        style: Theme.of(context).textTheme.displaySmall,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'الطلاب والمشرفين',
+                              style: Theme.of(context).textTheme.displaySmall,
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'إدارة بيانات الطلاب والمشرفين الأكاديميين',
+                              style: TextStyle(color: AppColors.gray600),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'إدارة بيانات الطلاب والمشرفين الأكاديميين',
-                        style: TextStyle(color: AppColors.gray600),
+                      const SizedBox(width: 16),
+                      ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.add),
+                        label: const Text('إضافة طالب جديد'),
                       ),
                     ],
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add),
-                    label: const Text('إضافة طالب جديد'),
-                  ),
-                ],
+                  );
+                },
               ),
               const SizedBox(height: 24),
 
@@ -189,15 +222,28 @@ class _StudentsScreenState extends State<StudentsScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Stats
-              GridView.count(
-                crossAxisCount: 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  Card(
+              // Stats - متكيفة مع الشاشة
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  int cols = 3;
+                  double ratio = 1.6;
+                  if (constraints.maxWidth < 500) {
+                    cols = 1;
+                    ratio = 3.0;
+                  } else if (constraints.maxWidth < 900) {
+                    cols = 2;
+                    ratio = 2.0;
+                  }
+                  
+                  return GridView.count(
+                    crossAxisCount: cols,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    childAspectRatio: ratio,
+                    children: [
+                      Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -268,6 +314,8 @@ class _StudentsScreenState extends State<StudentsScreen> {
                     ),
                   ),
                 ],
+                  );
+                },
               ),
             ],
           ),

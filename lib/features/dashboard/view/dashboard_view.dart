@@ -12,22 +12,28 @@ class DashboardView extends StatelessWidget {
       builder: (context, controller, child) {
         return Scaffold(
           backgroundColor: const Color(0xFFF8FAFC),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < 600;
+              final padding = isMobile ? 12.0 : 24.0;
+              return SingleChildScrollView(
+            padding: EdgeInsets.all(padding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
                 Text(
                   'مرحباً بك في لوحة التحكم',
-                  style: Theme.of(context).textTheme.displaySmall,
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    fontSize: isMobile ? 18 : 24,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'نظرة عامة على نظام إدارة أبحاث التخرج',
                   style: TextStyle(
                     color: AppColors.gray500,
-                    fontSize: 14,
+                    fontSize: isMobile ? 12 : 14,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -50,13 +56,15 @@ class DashboardView extends StatelessWidget {
                 else
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final isMobile = constraints.maxWidth < 600;
+                      final width = constraints.maxWidth;
+                      final columns = width < 480 ? 2 : (width < 900 ? 2 : 4);
+                      final ratio = width < 480 ? 1.5 : (width < 900 ? 1.8 : 2.0);
                       return GridView.count(
-                        crossAxisCount: isMobile ? 1 : (constraints.maxWidth < 900 ? 2 : 4),
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
+                        crossAxisCount: columns,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
                         shrinkWrap: true,
-                        childAspectRatio: isMobile ? 2.5 : 1.8,
+                        childAspectRatio: ratio,
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
                           _SimpleStatCard(
@@ -139,6 +147,8 @@ class DashboardView extends StatelessWidget {
                   ),
               ],
             ),
+          );
+            },
           ),
         );
       },
