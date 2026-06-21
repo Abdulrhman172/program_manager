@@ -212,148 +212,182 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 12),
-              GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 1200
-                    ? 4
-                    : MediaQuery.of(context).size.width > 800
-                        ? 2
-                        : 1,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  StatCard(
-                    icon: Icons.book,
-                    label: 'إجمالي البحوث',
-                    value: 45,
-                    change: 12,
-                    changeLabel: 'منذ الشهر الماضي',
-                    color: 'blue',
-                  ),
-                  StatCard(
-                    icon: Icons.people,
-                    label: 'الطلاب المسجلين',
-                    value: 135,
-                    change: 8,
-                    changeLabel: 'نشطين هذا الفصل',
-                    color: 'green',
-                  ),
-                  StatCard(
-                    icon: Icons.person_outline,
-                    label: 'المشرفين',
-                    value: 28,
-                    change: -2,
-                    changeLabel: 'متاح للإشراف',
-                    color: 'orange',
-                  ),
-                  StatCard(
-                    icon: Icons.check_circle,
-                    label: 'المراحل المكتملة',
-                    value: 2,
-                    changeLabel: 'من 5 مراحل',
-                    color: 'red',
-                  ),
-                ],
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final w = constraints.maxWidth;
+                  final cols = w > 900 ? 4 : (w > 500 ? 2 : 1);
+                  final spacing = 16.0;
+                  final itemWidth = (w - (cols - 1) * spacing) / cols;
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: [
+                      SizedBox(
+                        width: itemWidth,
+                        child: StatCard(
+                          icon: Icons.book,
+                          label: 'إجمالي البحوث',
+                          value: 45,
+                          change: 12,
+                          changeLabel: 'منذ الشهر الماضي',
+                          color: 'blue',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: StatCard(
+                          icon: Icons.people,
+                          label: 'الطلاب المسجلين',
+                          value: 135,
+                          change: 8,
+                          changeLabel: 'نشطين هذا الفصل',
+                          color: 'green',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: StatCard(
+                          icon: Icons.person_outline,
+                          label: 'المشرفين',
+                          value: 28,
+                          change: -2,
+                          changeLabel: 'متاح للإشراف',
+                          color: 'orange',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: StatCard(
+                          icon: Icons.check_circle,
+                          label: 'المراحل المكتملة',
+                          value: 2,
+                          changeLabel: 'من 5 مراحل',
+                          color: 'red',
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 24),
 
               // Notifications and Quick Actions
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'الإشعارات الهامة',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 12),
-                        const Column(
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isMobile = constraints.maxWidth < 800;
+                  
+                  final notificationsWidget = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'الإشعارات الهامة',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 12),
+                      const Column(
+                        children: [
+                          NotificationCard(
+                            type: 'warning',
+                            title: 'أبحاث بحاجة إلى مراجعة',
+                            description:
+                                'هناك 12 بحث تنتظر مراجعة المرحلة الأولى',
+                            timestamp: 'منذ ساعة',
+                          ),
+                          SizedBox(height: 12),
+                          NotificationCard(
+                            type: 'info',
+                            title: 'موعد المرحلة الثانية اقترب',
+                            description:
+                                'يتبقى 5 أيام لانتهاء المرحلة الثانية من البحث',
+                            timestamp: 'منذ 3 ساعات',
+                          ),
+                          SizedBox(height: 12),
+                          NotificationCard(
+                            type: 'success',
+                            title: 'تم اعتماد بحث جديد',
+                            description:
+                                'تم اعتماد بحث "نظام إدارة المكتبات الذكية" بنجاح',
+                            timestamp: 'أمس',
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+
+                  final quickActionsWidget = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'الإجراءات السريعة',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
                           children: [
-                            NotificationCard(
-                              type: 'warning',
-                              title: 'أبحاث بحاجة إلى مراجعة',
-                              description:
-                                  'هناك 12 بحث تنتظر مراجعة المرحلة الأولى',
-                              timestamp: 'منذ ساعة',
+                            ElevatedButton(
+                              onPressed: () => _navigateTo('/students'),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(40),
+                              ),
+                              child: const Text('إضافة طالب جديد'),
                             ),
-                            SizedBox(height: 12),
-                            NotificationCard(
-                              type: 'info',
-                              title: 'موعد المرحلة الثانية اقترب',
-                              description:
-                                  'يتبقى 5 أيام لانتهاء المرحلة الثانية من البحث',
-                              timestamp: 'منذ 3 ساعات',
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: () => _navigateTo('/students'),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(40),
+                              ),
+                              child: const Text('إضافة مشرف'),
                             ),
-                            SizedBox(height: 12),
-                            NotificationCard(
-                              type: 'success',
-                              title: 'تم اعتماد بحث جديد',
-                              description:
-                                  'تم اعتماد بحث "نظام إدارة المكتبات الذكية" بنجاح',
-                              timestamp: 'أمس',
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: () => _navigateTo('/approval'),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(40),
+                              ),
+                              child: const Text('اعتماد بحث'),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: () => _navigateTo('/stages'),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(40),
+                              ),
+                              child: const Text('إنشاء مرحلة جديدة'),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
+                      ),
+                    ],
+                  );
+
+                  if (isMobile) {
+                    return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'الإجراءات السريعة',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Column(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () => _navigateTo('/students'),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size.fromHeight(40),
-                                ),
-                                child: const Text('إضافة طالب جديد'),
-                              ),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                onPressed: () => _navigateTo('/students'),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size.fromHeight(40),
-                                ),
-                                child: const Text('إضافة مشرف'),
-                              ),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                onPressed: () => _navigateTo('/approval'),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size.fromHeight(40),
-                                ),
-                                child: const Text('اعتماد بحث'),
-                              ),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                onPressed: () => _navigateTo('/stages'),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size.fromHeight(40),
-                                ),
-                                child: const Text('إنشاء مرحلة جديدة'),
-                              ),
-                            ],
-                          ),
-                        ),
+                        notificationsWidget,
+                        const SizedBox(height: 24),
+                        quickActionsWidget,
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: notificationsWidget,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: quickActionsWidget,
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 24),
 
@@ -363,48 +397,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 12),
-              GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 1200
-                    ? 3
-                    : MediaQuery.of(context).size.width > 800
-                        ? 2
-                        : 1,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  MilestoneCard(
-                    stage: 'المرحلة الأولى - اختيار الموضوع',
-                    status: 'completed',
-                    date: '28/03/2026',
-                    description: 'اختيار موضوع البحث والموافقة عليه',
-                  ),
-                  MilestoneCard(
-                    stage: 'المرحلة الثانية - إجازة الخطة',
-                    status: 'in-progress',
-                    date: '25/01/2026',
-                    description: 'تقديم وإجازة خطة البحث',
-                  ),
-                  MilestoneCard(
-                    stage: 'المرحلة الثالثة - مناقشة الخطة',
-                    status: 'pending',
-                    date: 'قادمة',
-                    description: 'مناقشة الخطة مع لجنة التقييم',
-                  ),
-                  MilestoneCard(
-                    stage: 'المرحلة الرابعة - تنفيذ البحث',
-                    status: 'pending',
-                    date: 'قادمة',
-                    description: 'تنفيذ البحث وجمع البيانات',
-                  ),
-                  MilestoneCard(
-                    stage: 'المرحلة الخامسة - المناقشة النهائية',
-                    status: 'pending',
-                    date: 'قادمة',
-                    description: 'المناقشة النهائية وتقييم البحث',
-                  ),
-                ],
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final w = constraints.maxWidth;
+                  final cols = w > 1200 ? 3 : (w > 800 ? 2 : 1);
+                  final spacing = 12.0;
+                  final itemWidth = (w - (cols - 1) * spacing) / cols;
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: [
+                      SizedBox(
+                        width: itemWidth,
+                        child: MilestoneCard(
+                          stage: 'المرحلة الأولى - اختيار الموضوع',
+                          status: 'completed',
+                          date: '28/03/2026',
+                          description: 'اختيار موضوع البحث والموافقة عليه',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: MilestoneCard(
+                          stage: 'المرحلة الثانية - إجازة الخطة',
+                          status: 'in-progress',
+                          date: '25/01/2026',
+                          description: 'تقديم وإجازة خطة البحث',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: MilestoneCard(
+                          stage: 'المرحلة الثالثة - مناقشة الخطة',
+                          status: 'pending',
+                          date: 'قادمة',
+                          description: 'مناقشة الخطة مع لجنة التقييم',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: MilestoneCard(
+                          stage: 'المرحلة الرابعة - تنفيذ البحث',
+                          status: 'pending',
+                          date: 'قادمة',
+                          description: 'تنفيذ البحث وجمع البيانات',
+                        ),
+                      ),
+                      SizedBox(
+                        width: itemWidth,
+                        child: MilestoneCard(
+                          stage: 'المرحلة الخامسة - المناقشة النهائية',
+                          status: 'pending',
+                          date: 'قادمة',
+                          description: 'المناقشة النهائية وتقييم البحث',
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

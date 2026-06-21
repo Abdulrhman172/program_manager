@@ -20,7 +20,6 @@ import '../../features/approval/controller/approval_controller.dart';
 import '../../features/research/controller/research_controller.dart';
 import '../../features/teams/controller/teams_controller.dart';
 
-
 class MainLayout extends StatelessWidget {
   const MainLayout({super.key});
 
@@ -40,7 +39,6 @@ class MainLayout extends StatelessWidget {
         return const ResearchView();
       case '/teams':
         return const TeamsView();
-
       case '/settings':
         return const SettingsView();
       default:
@@ -50,9 +48,6 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isDesktop = size.width > 800;
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DashboardController()),
@@ -61,79 +56,149 @@ class MainLayout extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ApprovalController()),
         ChangeNotifierProvider(create: (_) => ResearchController()),
         ChangeNotifierProvider(create: (_) => TeamsController()),
-
       ],
       child: Consumer<DashboardController>(
         builder: (context, controller, _) {
+          final screenWidth = MediaQuery.of(context).size.width;
+          final isDesktop = screenWidth > 800;
+
           return Scaffold(
-          backgroundColor: AppColors.background,
-          appBar: _buildTopBar(context, controller),
-          drawer: !isDesktop
-              ? Drawer(
-                  child: AppDrawer(
-                    currentRoute: controller.currentRoute,
-                    onItemSelected: (route) {
-                      controller.setCurrentRoute(route);
-                      Navigator.pop(context); // Close drawer on mobile
-                    },
-                  ),
-                )
-              : null,
-          body: Row(
-            children: [
-              if (isDesktop)
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      left: BorderSide(color: AppColors.gray200),
+            backgroundColor: AppColors.background,
+            appBar: _buildTopBar(context, controller, isDesktop),
+            drawer: !isDesktop
+                ? Drawer(
+                    child: AppDrawer(
+                      currentRoute: controller.currentRoute,
+                      onItemSelected: (route) {
+                        controller.setCurrentRoute(route);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                : null,
+            body: Row(
+              children: [
+                if (isDesktop)
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        left: BorderSide(color: AppColors.gray200),
+                      ),
+                    ),
+                    child: AppDrawer(
+                      currentRoute: controller.currentRoute,
+                      onItemSelected: (route) {
+                        controller.setCurrentRoute(route);
+                      },
                     ),
                   ),
-                  child: AppDrawer(
-                    currentRoute: controller.currentRoute,
-                    onItemSelected: (route) {
-                      controller.setCurrentRoute(route);
-                    },
-                  ),
+                Expanded(
+                  child: _getScreen(controller.currentRoute),
                 ),
-              Expanded(
-                child: _getScreen(controller.currentRoute),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
-}
-
-
-  PreferredSizeWidget _buildTopBar(BuildContext context, DashboardController controller) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      titleSpacing: 16,
-      iconTheme: const IconThemeData(color: AppColors.foreground),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1.0),
-        child: Container(
-          color: AppColors.gray200,
-          height: 1.0,
-        ),
+              ],
+            ),
+          );
+        },
       ),
-      title: _buildTopBarContent(context, controller.userName, controller.userImage),
     );
   }
 
-  Widget _buildTopBarContent(BuildContext context, String userName, String? userImage) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      reverse: true, // For RTL
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  PreferredSizeWidget _buildTopBar(
+    BuildContext context,
+    DashboardController controller,
+    bool isDesktop,
+  ) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      titleSpacing: isDesktop ? 16 : 8,
+      iconTheme: const IconThemeData(color: AppColors.foreground),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1.0),
+        child: Container(color: AppColors.gray200, height: 1.0),
+      ),
+      title: _buildTopBarContent(context, controller, isDesktop),
+    );
+  }
+
+  Widget _buildTopBarContent(
+    BuildContext context,
+    DashboardController controller,
+    bool isDesktop,
+  ) {
+    if (!isDesktop) {
+      // موبايل: نص مختصر + قائمة المستخدم
+      return Row(
         children: [
-          // عنوان النظام في اليمين (RTL)
-          const Text(
+          const Expanded(
+            child: Text(
+              'نظام إدارة أبحاث التخرج',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Tajawal',
+                color: AppColors.primary,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 8),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'settings') {
+                controller.setCurrentRoute('/settings');
+              } else if (value == 'logout') {
+                _logout(context);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'settings',
+                child: Row(
+                  children: [
+                    Icon(Icons.settings, size: 18, color: AppColors.gray600),
+                    SizedBox(width: 8),
+                    Text('الإعدادات'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, size: 18, color: AppColors.error),
+                    SizedBox(width: 8),
+                    Text(
+                      'تسجيل الخروج',
+                      style: TextStyle(color: AppColors.error),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(Icons.person, color: Colors.white, size: 20),
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
+        ],
+      );
+    }
+
+    // Desktop / Tablet: الشريط الكامل
+    return Row(
+      children: [
+        const Flexible(
+          child: Text(
             'نظام إدارة ومتابعة أبحاث التخرج',
             style: TextStyle(
               fontSize: 18,
@@ -141,96 +206,82 @@ class MainLayout extends StatelessWidget {
               fontFamily: 'Tajawal',
               color: AppColors.primary,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(width: 16),
-
-          // الأدوات في اليسار
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // معلومات المستخدم مع إمكانية النقر
-              InkWell(
-                onTap: () {
-                  Provider.of<DashboardController>(context, listen: false).setCurrentRoute('/settings');
-                },
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            userName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.foreground,
-                            ),
-                          ),
-                          const Text(
-                            'مسؤول البرنامج',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: AppColors.gray500,
-                            ),
-                          ),
-                        ],
+        ),
+        const SizedBox(width: 16),
+        InkWell(
+          onTap: () => controller.setCurrentRoute('/settings'),
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      controller.userName,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.foreground,
                       ),
-                      const SizedBox(width: 12),
-
-                      // الأيقونة الشخصية
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                          image: userImage != null
-                              ? DecorationImage(
-                                  image: NetworkImage(userImage),
-                                  fit: BoxFit.cover,
-                                )
-                              : null,
-                        ),
-                        child: userImage == null
-                            ? const Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              )
-                            : null,
+                    ),
+                    const Text(
+                      'مسؤول البرنامج',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.gray500,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 24),
-
-              // زر تسجيل الخروج
-              OutlinedButton.icon(
-                onPressed: () => _logout(context),
-                icon: const Icon(Icons.logout, size: 18),
-                label: const Text('تسجيل الخروج'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.error,
-                  side: const BorderSide(color: AppColors.error),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                const SizedBox(width: 12),
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                    image: controller.userImage != null
+                        ? DecorationImage(
+                            image: NetworkImage(controller.userImage!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: controller.userImage == null
+                      ? const Center(
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        )
+                      : null,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+        const SizedBox(width: 16),
+        OutlinedButton.icon(
+          onPressed: () => _logout(context),
+          icon: const Icon(Icons.logout, size: 16),
+          label: const Text('خروج'),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.error,
+            side: const BorderSide(color: AppColors.error),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          ),
+        ),
+      ],
     );
   }
 

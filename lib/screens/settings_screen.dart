@@ -15,7 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -36,7 +36,6 @@ class _SettingsScreenState extends State<SettingsScreen>
             Tab(text: 'الملف الشخصي'),
             Tab(text: 'الأمان'),
             Tab(text: 'الإشعارات'),
-            Tab(text: 'منطقة الخطر'),
           ],
         ),
       ),
@@ -51,9 +50,6 @@ class _SettingsScreenState extends State<SettingsScreen>
 
           // Notifications Tab
           _buildNotificationsTab(),
-
-          // Danger Zone Tab
-          _buildDangerZoneTab(),
         ],
       ),
     );
@@ -396,139 +392,4 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  Widget _buildDangerZoneTab() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'منطقة الخطر',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'إجراءات حساسة قد تؤثر على حسابك',
-              style: TextStyle(color: AppColors.gray600),
-            ),
-            const SizedBox(height: 24),
-
-            // Logout from all devices
-            Card(
-              color: const Color(0xFFFEE2E2),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.warning_outlined,
-                          color: AppColors.error,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'تسجيل الخروج من جميع الأجهزة',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.error),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                'سيتم تسجيل خروجك من جميع الأجهزة والمتصفحات',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.error,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.error,
-                          side: const BorderSide(color: AppColors.error),
-                        ),
-                        child: const Text('تسجيل الخروج من الكل'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Delete Account
-            Card(
-              color: const Color(0xFFFEE2E2),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.delete_outline,
-                          color: AppColors.error,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'حذف الحساب',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.error),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                'حذف حسابك وجميع بيانات المرتبطة به بشكل نهائي',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.error,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.error,
-                          side: const BorderSide(color: AppColors.error),
-                        ),
-                        child: const Text('حذف الحساب'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

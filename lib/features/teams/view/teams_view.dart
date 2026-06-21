@@ -159,19 +159,20 @@ class TeamsView extends StatelessWidget {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isMobile = constraints.maxWidth < 800;
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: isMobile ? 1 : 2,
-                        crossAxisSpacing: 24,
-                        mainAxisSpacing: 24,
-                        childAspectRatio: isMobile ? 0.7 : 0.8,
-                      ),
-                      itemCount: controller.teams.length,
-                      itemBuilder: (context, index) {
-                        return _buildTeamCard(context, controller.teams[index]);
-                      },
+                    final w = constraints.maxWidth;
+                    int cols = isMobile ? 1 : 2;
+                    final spacing = 24.0;
+                    final itemWidth = (w - (cols - 1) * spacing) / cols;
+
+                    return Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: List.generate(controller.teams.length, (index) {
+                        return SizedBox(
+                          width: itemWidth,
+                          child: _buildTeamCard(context, controller.teams[index]),
+                        );
+                      }),
                     );
                   },
                 ),
@@ -332,62 +333,83 @@ class TeamsView extends StatelessWidget {
           const SizedBox(height: 8),
           
           // Members List
-          Expanded(
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: team.members.length,
-              itemBuilder: (context, index) {
-                final member = team.members[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: member.role == 'قائد الفريق' ? const Color(0xFFDBEAFE) : AppColors.gray100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          member.role,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: member.role == 'قائد الفريق' ? const Color(0xFF2563EB) : AppColors.gray600,
-                            fontWeight: FontWeight.bold,
-                          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: team.members.length,
+            itemBuilder: (context, index) {
+              final member = team.members[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: member.role == 'قائد الفريق' ? const Color(0xFFDBEAFE) : AppColors.gray100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        member.role,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: member.role == 'قائد الفريق' ? const Color(0xFF2563EB) : AppColors.gray600,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(member.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.foreground)),
-                           Text(member.id.toString(), style: const TextStyle(fontSize: 12, color: AppColors.gray500)),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(member.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.foreground)),
+                         Text(member.id.toString(), style: const TextStyle(fontSize: 12, color: AppColors.gray500)),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           
-          // View Full Details Button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () {
-                _showDetailsModal(context, team);
-              },
-              icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
-              label: const Text('عرض التفاصيل الكاملة', style: TextStyle(fontWeight: FontWeight.bold)),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.foreground,
-                side: const BorderSide(color: AppColors.gray300),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          // Action Buttons
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => EditTeamModal(team: team, controller: context.read<TeamsController>()),
+                    );
+                  },
+                  icon: const Icon(Icons.edit_outlined, size: 16),
+                  label: const Text('تعديل', style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF2563EB),
+                    side: const BorderSide(color: Color(0xFF2563EB)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    _showDetailsModal(context, team);
+                  },
+                  icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
+                  label: const Text('التفاصيل', style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.foreground,
+                    side: const BorderSide(color: AppColors.gray300),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -547,6 +569,252 @@ class TeamsView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class EditTeamModal extends StatefulWidget {
+  final TeamModel team;
+  final TeamsController controller;
+
+  const EditTeamModal({super.key, required this.team, required this.controller});
+
+  @override
+  State<EditTeamModal> createState() => _EditTeamModalState();
+}
+
+class _EditTeamModalState extends State<EditTeamModal> {
+  bool _isLoading = true;
+  List<Map<String, dynamic>> _supervisors = [];
+  List<Map<String, dynamic>> _unassignedStudents = [];
+  int? _selectedSupervisorId;
+  int? _selectedStudentToAdd;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedSupervisorId = widget.team.supervisorId;
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() => _isLoading = true);
+    final sups = await widget.controller.fetchSupervisors();
+    final studs = await widget.controller.fetchUnassignedStudents();
+    setState(() {
+      _supervisors = sups;
+      _unassignedStudents = studs;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Dialog(
+        child: Padding(
+          padding: EdgeInsets.all(48.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [CircularProgressIndicator(), SizedBox(height: 16), Text('جاري تحميل البيانات...')],
+          ),
+        ),
+      );
+    }
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        width: 600,
+        padding: const EdgeInsets.all(24),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('تعديل الفريق: ${widget.team.groupName}',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.foreground)),
+              const SizedBox(height: 24),
+
+              // Supervisor Section
+              const Text('مشرف المجموعة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      final success = await widget.controller.changeSupervisor(widget.team.groupId, _selectedSupervisorId);
+                      if (!context.mounted) return;
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم تغيير المشرف بنجاح'), backgroundColor: Colors.green));
+                        widget.controller.fetchTeams();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(widget.controller.errorMessage ?? 'حدث خطأ'), backgroundColor: Colors.red));
+                      }
+                    },
+                    child: const Text('حفظ المشرف'),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: DropdownButtonFormField<int>(
+                      initialValue: _selectedSupervisorId,
+                      items: _supervisors.map((s) => DropdownMenuItem<int>(
+                            value: s['sprvsr_id'],
+                            child: Text(s['sprvsr_name']),
+                          )).toList(),
+                      onChanged: (val) {
+                        setState(() => _selectedSupervisorId = val);
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      ),
+                      hint: const Text('اختر مشرفاً'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              const Divider(),
+              const SizedBox(height: 16),
+
+              // Add Student Section
+              const Text('إضافة طالب للمجموعة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: _selectedStudentToAdd == null ? null : () async {
+                      final success = await widget.controller.addStudent(_selectedStudentToAdd!, widget.team.groupId);
+                      if (!context.mounted) return;
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تمت الإضافة بنجاح'), backgroundColor: Colors.green));
+                        widget.controller.fetchTeams();
+                        _loadData();
+                        setState(() => _selectedStudentToAdd = null);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(widget.controller.errorMessage ?? 'حدث خطأ'), backgroundColor: Colors.red));
+                      }
+                    },
+                    child: const Text('إضافة للطالب'),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: DropdownButtonFormField<int>(
+                      initialValue: _selectedStudentToAdd,
+                      items: _unassignedStudents.map((s) => DropdownMenuItem<int>(
+                            value: s['stud_id'],
+                            child: Text('${s['stud_name']} (${s['stud_college_num']})'),
+                          )).toList(),
+                      onChanged: (val) {
+                        setState(() => _selectedStudentToAdd = val);
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      ),
+                      hint: const Text('اختر طالباً غير مرتبط بمجموعة'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              const Divider(),
+              const SizedBox(height: 16),
+
+              // Members List Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('عدد الأعضاء: ${widget.team.members.length}', style: const TextStyle(color: AppColors.gray600)),
+                  const Text('أعضاء الفريق الحاليين', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ...widget.team.members.map((member) => Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.gray100,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.gray200),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline, color: Colors.red),
+                              tooltip: 'حذف من المجموعة',
+                              onPressed: () async {
+                                final success = await widget.controller.removeStudent(member.id, widget.team.leaderId);
+                                if (!context.mounted) return;
+                                if (success) {
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم الحذف بنجاح'), backgroundColor: Colors.green));
+                                  widget.controller.fetchTeams();
+                                  _loadData();
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(widget.controller.errorMessage ?? 'حدث خطأ'), backgroundColor: Colors.red));
+                                }
+                              },
+                            ),
+                            if (member.id != widget.team.leaderId)
+                              IconButton(
+                                icon: const Icon(Icons.star_border, color: Colors.orange),
+                                tooltip: 'تعيين كقائد',
+                                onPressed: () async {
+                                  final success = await widget.controller.assignNewLeader(widget.team.groupId, member.id);
+                                  if (!context.mounted) return;
+                                  if (success) {
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم التعيين بنجاح'), backgroundColor: Colors.green));
+                                    widget.controller.fetchTeams();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(widget.controller.errorMessage ?? 'حدث خطأ'), backgroundColor: Colors.red));
+                                  }
+                                },
+                              ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              children: [
+                                if (member.id == widget.team.leaderId)
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(color: const Color(0xFFDBEAFE), borderRadius: BorderRadius.circular(4)),
+                                    child: const Text('قائد', style: TextStyle(fontSize: 10, color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
+                                  ),
+                                Text(member.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                              ],
+                            ),
+                            Text('الرقم: ${member.id}', style: const TextStyle(fontSize: 12, color: AppColors.gray600)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
+
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    side: const BorderSide(color: AppColors.gray300),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('إغلاق', style: TextStyle(color: AppColors.foreground, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

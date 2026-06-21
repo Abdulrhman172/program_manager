@@ -200,70 +200,66 @@ class _StagesScreenState extends State<StagesScreen> {
                           const SizedBox(height: 12),
 
                           // Dates
-                          Row(
+                          Wrap(
+                            spacing: 24,
+                            runSpacing: 16,
                             children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'تاريخ البداية',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.gray500,
-                                      ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'تاريخ البداية',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.gray500,
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      stage.startDate,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    stage.startDate,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'تاريخ الانتهاء',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.gray500,
-                                      ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'تاريخ الانتهاء',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.gray500,
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      stage.endDate,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    stage.endDate,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'المهام',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.gray500,
-                                      ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'المهام',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.gray500,
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      '${stage.tasksCount} مهمة',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${stage.tasksCount} مهمة',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
+                                  ),
+                                ],
                               ),
                             ],
                           ),

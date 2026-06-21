@@ -129,4 +129,115 @@ class TeamsController extends ChangeNotifier {
     _subscription?.unsubscribe();
     super.dispose();
   }
+
+  Future<List<Map<String, dynamic>>> fetchSupervisors() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+      if (idProgram == null) return [];
+      final response = await SupabaseService.client
+          .from('supervisor')
+          .select('sprvsr_id, sprvsr_name')
+          .eq('program_id', idProgram);
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchUnassignedStudents() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final idProgram = prefs.getInt('id_program');
+      if (idProgram == null) return [];
+      final response = await SupabaseService.client
+          .from('student')
+          .select('stud_id, stud_name, stud_college_num')
+          .eq('id_program', idProgram)
+          .isFilter('id_group', null);
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<bool> changeSupervisor(int groupId, int? newSupervisorId) async {
+    try {
+      await SupabaseService.client
+          .from('groups')
+          .update({'id_sprvsr': newSupervisorId})
+          .eq('group_id', groupId);
+      return true;
+    } catch (e) {
+      _errorMessage = 'فشل تغيير المشرف: $e';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> removeStudent(int studentId, int? leaderId) async {
+    if (leaderId != null && studentId == leaderId) {
+      _errorMessage = 'لا يمكن حذف قائد الفريق. يرجى تعيين قائد جديد أولاً.';
+      notifyListeners();
+      return false;
+    }
+    try {
+      await SupabaseService.client
+          .from('student')
+          .update({'id_group': null})
+          .eq('stud_id', studentId);
+      return true;
+    } catch (e) {
+      _errorMessage = 'فشل حذف الطالب: $e';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> addStudent(int studentId, int groupId) async {
+    try {
+      await SupabaseService.client
+          .from('student')
+          .update({'id_group': groupId})
+          .eq('stud_id', studentId);
+      return true;
+    } catch (e) {
+      _errorMessage = 'فشل إضافة الطالب: $e';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> moveStudent(int studentId, int newGroupId, int? leaderId) async {
+    if (leaderId != null && studentId == leaderId) {
+      _errorMessage = 'لا يمكن نقل قائد الفريق. يرجى تعيين قائد جديد أولاً.';
+      notifyListeners();
+      return false;
+    }
+    try {
+      await SupabaseService.client
+          .from('student')
+          .update({'id_group': newGroupId})
+          .eq('stud_id', studentId);
+      return true;
+    } catch (e) {
+      _errorMessage = 'فشل نقل الطالب: $e';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> assignNewLeader(int groupId, int newLeaderId) async {
+    try {
+      await SupabaseService.client
+          .from('groups')
+          .update({'group_led_id': newLeaderId})
+          .eq('group_id', groupId);
+      return true;
+    } catch (e) {
+      _errorMessage = 'فشل تعيين القائد: $e';
+      notifyListeners();
+      return false;
+    }
+  }
 }

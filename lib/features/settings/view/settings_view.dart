@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../auth/view/login_view.dart';
 import '../controller/settings_controller.dart';
 
 class SettingsView extends StatefulWidget {
@@ -18,7 +17,7 @@ class _SettingsViewState extends State<SettingsView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -40,7 +39,6 @@ class _SettingsViewState extends State<SettingsView>
             tabs: const [
               Tab(text: 'الملف الشخصي'),
               Tab(text: 'الأمان'),
-              Tab(text: 'منطقة الخطر'),
             ],
           ),
         ),
@@ -57,7 +55,6 @@ class _SettingsViewState extends State<SettingsView>
                   children: [
                     _buildProfileTab(context, controller),
                     _buildSecurityTab(context, controller),
-                    _buildDangerZoneTab(context, controller),
                   ],
                 ),
                 if (controller.isLoading && controller.currentUser != null)
@@ -132,15 +129,16 @@ class _SettingsViewState extends State<SettingsView>
                   ),
                   const SizedBox(height: 12),
                   if (hasImage)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
                         ElevatedButton.icon(
                           onPressed: controller.pickAndUploadImage,
                           icon: const Icon(Icons.edit, size: 18),
                           label: const Text('تغيير الصورة'),
                         ),
-                        const SizedBox(width: 8),
                         OutlinedButton.icon(
                           onPressed: () => _confirmDeleteImage(context, controller),
                           icon: const Icon(Icons.delete, size: 18),
@@ -357,250 +355,27 @@ class _SettingsViewState extends State<SettingsView>
     );
   }
 
-
-  Widget _buildDangerZoneTab(BuildContext context, SettingsController controller) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'منطقة الخطر',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'إجراءات حساسة قد تؤثر على حسابك',
-              style: TextStyle(color: AppColors.gray600),
-            ),
-            const SizedBox(height: 24),
-
-            // Logout from all devices
-            Card(
-              color: const Color(0xFFFEE2E2),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.warning_outlined,
-                          color: AppColors.error,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'تسجيل الخروج من جميع الأجهزة',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.error),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                'سيتم تسجيل خروجك من جميع الأجهزة والمتصفحات',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.error,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          await controller.logout();
-                          if (context.mounted) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => const LoginView()),
-                              (route) => false,
-                            );
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.error,
-                          side: const BorderSide(color: AppColors.error),
-                        ),
-                        child: const Text('تسجيل الخروج من الكل'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Delete Account
-            Card(
-              color: const Color(0xFFFEE2E2),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.delete_outline,
-                          color: AppColors.error,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'حذف الحساب',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.error),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                'حذف حسابك وجميع بيانات المرتبطة به بشكل نهائي',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.error,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () => _confirmDeleteAccount(context, controller),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.error,
-                          side: const BorderSide(color: AppColors.error),
-                        ),
-                        child: const Text('حذف الحساب'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _confirmDeleteAccount(BuildContext context, SettingsController controller) {
-    showDialog(
+  Future<void> _confirmDeleteImage(BuildContext context, SettingsController controller) async {
+    final bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('هل أنت متأكد؟', style: TextStyle(color: Colors.red)),
-        content: const Text('حذف الحساب سيؤدي إلى تعطيله بشكل نهائي ولن تتمكن من الدخول مرة أخرى. هل تريد المتابعة؟'),
+      builder: (context) => AlertDialog(
+        title: const Text('تأكيد الحذف'),
+        content: const Text('هل أنت متأكد من حذف الصورة الشخصية؟'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(ctx),
+            onPressed: () => Navigator.of(context).pop(false),
             child: const Text('إلغاء'),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              _showPinDialog(context, controller);
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('نعم، متأكد', style: TextStyle(color: Colors.white)),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('حذف', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
-  }
 
-  void _showPinDialog(BuildContext context, SettingsController controller) {
-    final pinController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('تأكيد الحذف النهائي'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('يرجى إدخال رمز الحساب (كلمة المرور) لكي يتم الحذف:'),
-            const SizedBox(height: 16),
-            TextField(
-              controller: pinController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'رمز الحساب',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final success = await controller.deleteAccount(pinController.text);
-              if (success && context.mounted) {
-                Navigator.pop(ctx);
-                await controller.logout();
-                if (context.mounted) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const LoginView()),
-                    (route) => false,
-                  );
-                }
-              } else if (context.mounted) {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(controller.errorMessage ?? 'فشل الحذف'), backgroundColor: Colors.red),
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('حذف', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _confirmDeleteImage(BuildContext context, SettingsController controller) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('حذف الصورة الشخصية'),
-        content: const Text('هل أنت متأكد من رغبتك في حذف صورتك الشخصية؟'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              controller.deleteImage();
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('حذف', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
+    if (confirm == true) {
+      await controller.deleteImage();
+    }
   }
 }

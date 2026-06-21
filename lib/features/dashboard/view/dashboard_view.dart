@@ -12,22 +12,28 @@ class DashboardView extends StatelessWidget {
       builder: (context, controller, child) {
         return Scaffold(
           backgroundColor: const Color(0xFFF8FAFC),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < 600;
+              final padding = isMobile ? 12.0 : 24.0;
+              return SingleChildScrollView(
+            padding: EdgeInsets.all(padding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
                 Text(
                   'مرحباً بك في لوحة التحكم',
-                  style: Theme.of(context).textTheme.displaySmall,
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    fontSize: isMobile ? 18 : 24,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'نظرة عامة على نظام إدارة أبحاث التخرج',
                   style: TextStyle(
                     color: AppColors.gray500,
-                    fontSize: 14,
+                    fontSize: isMobile ? 12 : 14,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -50,34 +56,46 @@ class DashboardView extends StatelessWidget {
                 else
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final isMobile = constraints.maxWidth < 600;
-                      return GridView.count(
-                        crossAxisCount: isMobile ? 1 : (constraints.maxWidth < 900 ? 2 : 4),
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        shrinkWrap: true,
-                        childAspectRatio: isMobile ? 2.5 : 1.8,
-                        physics: const NeverScrollableScrollPhysics(),
+                      final width = constraints.maxWidth;
+                      final columns = width < 480 ? 1 : (width < 900 ? 2 : 4);
+                      final spacing = 12.0;
+                      final itemWidth = (width - (columns - 1) * spacing) / columns;
+                      
+                      return Wrap(
+                        spacing: spacing,
+                        runSpacing: spacing,
                         children: [
-                          _SimpleStatCard(
-                            title: 'الأبحاث النشطة حالياً',
-                            value: controller.activeResearchesCount.toString(),
-                            icon: Icons.check_circle_outline,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'الأبحاث النشطة حالياً',
+                              value: controller.activeResearchesCount.toString(),
+                              icon: Icons.check_circle_outline,
+                            ),
                           ),
-                          _SimpleStatCard(
-                            title: 'عدد المشرفين المفعلين',
-                            value: controller.supervisorsCount.toString(),
-                            icon: Icons.person_outline,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'عدد المشرفين المفعلين',
+                              value: controller.supervisorsCount.toString(),
+                              icon: Icons.person_outline,
+                            ),
                           ),
-                          _SimpleStatCard(
-                            title: 'عدد الطلاب المسجلين',
-                            value: controller.studentsCount.toString(),
-                            icon: Icons.people_outline,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'عدد الطلاب المسجلين',
+                              value: controller.studentsCount.toString(),
+                              icon: Icons.people_outline,
+                            ),
                           ),
-                          _SimpleStatCard(
-                            title: 'عدد الأبحاث المكتملة',
-                            value: controller.finishedResearchesCount.toString(),
-                            icon: Icons.description_outlined,
+                          SizedBox(
+                            width: itemWidth,
+                            child: _SimpleStatCard(
+                              title: 'عدد الأبحاث المكتملة',
+                              value: controller.finishedResearchesCount.toString(),
+                              icon: Icons.description_outlined,
+                            ),
                           ),
                         ],
                       );
@@ -139,6 +157,8 @@ class DashboardView extends StatelessWidget {
                   ),
               ],
             ),
+          );
+            },
           ),
         );
       },
