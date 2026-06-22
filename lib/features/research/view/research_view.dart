@@ -437,6 +437,27 @@ class ResearchView extends StatelessWidget {
         ),
         const SizedBox(height: 16),
 
+        // Search Bar for Archived Research
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.gray200),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TextField(
+            onChanged: controller.search,
+            textAlign: TextAlign.right,
+            decoration: const InputDecoration(
+              hintText: 'البحث عن بحث مؤرشف...',
+              hintStyle: TextStyle(color: AppColors.gray400),
+              border: InputBorder.none,
+              suffixIcon: Icon(Icons.search, color: AppColors.gray400),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+
         if (controller.researches.isEmpty)
           Center(
             child: Padding(
@@ -637,15 +658,15 @@ class ResearchView extends StatelessWidget {
           Text('الملفات المرفقة (${research.files.length})',
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.gray700)),
           const SizedBox(height: 8),
-          Expanded(
-            child: ListView.builder(
-              itemCount: research.files.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(research.files[index].name,
-                    style: const TextStyle(fontSize: 12, color: AppColors.gray600),
-                    textAlign: TextAlign.right),
-              ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: research.files.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(research.files[index].name,
+                  style: const TextStyle(fontSize: 12, color: AppColors.gray600),
+                  textAlign: TextAlign.right),
             ),
           ),
           Row(

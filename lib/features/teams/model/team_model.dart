@@ -22,6 +22,8 @@ class TeamModel {
   final bool archived;
   final bool isActive;
   final List<TeamMemberModel> members;
+  int? leaderId;
+  int? supervisorId;
 
   TeamModel({
     required this.groupId,
@@ -35,6 +37,8 @@ class TeamModel {
     required this.archived,
     required this.isActive,
     required this.members,
+    this.leaderId,
+    this.supervisorId,
   });
 
   factory TeamModel.fromJson(Map<String, dynamic> json) {
@@ -49,6 +53,8 @@ class TeamModel {
       currentStage: (json['current_stage'] as num?)?.toInt() ?? 1,
       archived: json['archived'] as bool? ?? false,
       isActive: json['group_isactive'] as bool? ?? true,
+      supervisorId: (json['id_sprvsr'] as num?)?.toInt(),
+      leaderId: (json['group_led_id'] as num?)?.toInt(),
       members: [],
     );
   }

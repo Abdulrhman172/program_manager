@@ -83,6 +83,7 @@ class ApprovalController extends ChangeNotifier {
           .from('first_stage_view')
           .select()
           .not('research_title', 'is', null)
+          .eq('sprvsr_approval', true)
           .inFilter('group_id', programGroupIds);
 
       // تصفية نتائج المرحلة الأولى
